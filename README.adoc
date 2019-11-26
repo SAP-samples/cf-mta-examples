@@ -27,6 +27,9 @@ Clone the repository, following the link:https://help.github.com/en/github/creat
 ## Deploy other SCP Application Content
 * link:/content-deployment[Generic Application Content Deployment]
 
+## Manage CF Services
+* link:/create-managed-services[Service and binding creation]
+
 ## Share configuration values between MTAs via a configuration registry
 * link:/cross-mta-configurations[Cross MTA configurations]
 
