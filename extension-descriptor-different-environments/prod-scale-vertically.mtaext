@@ -1,0 +1,9 @@
+_schema-version: 3.3.0
+ID: my-mta-prod-scale-vertically
+extends: my-mta-prod
+version: 1.0.0
+
+modules:
+- name: my-app
+  parameters:
+    memory: 2G

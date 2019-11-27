@@ -1,0 +1,234 @@
+:toc:
+
+# Configure same MTA for different environments
+
+Configuration of the MTA is done with the standard approach using MTA extension descriptors. Extension descriptors are complementary files to the main deployment descriptor that provide additional data. They have file extension .mtaext and are external for MTA archive .mtar. Extension descriptors can be used to provide deployment specific information, for example credentials to external services.
+
+For the test purpose of the example, we will use a MTA containing a simple application, simple service and binding between them.
+The MTA will be deployed in DEV and PROD environments using different extension descriptors, that result in different set-ups.
+
+## [Optional] Requirements
+- Quota for application
+- Quota for different service plans. The example use service offering "application-logs", free service plan "lite" and paid service plan "standard". You can try out with different service offering and plan at your convenience.
+
+## Oficial documemtation in Help SAP Portal
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/50df803465324d36851c79fd07e8972c.html[Defining MTA Extension Descriptors]
+
+# Try out
+
+## Deploy MTAR without extension descriptors
+
+The first step of the example, shows unsuccessful attempt to deploy the MTA without extension descriptor.
+
+### Deploy with a deployment descriptor (mtad.yaml)
+
+That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+
+``` bash
+$ cf deploy -f
+...
+Error building cloud model: Service "my-service" has missing required parameter: service-plan
+...
+```
+
+Note that deployment fails expectedly because MTA defines required parameter `service-plan` for resource `my-service`, that represents service instance. This is done with MTA parameter metadata, called `optional`. By default, `optional` is true and setting it to `false`, make certain parameter required.
+
+```text
+- name: my-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service-plan: # set the service plan to use
+    service: application-logs #set the service offering (label)
+  parameters-metadata:
+    service-plan:
+      optional: false # make the parameter required
+
+```
+
+The idea is to oblige the operator, who deploys the MTA to specify the service plan according to the region, organization and space. For example in DEV env free and small service plan is used where in PROD environment, paid and supported plan is used.
+
+### Verify the result
+
+Make sure that nothing is created in the space with `cf apps` and `cf services`.
+
+## Deploy MTAR in DEV environment
+
+This step of the example shows how the MTA is deployed in DEV enviroment where the goal is to use minimal resources for application and use free service plan.
+
+### Deploy with a deployment descriptor (mtad.yaml)
+
+That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptor for DEV env `link:dev.mtaext[dev.mtaext]`:
+
+``` bash
+$ cf deploy -f -e dev.mtaext
+...
+Uploading 1 files...
+  .../my-mta.mtar
+OK
+Uploading 2 files...
+  .../dev.mtaext
+OK
+...
+No deployed MTA detected - this is initial deployment
+Detected new MTA version: "1.0.0"
+Processing service "my-service"...
+Creating service "my-service" from MTA resource "my-service"...
+Creating application "my-app" from MTA module "my-app"...
+Uploading application "my-app"...
+Scaling application "my-app" to "1" instances...
+Staging application "my-app"...
+Application "my-app" staged
+Starting application "my-app"...
+...
+```
+
+### Verify the result
+
+Check that app and service instance are created, and service has the plan `lite`, defined in the extension descriptor:
+
+``` bash
+$ cf s
+...
+name              service            plan             bound apps       last operation     ...
+my-service        application-logs   lite             my-app           create succeeded   ...
+
+$ cf a
+...
+name             requested state   instances   memory   disk   urls
+my-app           started           1/1         1G       1G     ...
+```
+
+NOTE: The application has 1 instance, that is defined in the `mtad.yaml`. It uses 1G memory and 1G disk that is default for the platform.
+
+## Deploy MTAR in PROD environment
+
+This step of the example shows how the MTA is deployed in PROD enviroment using  `link:prod.mtaext[prod.mtaext]`. The goal is that app and service can handle more load without performance issues. The application is scaled horizontally on 2 instances and the service uses stable paid service plan `standard`:
+
+.prod.mtaext
+```text
+_schema-version: 3.3.0
+ID: my-mta-prod
+extends: my-mta
+version: 1.0.0
+
+modules:
+- name: my-app
+  parameters:
+    instances: 2
+
+resources:
+ - name: my-service
+   parameters:
+     service-plan: "standard"
+
+```
+
+NOTE: Extension descriptor extends deployment descriptor id `extends: my-mta`
+
+### Deploy with a deployment descriptor (mtad.yaml)
+
+That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptor for PROD env `link:prod.mtaext[prod.mtaext]`:
+
+``` bash
+$ cf deploy -f -e prod.mtaext
+...
+Uploading 1 files...
+  .../my-mta.mtar
+OK
+Uploading 2 files...
+  .../prod.mtaext
+OK
+...
+No deployed MTA detected - this is initial deployment
+Detected new MTA version: "1.0.0"
+Processing service "my-service"...
+Creating service "my-service" from MTA resource "my-service"...
+Creating application "my-app" from MTA module "my-app"...
+Uploading application "my-app"...
+Scaling application "my-app" to "2" instances...
+Staging application "my-app"...
+Application "my-app" staged
+Starting application "my-app"...
+...
+```
+
+### Verify the result
+
+Check that app and service instance are created, and service has the plan `standard`, defined in the extension descriptor:
+
+``` bash
+$ cf s
+...
+name              service            plan             bound apps       last operation     ...
+my-service        application-logs   standard         my-app           create succeeded   ...
+
+$ cf a
+...
+name             requested state   instances   memory   disk   urls
+my-app           started           2/2         1G       1G     ...
+```
+
+## Deploy MTAR in PROD environment, scale vertically
+
+This step of the example shows how the MTA is deployed in PROD enviroment using 2 extension descriptors `link:prod.mtaext[prod.mtaext]` and `link:prod-scale-vertically.mtaext[prod-scale-vertically.mtaext]`. The goal is that app and service can handle more load without performance issues. The application is scaled horizontally on 2 instances and vertically using 2G memory:
+
+.prod-scale-vertically.mtaext
+```text
+_schema-version: 3.3.0
+ID: my-mta-prod-scale-vertically
+extends: my-mta-prod
+version: 1.0.0
+
+modules:
+- name: my-app
+  parameters:
+    memory: 2G
+```
+
+NOTE: `prod-scale-vertically.mtaext` extends `prod.mtaext` that extends deployment descriptor `mtad.yaml`. It makes extension descriptor chain.
+
+NOTE: `memory` parameter is not defined in the deployment descriptor, however it is considered during deployment.
+
+### Deploy with a deployment descriptor (mtad.yaml)
+
+That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptors for PROD env `link:prod.mtaext[prod.mtaext]` and `link:prod-scale-vertically.mtaext[prod-scale-vertically.mtaext]`:
+
+``` bash
+$ cf deploy -f -e prod.mtaext,prod-scale-vertically.mtaext
+...
+Uploading 1 files...
+  .../my-mta.mtar
+OK
+Uploading 2 files...
+  .../prod.mtaext
+  .../prod-scale-vertically.mtaext
+OK
+...
+No deployed MTA detected - this is initial deployment
+Detected new MTA version: "1.0.0"
+Processing service "my-service"...
+Creating service "my-service" from MTA resource "my-service"...
+Creating application "my-app" from MTA module "my-app"...
+Uploading application "my-app"...
+Scaling application "my-app" to "2" instances...
+Staging application "my-app"...
+Application "my-app" staged
+Starting application "my-app"...
+...
+```
+
+### Verify the result
+
+Check that app and service instance are created, and app has values defined in both extension descriptors:
+
+``` bash
+$ cf s
+...
+name              service            plan             bound apps       last operation     ...
+my-service        application-logs   standard         my-app           create succeeded   ...
+
+$ cf a
+...
+name             requested state   instances   memory   disk   urls
+my-app           started           2/2         2G       1G     ...
+```

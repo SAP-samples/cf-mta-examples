@@ -1,0 +1,23 @@
+ID: "my-mta"
+_schema-version: 3.3.0
+version: 1.0.0
+
+modules:
+  #A cf app which will be bound to the service
+- name: my-app
+  type: application
+  path: "appBits.zip"
+  requires:
+    - name: my-service
+  parameters:
+    instances: 1
+
+resources:
+- name: my-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service-plan: # set the service plan to use
+    service: application-logs #set the service offering (label)
+  parameters-metadata:
+    service-plan:
+      optional: false # make the parameter required
