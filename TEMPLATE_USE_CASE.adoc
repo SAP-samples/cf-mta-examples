@@ -1,0 +1,23 @@
+:toc:
+
+# <TOPIC>
+
+- What is purpose of the feature/scenario.
+- [Optional] Any links to official Cloud Foundry features?
+
+## [Optional] Requirements
+- what you should know in advance
+- what should exist in local dev
+- any other prerequisites?
+
+## [Optional] Oficial documemtation in Help SAP Portal
+- link:https://help.sap.com/[Official Name of the page]
+
+# Try out
+
+## How to execute
+
+### [Optional] Any alternatives for execution, e.g. `cf deploy xx.mtar` and `cf deploy folder/`
+
+## Verify the result
+- Check with CF natives

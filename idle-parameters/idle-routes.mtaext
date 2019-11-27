@@ -1,0 +1,10 @@
+_schema-version: "3.1.0"
+ID: idle.parameters.example.idle-routes
+extends: idle.parameters.example
+
+modules:
+- name: app
+  parameters:
+    idle-routes: 
+     - idle-route: "your-first-idle-hostname.your.first.idle.domain" 
+     - idle-route: "your-second-idle-hostname.your.second.idle.domain"

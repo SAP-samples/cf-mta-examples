@@ -1,0 +1,6 @@
+_schema-version: "3.3.0"
+extends: hello-world
+ID: hello-world-no-parallel
+
+parameters:
+  enable-parallel-deployments: true 

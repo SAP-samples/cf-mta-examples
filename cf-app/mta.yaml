@@ -1,0 +1,66 @@
+ID: a.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+
+modules:
+  #A cf app consuming the configuration
+  - name: my-mta-managed-app-module
+    type: application # value custom would do just as well
+    path: "appBits.zip"
+    properties: #module properties for CF Apps can be consumed as app environment variables at runitime
+      MY_CF_APP_ENV_VARIABLE: "HELLO MTA"
+      A_MORE_COMPLEX_VAR: "{
+        \"can be an entire\":\"json object\",
+        \"with\": [
+          \"nested\": {
+            \"elements\": \"${default-url}\"
+            }
+          ]"
+    parameters: #ALL paramters are optional and can be deleted- defaults will be taken/detected if non specified. 
+      buildpack: staticfile_buildpack
+      app-name: my-cf-app 
+      memory: 1G 
+      disk-quota: 1G 
+      no-route: false 
+      no-start: false 
+      instances: 1 
+      routes: # if not defined, a default route would be auto assinged unless no-route is specified
+        - route: ${default-host}.${default-domain}
+        - route: my-custom-host.at.some.domain
+      upload-timeout: 180 #seconds
+      health-check-type: http #http/port/process
+      health-check-http-endpoint: "/index" # the http route pinged
+      health-check-timeout: 180 #seconds            
+      stack: cflinuxfs3 
+      enable-ssh: true # allows to `cf ssh <my-app-name>`
+      host:  each-host-is-registered-for-all-specified-domans #consider using `routes:` instead
+      ##out of scope for this example:
+      #hosts: #registering multitude of hosts
+      #domain: #rarely are custom domain registered in such manner
+      #domains: 
+      #
+      #command: java -jar ... #start my app in a custom way with this command
+      #
+      #docker:   # schedule a docker image found in that repository instead of staging bits
+      #  image: cloudfoundry/test-app # repo/image:tag
+      #  username: <optional username> #credentials to access docker repo
+      #  password: <optional password> $
+      #
+      #tasks: # Execute this task after staging my app
+      #   - name: my task
+      #     command: echo "Custom command executed in an app container!"
+      #keep-existing: #Usually used when *.mtaext files are not maintained and the platform is relied on to persist the config state. E.g. multitenant apps which receive additional routes on onboarding of accounts 
+      #  env: false 
+      #  routes: false
+      #  service-bindings: false
+      #
+      #Uncommon:
+      #
+      #dependency-type: #used when dealing with circular 'requires' dependencies
+      #
+      #create-service-broker: # and all complementary sb-name, sb-password, sb-space-scoped...
+      #
+      #restart-on-env-change: #Fine tunes deployment behavior on whether to restart on certain events during deployment
+      #  - user-provided: false
+      #  - vcap-application: true
+      #  - vcal-services: false

@@ -1,0 +1,62 @@
+# Keeping existing CF app service bindings during update
+:toc:
+
+## Overview
+This example shows how to preserve manually created service bindings, during an MTA deployment, that are created outside of the MTA. A real use case for that is a multi-tenant scenario where bindings are created during tenant onboarding of a multitenant application, and those bindings are not maintained by MTA deployment. 
+
+Modelled via a module level parameter `keep-existing` and parameter option `service-bindings`:
+```bash 
+modules:
+  - name:...
+    parameters:
+      keep-existing: 
+        service-bindings: true
+```
+
+## Official Documentation
+
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/37eedfdf814d4845ad784334d7ad6f8e.html[MTA Module Types, Resource Types, and Parameters for Applications in the Cloud Foundry Environment]
+
+NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current directory.
+
+## Try out
+
+### Initial deployment
+In that part the MTA will be initially deployed when two applications are deployed and one service instance. There is not binding between them.
+
+directly from an mtad.yaml
+```bash
+  $ cf deploy ./ -f ;
+```
+or start from an mta.yaml:
+```bash
+  $ mbt build -p cf -t . ;
+  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+### Manually bind service instance
+```bash
+  $ cf bind-service cf-app-keeping-bindings dummy-service
+  $ cf bind-service cf-app-resetting-bindings dummy-service
+```
+#### Examine the result
+```bash
+  $ cf services
+Getting services in org ...
+name           service       ... bound apps                                         ...  
+dummy-service  user-provided     cf-app-keeping-bindings, cf-app-resetting-bindings                                    
+```
+### Re-deply to simulate update
+```bash
+  $ cf deploy -f ;
+  # or 
+  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
+#### Examine the result
+Verify that  app `cf-app-keeping-bindings` has the binding preserved and app `cf-app-keeping-bindings` has lost the binding.
+```bash
+  $ cf services
+Getting services in org ...
+name           service       ... bound apps                                         ...  
+dummy-service  user-provided     cf-app-keeping-bindings                                     
+```

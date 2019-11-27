@@ -1,0 +1,76 @@
+# Modifying assembled MTA archives 
+
+:toc:
+:toc-title: Instructions
+
+This example shows how to manually modify, package and deploy an already assembled MTA
+
+NOTE: Such operations are generally prone to errors and failure due to change in input. 
+
+WARNING: If the MTA archive is signed, after modifications signatures may no longer be valid. Depending on the CA and cn, the archive deployment may be rejected 
+
+Please consider using other mechanisms for configuring deployments, as:
+
+* modifying MTA parameters/properties via extension descriptors (-e *.mtaext) (TODO link) 
+* refactor in source code (before initial assembly)
+* deploy multiple MTAs in a single space, use namespaces ( not yet available )
+
+## Try it
+Execute the commands below in the current directory
+
+### 1. Extract the content of the MTA archive
+``` bash
+$ unzip original.mtar
+Archive:  original.mtar
+   creating: META-INF/
+  inflating: META-INF/MANIFEST.MF
+  inflating: META-INF/mtad.yaml
+  inflating: appBits.zip
+```
+
+### 2. Modify the arcive
+
+In example, change the MTA ID as it is not modifyable in an *.mtaext
+``` bash
+$ cat META-INF/mtad.yaml
+  _schema-version: 3.3.0
+  ID: a.cf.app
+  version: 0.0.0
+  ...
+
+$ sed -i -e 's/ID:\(.*\)/ID:\1-with-suffix /g' META-INF/mtad.yaml                                                 
+
+$ cat META-INF/mtad.yaml
+  _schema-version: 3.3.0
+  ID: a.cf.app-with-suffix
+  version: 0.0.0
+  ...
+```
+### 3. Assemble the archive
+``` bash
+zip modified.mtar META-INF/* appBits.zip
+  adding: META-INF/MANIFEST.MF (deflated 25%)
+  adding: META-INF/mtad.yaml (deflated 41%)
+  adding: META-INF/mtad.yaml-e (deflated 41%)
+  adding: appBits.zip (stored 0%)
+```
+
+### 4. Deploy 
+
+``` bash
+$ cf deploy modified.mtar                                     Deploying multi-target app archive modified.mtar in org ***** / space ****** as ******...
+Uploading 1 files...
+  .../modified.mtar
+OK
+Deploying in org "*****" and space "******"
+...
+Process finished.
+```
+### 5. Check out the result
+``` bash
+$ cf mtas
+Getting multi-target apps in org ****** / space ****** as ******...
+OK
+mta id                 version
+a.cf.app-with-suffix   0.0.0 
+```

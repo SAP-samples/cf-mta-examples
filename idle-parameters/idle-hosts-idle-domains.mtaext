@@ -1,0 +1,9 @@
+_schema-version: "3.1.0"
+ID: idle.parameters.example.idle-hosts-idle-domains
+extends: idle.parameters.example
+
+modules:
+- name: app
+  parameters:
+    idle-hosts: ["your-first-idle-hostname", "your-second-idle-hostname"]
+    idle-domains: ["your.first.idle.domain", "your.second.idle.domain"]

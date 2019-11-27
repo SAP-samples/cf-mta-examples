@@ -1,0 +1,37 @@
+ID: test.provider
+_schema-version: 3.3.0
+version: 0.0.0
+
+modules:
+  # Limitation: dummy application used to provide the configurations
+  - name: configMtaApp
+    type: staticfile
+    path: "Staticfile.zip"
+    parameters:
+      no-start: true
+      no-route: true
+      memory: 1M
+    provides:
+      - name: configuration_dev
+        public: true
+        properties:
+          a-config-property: myDevService
+        parameters:
+          #those are optional and limit the scope where the config can be consumed
+          visibility:          
+            - org: ${org}
+              space: ${space}
+      - name: configuration_ci
+        public: true
+        properties:
+          a-config-property: myCIService
+
+
+          
+    
+          
+
+
+      
+      
+    

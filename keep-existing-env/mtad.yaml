@@ -1,0 +1,24 @@
+ID: a.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+
+parameters:
+  #for a faster turnaround
+  enable-parallel-deployments: true
+  
+
+modules:
+  - name: cf-app-keeping-env-changes
+    type: application 
+    path: "appBits.zip"
+    parameters: 
+      keep-existing:
+        env: true
+    properties:
+      managed-env-variable: "original-env-var-val"
+  - name: cf-app-resetting-env
+    type: application 
+    path: "appBits.zip"
+    properties:
+      managed-env-variable: "original-env-var-val"
+      

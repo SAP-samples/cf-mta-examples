@@ -1,0 +1,6 @@
+_schema-version: '3.1'
+ID: test.consumer.ci
+extends: test.consumer
+
+parameters:
+  env: ci

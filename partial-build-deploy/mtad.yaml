@@ -1,0 +1,35 @@
+_schema-version: 3.3.0
+ID: hello-world
+version: 1.0.0
+parameters:
+  enable-parallel-deployments: true
+  
+modules:
+- name: module-a
+  type: staticfile
+  path: content/hello_world.zip
+  requires:
+  - name: service-1
+  parameters:
+    memory: 64M
+- name: module-b
+  type: staticfile
+  path: content/hello_world.zip
+  requires:
+  - name: service-2
+  parameters:
+    memory: 64M
+- name: module-c
+  type: staticfile
+  path: content/hello_world.zip
+  requires:
+  - name: service-3
+  parameters:
+    memory: 64M
+resources:
+- name: service-1
+  type: org.cloudfoundry.user-provided-service
+- name: service-2
+  type: org.cloudfoundry.user-provided-service
+- name: service-3
+  type: org.cloudfoundry.user-provided-service

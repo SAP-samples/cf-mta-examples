@@ -1,0 +1,71 @@
+# Description
+
+The repository contains Multitarget Application (MTA) examples for SAP Cloud Platform Cloud Foundry environment. Examples demonstrate how to achieve different goals using MTAs and what are the capabilities of MTA Deployment service in Cloud Foundry environment.
+
+Before you start with the examples, please make sure that:
+
+* You are familiar with the basic concepts of Cloud Foundry, such as Cloud Foundry applications, services, service bindings
+* You are familiar with the basic concepts of MTA modeling, such as MTA modules, resources and dependencies between them. For more information, you may refer to official documentation for Multitarget Applications for the Cloud Foundry Environment on the SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d04fc0e2ad894545aebfd7126384307c.html[Multitarget Applications for the Cloud Foundry Environment]
+
+# Requirements
+* Installed CloudFoundry CLI - ensure that CloudFoundry CLI is installed and working. For more information about installation of CloudFoundry CLI, please visit the official link:https://docs.cloudfoundry.org/cf-cli/install-go-cli.html[CloudFoundry Documentation].
+* Installed MultiApps CF CLI Plugin - ensure that MultiApps CF CLI Plugin is installed and working. For more information, please visit the official link:https://github.com/cloudfoundry-incubator/multiapps-cli-plugin#download-and-installation[GitHub Page]
+* [Optional] Installed Cloud MTA Build Tool - the tool is used in some of the listed use cases. For more information please visit the official link:https://sap.github.io/cloud-mta-build-tool/[Cloud MTA Build Tool Documentation]
+
+# MTA use case examples 
+
+## Deploy CF Apps
+* link:/cf-app[Simple CF app, app attributes & deploy parameters]
+* link:/app-routes[Managing cf app routes]
+* [Share one app url to another a.k.a. provides/requires dependencies (TODO)]
+* [CF app <-binding to-> services(TODO)]
+* [Apps from docker images(TODO)]
+* [Running app tasks on deploy(TODO)]
+
+## Deploy other SCP Application Content
+* link:/content-deployment[Generic Application Content Deployment]
+
+## Manage CF Services
+* [Create and update cf services(TODO)]
+* [Manage 'existing' services(TODO)]
+* [Manage service keys(TODO)]
+* [Sharing services between MTAs(TODO)]
+
+## Share configuration values between MTAs via a configuration registry
+* link:/cross-mta-configurations[Cross MTA configurations]
+* [Register plugins to a framework via MTAs(TODO)]
+
+## Managing deployment configurations
+* [Parameters, overriding and resolution chain(TODO)]
+* [Providing configuration values with Extension Descriptor(s)(TODO)]
+* link:/modify-packaged-mta[Modifying an assembled MTA archive]
+
+## Parallel deployment
+Optimize deploy time by executing deploy operations in parallel
+
+* link:/parallel-deployment[Parallel module deployment]
+
+## Zero downtime update
+* link:/blue-green-deploy[Blue-green deployment]
+* [Rolling deployment(TODO)]
+
+### Idle host and domain during blue-green deployment
+* link:/idle-parameters[Idle route(s), idle host(s) and idle domain(s)]
+
+## Solution development efficiency
+* link:/partial-build-deploy[Build/Assemble & Deploy only a parts of an MTA]
+* [Test code change in single cf app module (TODO)]
+* [Test code change in single content module (TODO)]
+
+## Preserve manually modified app state
+* link:/keep-existing-routes[Keep exisiting routes on update]
+* link:/keep-existing-bindings[Keep exisiting service bindings on update]
+* link:/keep-existing-env[Keep exisiting app env variables on update]
+
+## Project build setup
+* [Orhcestrating mbt assemble from an public maven build (no nexus.wdf.sap.corp)(TODO)]
+* [Orchestrating build with mbt build (on a complex polyglot project)(TODO)]
+
+## SAP INTERNAL INFRASTRUCTURE SPECIFFIC
+* [Orhcestrating mbt assemble from an internal maven build (mbt from nexus.wdf.sap.corp)(TODO)
+https://wiki.wdf.sap.corp/wiki/display/xs2/Creating+MTA+Archives+with+Maven]

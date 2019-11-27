@@ -1,0 +1,147 @@
+:toc:
+
+# Partial deployment
+
+Partial deployment is a feature allowing fine control over which parts of the MTA are getting processed by the MTA Deployment service and which not.
+One is able to select only certain module(s) and/or resource(s) for deployment. The MTA Deployment service takes care to orchestrate the deployment only for the selected parts and skips the rest.
+
+WARNING: All descriptor validations and dependency cheks on the processed modules are always executed. If the MTA archive is invalid or e.g. an module has a missing dependency (i.e. service instance which should be bound to but does not exist), deployment fails. 
+
+## Usage
+To use feature, pass one of the following environment variablest to the `cf deploy` or `cf bg-deploy commands`
+
+|===
+|-m <module name>|
+Deploy only the module with the specified name.
+Note: It can be used multiple times.
+|--all-modules|
+Deploy all modules.
+|-r <resource name>|
+Deploy only the resource with the specified name
+Note:It can be used multiple times.
+|--all-resources|
+Deploy all resources.ß
+|===
+
+## Partial build & assembly
+Only selected moduels would be built and included in the MTA archive. This optimizes built & assembly time, the archive size and respectfully upload & processing time in the MTA deployment service. 
+
+### Partial build
+Partial build procedure is under construction...
+
+### Partial assembly
+If staring from mtad.yaml, the cf deploy command is capable of assembling an MTA archive just before deployment. The list of modules passed to the (bg-)deploy command is used to select which would be included in the assembled archive.
+
+NOTE: the modules `path` argument has to be maintained for assembly to work. All selected modules should have such pointing to properly build module bits.
+
+## Partial deploy
+
+In the current directory you'll find example cf app payload with the following structure:
+
+image::MTAstructure.png[mta structure diagram]
+
+* development descriptor: link:mta.yaml[mta.yaml]
+* deployment descriptor: link:mtad.yaml[mtad.yaml]
+
+
+## Official Documentation
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/65ddb1b51a0642148c6b468a759a8a2e.html[Multitarget Application Commands for the Cloud Foundry Environment]
+
+# Try out
+
+## Deploy directly from directory, via mtad.yaml 
+In the current directory, run `cf deploy -m module-b -r service-2`. This will automatically assemble an MTA archive and deploy it 
+```bash
+$ cf deploy -m module-b -r service-2
+Deploying multi-target app archive */mta-examples/hello-world.mtar in org ******** / space ******** as **** ...
+Uploading 1 files...
+  */mta-examples/hello-world.mtar
+OK
+...
+No deployed MTA detected - this is initial deployment
+Processing service "service-2"...
+Creating service "service-2" from MTA resource "service-2"...
+Creating application "module-b" from MTA module "module-b"...
+Uploading application "module-b"...
+Scaling application "module-b" to "1" instances... 
+Staging application "module-b"...
+Application "module-b" staged
+Starting application "module-b"..
+Application "module-b" started and available at "******-*-module-b.cfapps.sap.hana.ondemand.com"
+Skipping deletion of services, because the command line option "--delete-services" is not specified.
+Process finished.
+```
+## Assemble MTA archive via mtad.yaml and deploy
+First use `mbt assemble` to create the *.mtar and than deploy it with `cf deploy`.
+
+NOTE: This approach is less efficient, as all modules are included in the MTA archive and uploaded to the MTA deployment service. Regardless that only the selected ones are processed. 
+```bash
+$$ mbt assemble
+  INFO assembling the MTA project...
+  INFO copying the MTA content...
+  INFO generating the metadata...
+  INFO generating the MTA archive...
+  INFO the MTA archive generated at: /Users/i076083/git/mta_examples/partial-build-deploy/mta_archives/hello-world_1.0.0.mtar
+  INFO cleaning temporary files...
+$ cf deploy mta_archives/hello-world_1.0.0.mtar -m module-c -r service-3
+  ...
+```
+## Build MTA archive via mta.yaml and deploy
+First use `mbt build` to create the *.mtar and than deploy it with `cf deploy`.
+
+NOTE: This approach is less efficient, as all modules are included in the MTA archive and uploaded to the MTA deployment service. Regardless that only the selected ones are processed. 
+```bash
+$ mbt build
+  INFO generating the "Makefile_20191029155931.mta" file...
+  INFO done
+  INFO executing the "make -f Makefile_20191029155931.mta p=cf mtar= strict=true mode=" command...
+  INFO validating the MTA project
+  INFO validating the MTA project
+  INFO building the "module-a" module...
+  INFO the build results of the "module-a" module will be packed and saved in the "/mta_examples/partial-build-deploy/.partial-build-deploy_mta_build_tmp/module-a" folder
+  INFO building the "module-b" module...
+  INFO the build results of the "module-b" module will be packed and saved in the "/mta_examples/partial-build-deploy/.partial-build-deploy_mta_build_tmp/module-b" folder
+  INFO building the "module-c" module...
+  INFO the build results of the "module-c" module will be packed and saved in the "/mta_examples/partial-build-deploy/.partial-build-deploy_mta_build_tmp/module-c" folder
+  INFO generating the metadata...
+  INFO generating the MTA archive...
+  INFO the MTA archive generated at: /mta_examples/partial-build-deploy/mta_archives/hello-world_1.0.0.mtar
+  INFO cleaning temporary files...
+$ cf deploy mta_archives/hello-world_1.0.0.mtar
+  Deploying multi-target app archive mta_archives/hello-world_1.0.0.mtar in org ****** / space ****** as ******...
+  Uploading 1 files...
+  ...
+```
+
+## Dependency validations
+
+WARNING: When selecting an MTA module/resource for processing, make sure it's dependencies are also selected or are already existing.
+ 
+E.g. If in a clean environment, only a module is selected, without the services it depends on - deployment would fail
+
+```bash
+$ cf undeploy hello-world --delete-services -f
+... 
+Process finished.
+
+$ cf mtas
+Getting multi-target apps in org ******** / space ******** as ********...
+OK
+mta id           version   
+
+$ cf deploy ./ -m module-b
+Creating application "module-b" from MTA module "module-b"...
+Error creating or updating application "module-b": Could not bind application "module-b" to service "service-2": 404 Not Found: Service service-2 not found. 
+
+$ cf deploy ./ -r service-2 -f 
+Creating service "service-2" from MTA resource "service-2"...
+...
+Process finished.
+
+$ cf deploy ./ -m module-b
+...
+Application "module-b" started and available at "******-*-module-b.cfapps.sap.hana.ondemand.com"
+...
+Process finished.
+```
+HINT: If you expect tu redeploy MTA modules/resources multiple times e.g. when doing minor adjustments to them - it may make sense to do a full deployment once and later only update the modules/resources you want. 

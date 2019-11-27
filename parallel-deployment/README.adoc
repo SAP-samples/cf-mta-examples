@@ -1,0 +1,108 @@
+:toc:
+
+# Parallel deployment
+
+Parallel deployment of MTA modules is a feature allowing to speed-up the deploy proces by processing the deployment multiple MTA modules in parallel. The feature is applicable either for standard and blue-green deployment scenarios.
+
+## Activation
+To activate the feature, set the "enable-parallel-deployments" global parameter to true
+
+```yaml
+...
+ID: myMtaID
+parameters:
+  enable-parallel-deployments: true
+...
+```
+NOTE: this can be done in the mta.yaml, mtad.yaml or via an additional extension descriptor (*.mtaext) passed during deployment
+
+## Deployment order
+When parallel deployments are activated, unless explicitly specified all modules are deployed simultaineously. There are cases in which a module has a dependency to another - e.g. the module initializing the database should be deployed before the others consuming that same database.
+The module element 'deployed-after' should be used to declare that dependency and influence the order of behavior:
+
+```yaml
+...
+modules:
+...
+- name: first-module
+- name: second-module
+  deployed-after:
+      - first-module
+...
+```
+## Official Documentation
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html[Modules]
+
+# Try it out
+In the current directory you'll find example cf app payload modelled to be deployed in parallel in both
+
+* development descriptor: link:mta.yaml[mta.yaml]
+* deployment descriptor: link:mtad.yaml[mtad.yaml]
+* extension descriptors
+** enabling parallelization: link:hello-world-parallel.mtaext[hello-world-parallel.mtaext]
+** disabling parallelization: link:[hello-world-no-parallel.mtaext]
+
+## Deploy directly from directory
+
+In the current directory of the repository, run `cf deploy` that will use `mtad.yaml`. This will automatically assemble an MTA archive and deploy it 
+```bash
+$cf deploy
+Deploying multi-target app archive ~/mta-examples/hello-world.mtar in org ****** / space ****** as ******...
+...
+Updating application "hello-world-second"...
+Updating application "hello-world"...
+Uploading application "hello-world-second"...
+...
+```
+
+## Assemble MTA archive via mtad.yaml and deploy
+First use `mbt assemble` to create the *.mtar from development descritpror `mta.yaml` and than deploy it with `cf deploy`.
+
+```bash
+$ mbt assemble
+  INFO assembling the MTA project...
+  INFO copying the MTA content...
+  INFO generating the metadata...
+  INFO generating the MTA archive...
+  INFO the MTA archive generated at: /mta_examples/parallel-deployment/mta_archives/hello-world_1.0.0.mtar
+  INFO cleaning temporary files...
+$ cf deploy mta_archives/hello-world_1.0.0.mtar
+  Deploying multi-target app archive mta_archives/hello-world_1.0.0.mtar in org ****** / space ****** as ******...
+  Uploading 1 files...
+```
+
+## Build MTA archive via mta.yaml and deploy
+First use `mbt build` to create the *.mtar and than deploy it with `cf deploy`.
+```bash
+$ mbt build
+  INFO generating the "Makefile_20191029153016.mta" file...
+  INFO done
+  INFO executing the "make -f Makefile_20191029153016.mta p=cf mtar= strict=true mode=" command...
+  INFO validating the MTA project
+  INFO validating the MTA project
+  INFO building the "hello-world" module...
+  INFO the build results of the "hello-world" module will be packed and saved in the "/mta_examples/parallel-deployment/.parallel-deployment_mta_build_tmp/hello-world" folder
+  INFO building the "hello-world-first" module...
+  INFO the build results of the "hello-world-first" module will be packed and saved in the "/mta_examples/parallel-deployment/.parallel-deployment_mta_build_tmp/hello-world-first" folder
+  INFO building the "hello-world-second" module...
+  INFO the build results of the "hello-world-second" module will be packed and saved in the "/mta_examples/parallel-deployment/.parallel-deployment_mta_build_tmp/hello-world-second" folder
+  INFO building the "hello-world-third" module...
+  INFO the build results of the "hello-world-third" module will be packed and saved in the "mta_examples/parallel-deployment/.parallel-deployment_mta_build_tmp/hello-world-third" folder
+  INFO generating the metadata...
+  INFO generating the MTA archive...
+  INFO the MTA archive generated at: /mta_examples/parallel-deployment/mta_archives/hello-world_1.0.0.mtar
+  INFO cleaning temporary files...
+$ cf deploy mta_archives/hello-world_1.0.0.mtar
+  Deploying multi-target app archive mta_archives/hello-world_1.0.0.mtar in org ***** / space ****** as ******...
+  Uploading 1 files...
+  ...
+```
+
+## Enable/disable parallel deployments with extension descriptors using created *.mtar file
+```bash
+cf deploy mta_archives/hello-world_1.0.0.mtar -e hello-world-parallel.mtaext
+```
+```bash
+cf deploy mta_archives/hello-world_1.0.0.mtar -e hello-world-no-parallel.mtaext
+```
+Note the processing of the MTA in the command output of both commands.

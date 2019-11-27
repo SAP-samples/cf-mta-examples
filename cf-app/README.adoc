@@ -1,0 +1,67 @@
+:toc:
+
+# Managing CF Apps with an MTA
+
+This example shows how to model a simple CF application in an MTA, deploy it set some attributes and configure the deployer behavior
+
+# Try out
+
+## Deploy an MTA containing an cf app.
+
+The example demostrate 2 different approaches that lead to the same result.
+
+### Deploy from directory
+That approach uses deployment descritpr `mtad.yaml` and ready application binaries `appBits.zip`:
+``` bash
+cf deploy ./ -f ;
+```
+### Build and Deploy
+The approach is using development descriptor `mta.yaml`and application binaries `appBits.zip` to build MTAR.
+Then the MTAR is deployed.
+
+``` bash
+mbt build -p cf -t . ;
+cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
+
+## Examine the result
+
+### List the deployed mta
+```bash
+$ cf mta a.cf.app ;
+Showing health and status ...
+OK
+Version: 0.0.0
+Apps:
+name        requested state   instances   memory   disk   urls   
+my-cf-app   started           1/1         1G       1G     orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com, my-custom-host.at.some.domain 
+```
+
+### List app status and attributes 
+``` bash
+$cf app my-cf-app ;
+Showing health and status for app my-cf-app in org ********** / space ******** as **********...
+
+name:              my-cf-app
+requested state:   started
+routes:            orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com, my-custom-host.at.some.domain
+last uploaded:     Thu 22 Aug 00:46:00 EEST 2019
+stack:             cflinuxfs3
+buildpacks:        staticfile
+
+type:           web
+instances:      1/1
+memory usage:   1024M
+     state     since                  cpu    memory        disk         details
+#0   running   2019-08-21T21:46:14Z   1.1%   12.2M of 1G   5.3M of 1G
+```
+
+### List app env variables and find the defined properties in the User Provided section 
+``` bash
+$cf env my-cf-app | grep "MY_CF_APP_ENV_VARIABLE" ;
+  MY_CF_APP_ENV_VARIABLE: HELLO MTA
+$cf env my-cf-app | grep "A_MORE_COMPLEX_VAR" ;
+  A_MORE_COMPLEX_VAR: { "can be an entire":"json object", "with": [ "nested": { "elements": "https://each-host-is-registered-for-all-specified-domans.cfapps.sap.hana.ondemand.com" } ]
+```

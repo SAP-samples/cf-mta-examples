@@ -1,0 +1,29 @@
+ID: a.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+
+parameters:
+  #when glboally defined, applies to all cf apps in MTA (unless overriden)
+  keep-existing-routes: false
+  #for a faster turnaround
+  enable-parallel-deployments: true
+  
+
+modules:
+  #A cf app consuming the configuration
+  - name: cf-app-keeping-simple-param
+    type: application # value custom would do just as well
+    path: "appBits.zip"
+    parameters: #ALL paramters are optional and can be deleted- defaults will be taken/detected if non specified. 
+      keep-existing-routes: true
+  - name: cf-app-keeping-complex-param
+    type: application # value custom would do just as well
+    path: "appBits.zip"
+    parameters: #ALL paramters are optional and can be deleted- defaults will be taken/detected if non specified. 
+      keep-existing:
+        env: false
+        routes: true
+  - name: cf-app-unmapping-routes
+    type: application # value custom would do just as well
+    path: "appBits.zip"
+      

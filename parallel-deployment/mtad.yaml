@@ -1,0 +1,32 @@
+_schema-version: 3.3.0
+ID: hello-world
+version: 1.0.0
+parameters:
+  enable-parallel-deployments: true
+
+modules:
+- name: hello-world
+  type: staticfile
+  path: content/hello_world.zip
+  parameters:
+    memory: 64M
+
+- name: hello-world-first
+  type: staticfile
+  path: content/hello_world.zip
+  parameters:
+    memory: 64M
+    
+- name: hello-world-second
+  type: staticfile
+  path: content/hello_world.zip
+  parameters:
+    memory: 64M
+
+- name: hello-world-third
+  type: staticfile
+  path: content/hello_world.zip
+  deployed-after:
+      - hello-world
+  parameters:
+    memory: 64M

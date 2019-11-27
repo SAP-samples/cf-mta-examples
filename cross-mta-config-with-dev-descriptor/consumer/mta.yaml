@@ -1,0 +1,63 @@
+ID: test.consumer
+_schema-version: 3.3.0
+version: 0.0.0
+
+parameters:
+  #default value for a global property. can be overwritten with an *.mtaext
+  env: dev
+
+
+resources:
+#This is how you consume configurations persisted in the deployer
+- name: external-configurations
+  type: configuration
+  parameters: #all optional but it makes sense for at least one to be used
+    #you can select which exact configuration to consume with a single param in a *.mtaext file
+    provider-id: test.provider:configuration_${env}
+    target: 
+      org: ${org}
+      space: ${space}
+    version: ">=0.0.0"
+
+#a cf backing service using the configs 
+- name: myBackingService
+  type: org.cloudfoundry.managed-service
+  requires: #A resource can consume another ressource 
+    - name: external-configurations
+  parameters:
+    service: application-logs
+    service-plan: lite
+    #using a configuration value to select the e.g. service name
+    service-name: ~{external-configurations/a-config-property}
+    #modifying the config value and using it as a service tag
+    customParamValue: ~{external-configurations/a-config-property}.customized_tag
+    service-tags:
+      - ${customParamValue}
+
+modules:
+  #A cf app consuming the configuration
+  - name: staticapp
+    type: staticfile
+    path: Staticfile.zip
+    parameters:
+      no-route: true
+      no-start: true
+      #A parameter consuming a config
+      the-config-in-module-parameter: ~{external-configurations/a-config-property}.inModuleParameter
+    properties: #defines env variables
+      #one can directly reference a config without requires->properties and without explicitly specifying parameter names elsewhere
+      property-directly-referencing-the-config: ~{external-configurations/a-config-property}.directly
+      via-module-parameter-value: ${the-config-in-module-parameter}
+    requires:
+      - name: external-configurations
+        parameters:
+          #configs can be referenced form a parameter
+          param-in-requires: ~{a-config-property}.inRequiresParam
+        properties: #also define env variables referencing the config
+          #references a property from the external config
+          property-referencing-config-in-requires: ~{a-config-property}.inRequiresProperty
+          #parameters within a requires can be consumed as:
+          via-param-in-requires: ${param-in-requires}.inRequiresProperty
+      #binding
+      - name: myBackingService     
+    

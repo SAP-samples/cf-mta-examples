@@ -1,0 +1,93 @@
+# Keeping existing CF App environment variables during update
+:toc:
+
+## Overview
+This example shows how to preserve manually set app environment variables during MTA deployment. The may be used used e.g. when an operator changes an app configuration, which should not be reverted, in case that configuration is not maintained in an *.mtaext extension descriptor given during deployment. 
+
+Modelled via a module level parameter `keep-existing:...`
+
+```bash 
+modules:
+  - name:...
+    parameters:
+      keep-existing: 
+        routes:true
+```
+NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current directory.
+
+### 1 Deploy 
+directly from an mtad.yaml
+```bash
+  $ cf deploy ./ -f ;
+```
+or start from an mta.yaml:
+```bash
+  $ mbt build -p cf -t . ;
+  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+### 2 Examine initial state
+```bash
+  $ cf env cf-app-keeping-env-changes
+...
+User-Provided:
+...
+managed-env-variable: original-env-var-val
+```
+```bash
+  $ cf env cf-app-resetting-env
+...
+User-Provided:
+...
+managed-env-variable: original-env-var-val
+```
+### 3 Manually set a new env variable
+```bash
+  $ cf set-env cf-app-keeping-env-changes new-env-variable new-env-var-val
+  $ cf set-env cf-app-keeping-env-changes managed-env-variable changed-env-var-val
+  $ cf set-env cf-app-resetting-env new-env-variable new-env-var-val
+  $ cf set-env cf-app-resetting-env managed-env-variable changed-env-var-val
+  
+```
+### 4 Examine the change
+```bash
+  $ cf env cf-app-keeping-env-changes
+...
+User-Provided:
+...
+managed-env-variable: changed-env-var-val
+new-env-variable: new-env-var-val
+```
+```bash
+  $ cf env cf-app-resetting-env
+...
+User-Provided:
+...
+managed-env-variable: changed-env-var-val
+new-env-variable: new-env-var-val
+```
+### 5 Re-deply to simulate update
+```bash
+  $ cf deploy -f ;
+  # or 
+  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
+### 6 Check out the result
+```bash
+  $ cf env cf-app-keeping-env-changes
+...
+User-Provided:
+...
+managed-env-variable: original-env-var-val
+new-env-variable: new-env-var-val
+```
+```bash
+  $ cf env cf-app-resetting-env
+...
+User-Provided:
+...
+managed-env-variable: original-env-var-val
+```
+Note that app `cf-app-keeping-env-changes` has the `new-env-variable` var kept, but has the `managed-env-variable` value's reset as defined in the mtad.yaml.
+
+App `cf-app-resetting-env` has lost the custom env variable and also has the `managed-env-variable` value reset.

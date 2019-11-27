@@ -1,0 +1,63 @@
+# Keeping exisiting routes on update
+:toc:
+
+## Overview
+This example shows how to preserve manual mappings of app routes during MTA deployment. The feature is usually used e.g. when tenant onboarding of multitenant apps creates a route for each tenant, and that route is not maintained e.g. in an *.mtaext - extension descriptor given to the MTA deployer. 
+
+Activated in 3 ways:
+
+* global parameter `keep-existing-routes: true` 
+* module level parameter `keep-existing-routes: true`
+* module level parameter `keep-existing:...`
+
+```bash 
+  ...
+  parameters:
+    keep-existing: 
+      routes:true
+```
+NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current directory.
+
+### 1 Deploy 
+directly from an mtad.yaml
+```bash
+  $ cf deploy ./ -f ;
+```
+or start from an mta.yaml:
+```bash
+  $ mbt build -p cf -t . ;
+  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+### 2 Manually map routes to the cf apps
+```bash
+  $ cf map-route cf-app-unmapping-routes apps.internal --hostname "custom-host"
+  $ cf map-route cf-app-keeping-complex-param apps.internal --hostname "custom-host"
+  $ cf map-route cf-app-keeping-simple-param apps.internal --hostname "custom-host"
+  
+```
+### 3 Examine the new routing
+```bash
+$ cf apps
+Getting apps in org ...
+name                           requested state   instances   memory   disk   urls
+cf-app-keeping-complex-param   started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-complex-param.<default-domain>, 
+cf-app-keeping-simple-param    started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-simple-param.<default-domain>
+cf-app-unmapping-routes        started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-unmapping-routes.<default-domain>
+```
+### 3 Re-deply to simulate update
+```bash
+  $ cf deploy -f ;
+  # or 
+  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
+### 4 Check out the result
+```bash
+$ cf apps
+Getting apps in org ...
+name                           requested state   instances   memory   disk   urls
+cf-app-keeping-complex-param   started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-complex-param.<default-domain>, 
+cf-app-keeping-simple-param    started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-simple-param.<default-domain>
+cf-app-unmapping-routes        started           1/1         1G       1G     <org>-<space>-cf-app-unmapping-routes.<default-domain>
+```
+Note that apps having 'keep-existing..' parameters activate, have the url `custom-host.apps.internal`. App `cf-app-unmapping-routes` has it unmapped.
