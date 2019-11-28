@@ -57,7 +57,7 @@ Optimize deploy time by executing deploy operations in parallel
 
 # Limitations
 
-Most of the examples are generic for link:https://github.com/cloudfoundry-incubator/multiapps-controller[MultiApps Controller] that is the standard MTA Deployment service for Cloud Foundry. However, some of the examples are designated only for SAP Cloud Platform Cloud Foundry, not for other distributions of Cloud Foundry, because of offerings and other functionalities available only there.
+Most examples are generic for link:https://github.com/cloudfoundry-incubator/multiapps-controller[MultiApps Controller] that is the standard MTA Deployment service for Cloud Foundry. Some, however are runnable only on SAP Cloud Platform Cloud Foundry, because of speciffic service offerings or functionalities available only there.
 
 # Known Issues
 
