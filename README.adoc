@@ -29,12 +29,14 @@ Clone the repository, following the link:https://help.github.com/en/github/creat
 
 ## Manage CF Services
 * link:/create-managed-services[Service and binding creation]
+* link:/user-provided-service[Manage User-Provided Service Instances]
 
 ## Share configuration values between MTAs via a configuration registry
 * link:/cross-mta-configurations[Cross MTA configurations]
 
 ## Managing deployment configurations
 * link:/modify-packaged-mta[Modifying an assembled MTA archive]
+* link:/extension-descriptor-different-environments[Configure same MTA for different environments]
 
 ## Parallel deployment
 Optimize deploy time by executing deploy operations in parallel
