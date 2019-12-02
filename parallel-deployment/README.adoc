@@ -2,36 +2,52 @@
 
 # Parallel deployment
 
-Parallel deployment of MTA modules is a feature allowing to speed-up the deploy proces by processing the deployment multiple MTA modules in parallel. The feature is applicable either for standard and blue-green deployment scenarios.
+Parallel deployment is a feature that allows to speed-up the deploy proces by processing multiple MTA modules in parallel. The feature is applicable either for standard and blue-green deployment scenarios.
+
+Parallel deployment feature concerns SAP Cloud Platform entities that are represented by MTA modules - applications and application contents.
+
+The feature does not relate to entities represented by MTA resources, for instance Cloud Foundry services. By default Cloud Foundry servicecs are processed in parallel without need of any additional configuration.
+
+## Official Documentation
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html[Modules]
 
 ## Activation
-To activate the feature, set the "enable-parallel-deployments" global parameter to true
+
+To activate the feature:
+
+- Use `_schema-version` with major version `3`, for instance `3.1.0` or `3.3.0` 
+- Set the global parameter `enable-parallel-deployments` to `true` 
+
 
 ```yaml
 ...
-ID: myMtaID
+_schema-version: 3.3.0
+ID: hello-world
+version: 1.0.0
 parameters:
   enable-parallel-deployments: true
 ...
 ```
-NOTE: this can be done in the mta.yaml, mtad.yaml or via an additional extension descriptor (*.mtaext) passed during deployment
+NOTE: Setting up the value of `enable-parallel-deployments` can be done in the mta.yaml, mtad.yaml or via an additional extension descriptor (*.mtaext) passed during deployment
 
 ## Deployment order
-When parallel deployments are activated, unless explicitly specified all modules are deployed simultaineously. There are cases in which a module has a dependency to another - e.g. the module initializing the database should be deployed before the others consuming that same database.
-The module element 'deployed-after' should be used to declare that dependency and influence the order of behavior:
+
+When parallel deployment is activated, all modules are deployed simultaineously. There are cases when a module has a dependency to another - e.g. the module initializing the database should be deployed before the others consuming that same database.
+
+The module element `deployed-after` should be used to declare that dependency and influence the order of behavior:
 
 ```yaml
 ...
 modules:
 ...
-- name: first-module
-- name: second-module
+- name: hello-world
+...
+
+- name: hello-world-third
   deployed-after:
-      - first-module
+      - hello-world
 ...
 ```
-## Official Documentation
-* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html[Modules]
 
 # Try it out
 In the current directory you'll find example cf app payload modelled to be deployed in parallel in both
@@ -41,6 +57,8 @@ In the current directory you'll find example cf app payload modelled to be deplo
 * extension descriptors
 ** enabling parallelization: link:hello-world-parallel.mtaext[hello-world-parallel.mtaext]
 ** disabling parallelization: link:[hello-world-no-parallel.mtaext]
+
+The example MTA contains 4 modules `hello-world`, `hello-world-first`, `hello-world-second` and `hello-world-third` where 3 of them does not have any dependency order and will be processed in parallel accordingly. Only `hello-world-third` depends on `hello-world`, so it will be processed after `hello-world` is completed.
 
 ## Deploy directly from directory
 
@@ -66,6 +84,7 @@ $ mbt assemble
   INFO generating the MTA archive...
   INFO the MTA archive generated at: /mta_examples/parallel-deployment/mta_archives/hello-world_1.0.0.mtar
   INFO cleaning temporary files...
+  
 $ cf deploy mta_archives/hello-world_1.0.0.mtar
   Deploying multi-target app archive mta_archives/hello-world_1.0.0.mtar in org ****** / space ****** as ******...
   Uploading 1 files...
@@ -92,6 +111,7 @@ $ mbt build
   INFO generating the MTA archive...
   INFO the MTA archive generated at: /mta_examples/parallel-deployment/mta_archives/hello-world_1.0.0.mtar
   INFO cleaning temporary files...
+  
 $ cf deploy mta_archives/hello-world_1.0.0.mtar
   Deploying multi-target app archive mta_archives/hello-world_1.0.0.mtar in org ***** / space ****** as ******...
   Uploading 1 files...
