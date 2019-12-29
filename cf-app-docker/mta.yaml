@@ -1,0 +1,15 @@
+ID: a.docker.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+
+modules:
+  #A cf app consuming the configuration
+  - name: my-mta-managed-app
+    path: "."
+    type: application # value custom would do just as well
+    parameters: #ALL paramters are optional and can be deleted- defaults will be taken/detected if non specified. 
+      docker:   # schedule a docker image found in that repository instead of staging bits
+        image: cloudfoundry/test-app # repo/image:tag
+        # username: <optional username> #credentials to access docker repo
+        # password: <optional password> $
+      

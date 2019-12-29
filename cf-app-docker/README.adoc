@@ -1,0 +1,96 @@
+:toc:
+
+# Deploying docker images as CF Apps with an MTA
+
+This example shows how to model a CF application running a docker image, as an MTA. Cloud foundry container runtime brings the capability to download docker images from a registry as dockerhub and to spin up containers from such. Those containers are managed just as regular cf apps.
+Documentated in the CF docs: link:https://docs.cloudfoundry.org/devguide/deploy-apps/push-docker.html[Deploying an App with Docker]
+
+The actual image getting deployed is of a cf sample app written in go: https://github.com/cloudfoundry-samples/test-app.git 
+
+# Try it out
+
+## Deploy an MTA containing a cf app referencing a docker image.
+
+The example demostrate 2 different approaches that lead to the same result. 
+
+### Deploy directly from directory
+That approach uses deployment descritpr `mtad.yaml` :
+```bash
+$ cf deploy ./
+Deploying multi-target app archive /Users/******/dev/repos/ds/cf-mta-examples/cf-app-docker/a.docker.cf.app.mtar in org ****** / space ****** as ******...
+...
+Deploying in org "deploy-service" and space "******"
+Detected MTA schema version: "3"
+Detected deployed MTA with ID "a.docker.cf.app" and version "0.0.0"
+Detected new MTA version: "0.0.0"
+Deployed MTA version: "0.0.0"
+Adding domain "my-mta-managed-app.cfapps.sap.hana.ondemand.com"...
+Updating application "my-mta-managed-app"...
+Uploading application "my-mta-managed-app"...
+Stopping application "my-mta-managed-app"...
+Starting application "my-mta-managed-app"...
+Application "my-mta-managed-app" started and available at "my.my-mta-managed-app.cfapps.sap.hana.ondemand.com"
+...
+Process finished.
+```
+### Or Assemble an MTA archive and deploy it
+The approach uses deployment descriptor `mtad.yaml` and Cloud MTA Build Tool uses it to assemble already built binaries in an MTAR.
+Then the newly generated MTAR is used for deployment.
+
+```bash
+mbt assemble
+cf deploy mta_archives/a.docker.cf.app_0.0.0.mtar ;
+
+```
+
+### Or Build an MTA and Deploy
+The approach is using development descriptor `mta.yaml` to build & assemble an MTAR. 
+In this example, both mta.yaml and mtad.yaml descriptors are identical. The mta build practically does no changes to such cf app modules. It would have orchestrated a build for modules of other types if such were modelled in the mta.yaml. 
+The MTAR is deployed with `cf deploy` after the build & assembly are done.
+
+```bash
+mbt build -p cf -t . ;
+cf deploy mta_archives/a.docker.cf.app_0.0.0.mtar ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
+
+## Examine the result
+
+### List the deployed mta
+```bash
+$ cf mta a.docker.cf.app                                                                                      
+Showing health and status for multi-target app a.docker.cf.app in org ****** / space ****** as ******...
+OK
+Version: 0.0.0
+
+Apps:
+name                 requested state   instances   memory   disk   urls   
+my-mta-managed-app   started           1/1         1G       1G     my.my-mta-managed-app.cfapps.sap.hana.ondemand.com
+```
+
+### List app status and attributes 
+```bash
+$cf app my-mta-managed-app
+Showing health and status for app my-mta-managed-app in org ****** / space ****** as ******...
+
+name:              my-mta-managed-app
+requested state:   started
+routes:            my.my-mta-managed-app.cfapps.sap.hana.ondemand.com            
+stack:             
+docker image:      cloudfoundry/test-app:latest
+```
+
+### Test if the app is working
+Find the route assigned to the app in the previous output (of `cf deploy`, `cf mta` or `cf app`)
+
+- Directly open it in a browser as https://<route>
+
+- Or execute a get request from the command line
+```bash
+curl https://my.my-mta-managed-app.cfapps.sap.hana.ondemand.com/index
+0
+echo $?
+0
+``` 
+
