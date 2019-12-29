@@ -1,3 +1,4 @@
 */mta_archives/*.mtar
 .DS_Store
 */target/*
+*.code-workspace
