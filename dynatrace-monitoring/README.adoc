@@ -1,0 +1,103 @@
+:toc:
+# Enabling Dynatrace monitoring for a CF app
+
+link:https://www.dynatrace.com/technologies/sap-cloud-platform-monitoring/[Dynatrace] is a powerfull monitoring solution consumable in SAP Cloud Platform. For CF applications, link:https://www.dynatrace.com/support/help/technology-support/cloud-platforms/cloud-foundry/installation-and-operation/application-only/deploy-oneagent-on-sap-cloud-platform-for-application-only-monitoring/[dynatrace monitoring is enabled] with the an agent, delivered by a buildpack during app staging. 
+
+The configurations for that agent consist of
+ 
+ - credentials set as a CF user-provided service*. Such include an environment id; url; token. 
+ - app env variables consumed by the DT "OneAgent".
+
+This example demonstrates how to manage dynatrace enablement with an MTA, including 
+- the user-provided service instance 
+- the app-service binding to it
+- OneAgent configuration via app env.
+
+*A generic example of modelling user-provided services in MTAs is available link:../user-provided-service/README.adoc[here]
+
+## Documemtation 
+- Dynatrace SAP Cloud Platform monitoring: https://www.dynatrace.com/technologies/sap-cloud-platform-monitoring/ 
+- Sap Cloud Platform applicaiton monitoring with Dynatrace One Agent: https://www.dynatrace.com/support/help/technology-support/cloud-platforms/cloud-foundry/installation-and-operation/application-only/deploy-oneagent-on-sap-cloud-platform-for-application-only-monitoring/ 
+- SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/37eedfdf814d4845ad784334d7ad6f8e.html[MTA Module Types, Resource Types, and Parameters for Applications in the Cloud Foundry Environment] -> Special Resource Types
+
+
+## Requirements
+- Installed JDK & maven, to build the java app in the example
+- Dynatrace environment to report metrics to
+
+## Try it out
+
+### Build a sample java app
+Pull the java app sources referenced with a git submodule
+
+```bash
+git submodule init
+git submodule update
+```
+
+Trigger a maven build in the app project directory
+
+```bash
+mvn clean install -f gs-rest-service/complete/pom.xml
+```
+
+### Deploy with a deployment descriptor (mtad.yaml)
+
+For simplicity of the example, let's first maintain the dynatrace credentials in the mtad.yaml.
+
+#### Add dynatrace credentials to mtad.yaml
+Update the following elements in the `link:mtad.yaml[mtad.yaml]` with the ones speciffic by your dynatrace environment.
+
+```yaml
+    environmentid: "YOUR_ENVIRONMENTID"
+    apitoken: "YOUR_API_TOKEN"
+    apiurl: "https://<YourManagedServerURL>/e/<environmentID>/"
+```
+
+### Trigger deployment
+
+```bash
+  $ cf deploy ./ -f
+  ...
+  Processing service "my-dynatrace-credentials"...
+  Creating service "my-dynatrace-credentials" from MTA resource "my-dynatrace-ups"...
+  ...
+  Creating application "spring-app" from MTA module "my-java-app-module"...
+  Uploading application "spring-app"...
+  Scaling application "spring-app" to "1" instances...
+  Staging application "spring-app"...
+  ...
+  Process finished.
+```
+
+NOTE: Alternatively, the build can be orchestrated with the mta build tool. In that case, an mta.yaml is defined. An intermediate deployable package - an MTA archive (*.mtar) is produced before deployment. For example, see link:../cf-app/README.adoc[a cf app example]
+
+#### Verify the result
+Open your dynatrace environment and observe the metrics of that application being deployed
+
+### Specify dynatrace credentials in an extension descriptor
+
+It may make sense to store concrete environment(s) credentials in separate files, outside to the application source code repository. This can be achieved with extension descriptors.
+
+#### Define DT environment credentials in an extension descriptor
+- Delete the previously set credentials from `link:mtad.yaml[mtad.yaml]`
+- Set the values to the coresponding entries in `link:service-credentials.mtaext[service-credentials.mtaext]`
+
+#### Trigger deployment with the extension descriptor
+
+```bash
+  $  cf deploy ./ -e service-credentials.mtaext -f
+  ...
+  Uploading 1 files...
+  ../create.service.example.mtar
+  OK
+  Uploading 1 files...
+  ./service-credentials.mtaext
+  OK
+  ...
+  Service "my-dynatrace-credentials" exists
+  Processing service "my-dynatrace-credentials"...
+  Updating service "my-dynatrace-credentials"...
+```
+#### Verify the result
+Open your dynatrace environment and observe the metrics of the application being delivered
