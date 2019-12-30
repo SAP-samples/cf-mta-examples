@@ -9,7 +9,7 @@ Before you start with the examples, please make sure that:
 * You are familiar with the basic concepts of Cloud Foundry, such as Cloud Foundry applications, services, service bindings
 * You are familiar with the basic concepts of MTA modeling, such as MTA modules, resources and dependencies between them. For more information, you may refer to official documentation for Multitarget Applications for the Cloud Foundry Environment on the SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d04fc0e2ad894545aebfd7126384307c.html[Multitarget Applications for the Cloud Foundry Environment]
 
-# Requirements
+## Requirements
 
 * Access to link:https://sap.com/products/business-technology-platform.html[SAP Business Technology Platform Cloud Foundry environment]. There you need to have link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b328cc89ea14484d9655b8cfb8efb508.html[account]. MTA examples will be deployed in some of the account's organization and space.
 * Installed CloudFoundry CLI - ensure that CloudFoundry CLI is installed and working. For more information about installation of CloudFoundry CLI, please visit the official link:https://docs.cloudfoundry.org/cf-cli/install-go-cli.html[CloudFoundry Documentation]. For the examples, CloudFoundry CLI  v8 is  supported.
@@ -20,7 +20,7 @@ Before you start with the examples, please make sure that:
 
 Clone the repository, following the link:https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository[instructions].
 
-# MTA use case examples 
+# MTA use case examples
 
 ## Deploy CF Apps
 * link:/cf-app[Simple CF app example, managing app attributes & deploy parameters]
@@ -73,18 +73,18 @@ Optimize deploy time by executing deploy operations in parallel
 ## Deploy a remote MTAR
 * link:/deploy-with-url[Deploy with a URL reference]
 
-# Limitations
+## Limitations
 
 Most examples are generic for link:https://github.com/cloudfoundry-incubator/multiapps-controller[MultiApps Controller] that is the standard MTA Deployment service for Cloud Foundry. Some, however are runnable only on SAP Business Technology Platform Cloud Foundry, because of speciffic service offerings or functionalities available only there.
 
-# Known Issues
+## Known Issues
 
 Not detected issues
 
-# How to obtain support
+## How to obtain support
 
 Create an issue, following the link:https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue[instructions].
 
-# License
+## License
 
 Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved. This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSES/Apache-2.0.txt) file.
