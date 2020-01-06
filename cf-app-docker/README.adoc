@@ -43,17 +43,7 @@ cf deploy mta_archives/a.docker.cf.app_0.0.0.mtar ;
 
 ```
 
-### Or Build an MTA and Deploy
-The approach is using development descriptor `mta.yaml` to build & assemble an MTAR. 
-In this example, both mta.yaml and mtad.yaml descriptors are identical. The mta build practically does no changes to such cf app modules. It would have orchestrated a build for modules of other types if such were modelled in the mta.yaml. 
-The MTAR is deployed with `cf deploy` after the build & assembly are done.
-
-```bash
-mbt build -p cf -t . ;
-cf deploy mta_archives/a.docker.cf.app_0.0.0.mtar ;
-```
-
-NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
+NOTE: See link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
 
 ## Examine the result
 
