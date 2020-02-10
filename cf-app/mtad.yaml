@@ -26,7 +26,7 @@ modules:
       instances: 1 
       routes: # if not defined, a default route would be auto assinged unless no-route is specified
         - route: ${default-host}.${default-domain}
-        - route: my-custom-host.at.some.domain
+        - route: my-custom-host${generated-password}.at.some.domain
       upload-timeout: 180 #seconds
       health-check-type: http #http/port/process
       health-check-http-endpoint: "/index" # the http route pinged
@@ -34,9 +34,14 @@ modules:
       stack: cflinuxfs3 
       enable-ssh: true # allows to `cf ssh <my-app-name>`
       host:  each-host-is-registered-for-all-specified-domans #consider using `routes:` instead
+      
+      
+      
       ##out of scope for this example:
+      #
       #hosts: #registering multitude of hosts
-      #domain: #rarely are custom domain registered in such manner
+      #
+      #domain: #rarely are custom domains registered in such way
       #domains: 
       #
       #command: java -jar ... #start my app in a custom way with this command
