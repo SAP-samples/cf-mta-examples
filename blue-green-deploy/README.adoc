@@ -1,9 +1,9 @@
 :toc:
 # Blue-green deployment
 
-Blue-green deployment is a technique that reduces downtime and risk by running two identical production environments called Blue and Green.
+Blue-green deployment is a technique that reduces downtime and risk by running two identical productive environments called Blue and Green.
 
-At any time, only one of the environments is live, with the live environment serving all production traffic. For this example, Blue is currently live and Green is idle.
+At any time, only one of the environments is live, with the live environment serving all productive traffic. For this example, Blue is currently live and Green is idle.
 
 As you prepare a new version of your software, deployment and the final stage of testing takes place in the environment that is not live: in this example, Green. Once you have deployed and fully tested the software in Green, you switch the router so all incoming requests now go to Green instead of Blue. Green is now live, and Blue is idle.
 
@@ -11,10 +11,12 @@ This technique can eliminate downtime due to app deployment. In addition, blue-g
 
 The example will demonstrate how to acomplish blue-green deployment using MTA.
 
-MTA blue-green deployment is separeted in two phases. 
-First phase, so called validation is phase setup the next color environment, in order to be tested. The new environment version, in this case GREEN, is not accessible on the production routes but on temporary `-idle` routes. The validation phase is used to verify that new version of environment is operational.
+MTA blue-green deployment is separeted in three phases. 
+First phase is used to setup the next color environment, in order to be tested. The new environment version, in this case GREEN, is not accessible on the productive routes but on temporary `-idle` routes. 
 
-During second phase all new applications are assigned to production routes and the new MTA color become productive.
+After this phase, the process enters second phase, so called testing phase. During that phase the user can verify that the new version of environment is operational by executing simple smoke tests or extensive testing. The user can decide to skip this phase with specifying the option '--skip-testing-phase'. The option is useful for CI/CD or other automated approaches.
+
+During third phase all new applications are assigned to productive routes and the new MTA color become productive.
 
 ## Requirements
 * Awarenes of blue green deploy in Cloud Foundry: link:https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html[Using Blue-Green Deployment to Reduce Downtime and Risk]
@@ -28,7 +30,7 @@ The example will demonstrate blue-green deployment of one MTA comprised of two a
 
 The idea is to have sample MTA which seems very similar to standard business applications that are comprised of frontend, backend and backing services. In the example "hello-backend" will play the combined role between backend and backing services, where the customer data is stored.
 
-In terms of the example, we are using Java applications which communicate using REST interface. Both applications are simple web projects containing only one servlet. 
+In terms of the example, we are using Java applications which communicate using the REST interface. Both applications are simple web projects containing only one servlet. 
 
 .Applications REST endpoints and logic
 |===
@@ -45,9 +47,9 @@ In terms of the example, we are using Java applications which communicate using 
 
 ## Execute initial blue-green deployment of the BLUE environment
 
-Initial blue green deployment is very similar to standard deployment because there are not existing applications. One difference is that temporary routes will be added during the deployment. Finally, the standard routes are assigned to the applications.
+Initial blue green deployment is very similar to standard deployment because there are no existing applications. One difference is that temporary routes will be added during the deployment. Finally, the standard routes are assigned to the applications.
 
-In the end of this part, you wil have similar environment:
+At the end of this part, you will have a similar environment:
 
 image::diagrams/initial-bg-deploy-blue.png[]
 ### Deploy
@@ -57,32 +59,35 @@ The differences are how the deploymnet is trigger.
 
 #### Using existing .mtar
 ```bash
-  $ cf bg-deploy hello-blue/hello.mtar -f
+  $ cf deploy hello-blue/hello.mtar -f --strategy blue-green
   ...
   No deployed MTA detected - this is initial deployment
-  New MTA color: BLUE
   ...
-  Starting application "hello-backend-blue"...
-  Application "hello-backend-blue" started and available at "<org>-<space>-hello-backend-idle.cfapps.sap.hana.ondemand.com"
+  Starting application "hello-backend-idle"...
+  Application "hello-backend-idle" started and available at "<org>-<space>-hello-backend-idle.cfapps.sap.hana.ondemand.com"
   ...
-  Starting application "hello-router-blue"...
-  Application "hello-router-blue" started and available at "<org>-<space>-i076083-2-hello-router-idle.cfapps.sap.hana.ondemand.com"
+  Starting application "hello-router-idle"...
+  Application "hello-router-idle" started and available at "<org>-<space>-hello-router-idle.cfapps.sap.hana.ondemand.com"
   ...
-  Application "hello-backend-blue" started and available at "<org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com"
+  Application "hello-backend-idle" started and available at "<org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com"
   ...
-  Application "hello-router-blue" started and available at "<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com"
+  Application "hello-router-idle" started and available at "<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com"
+  ...
+  Renaming application "hello-backend-idle" to "hello-backend"...
+  Renaming application "hello-router-idle" to "hello-router"...
+  ...
 ```
 
 #### Using deploy from directory with .mtad
 The approach will use deployment descriptor `hello-blue/mtad.yaml` and already built application bineries `hello-blue/router.war` and `hello-blue/backend.war`
 ```bash
-  $ cf bg-deploy hello-blue/ -f
+  $ cf deploy hello-blue/ -f --strategy blue-green
 ```
 
 #### Build and deploy
-The approach will use development descriptor `hello-blue/mta.yaml` to build bineries from source code folders `hello-blue/router/` and `hello-blue/backend/`. Then builded MTAR will be deployed.
+The approach will use development descriptor `hello-blue/mta.yaml` to build binaries from source code folders `hello-blue/router/` and `hello-blue/backend/`. Then the built MTAR will be deployed.
 
-NOTE: The Cloud MTA Build Tool is usiing maven to build Java applications by default.
+NOTE: The Cloud MTA Build Tool is using maven to build Java applications by default.
 
 ```bash
   $ mbt build -p cf -s hello-blue
@@ -104,18 +109,18 @@ NOTE: The Cloud MTA Build Tool is usiing maven to build Java applications by def
   INFO generating the metadata...
   INFO generating the MTA archive...
   INFO the MTA archive generated at: /mta_examples/blue-green-deploy/hello-blue/mta_archives/hello_0.1.0.mtar
-  $ cf bg-deploy hello-blue/mta_archives/hello_0.1.0.mtar
+  $ cf deploy hello-blue/mta_archives/hello_0.1.0.mtar --strategy blue-green
 ```
 ### Examine the result
-Verify that front-end `hello-router` returns BLUE:
+Verify that the front-end `hello-router` returns BLUE:
 ```bash
   $ curl https://<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com/router
   BLUE
 ```
 
-## Execute blue-green deployment of the GREEN environment and entering the validation phase
+## Execute blue-green deployment of the GREEN environment and entering the testing phase
 
-In the end of this part, you wil have similar environment:
+At the end of this part, you will have a similar environment:
 
 image::diagrams/bg-deploy-green-validation.png[]
 ### Deploy
@@ -123,106 +128,108 @@ You can try 3 different approaches, that will lead to the same result
 
 #### Using existing .mtar
 ```bash
-  $ cf bg-deploy hello-green/hello.mtar -f
+  $ cf deploy hello-green/hello.mtar -f --strategy blue-green
   ...
-  Deployed MTA color: BLUE
-  New MTA color: GREEN
+  Renaming application "hello-backend" to "hello-backend-live"...
+  Renaming application "hello-router" to "hello-router-live"...
   ...
-  Starting application "hello-backend-green"...
-  Application "hello-backend-green" started and available at "<org>-<space>-hello-backend-idle.cfapps.sap.hana.ondemand.com"
+  Starting application "hello-backend-idle"...
+  Application "hello-backend-idle" started and available at "<org>-<space>-hello-backend-idle.cfapps.sap.hana.ondemand.com"
   ...
-  Starting application "hello-router-green"...
-  Application "hello-router-green" started and available at "<org>-<space>-hello-router-idle.cfapps.sap.hana.ondemand.com"
-  Process has entered validation phase. After testing your new deployment you can resume or abort the process.
-  Use "cf bg-deploy -i xxxx -a abort" to abort the process.
-  Use "cf bg-deploy -i xxxx -a resume" to resume the process.
-  Hint: Use the '--no-confirm' option of the bg-deploy command to skip this phase.
+  Starting application "hello-router-idle"...
+  Application "hello-router-idle" started and available at "<org>-<space>-hello-router-idle.cfapps.sap.hana.ondemand.com"
+  Process has entered testing phase. After testing your new deployment you can resume or abort the process.
+  Use "cf deploy -i xxxx -a abort" to abort the process.
+  Use "cf deploy -i xxxx -a resume" to resume the process.
+  Hint: Use the '--skip-testing-phase' option of the deploy command to skip this phase.
 ```
 
 #### Using deploy from directory with .mtad
-The approach will use deployment descriptor `hello-green/mtad.yaml` and already built application bineries `hello-green/router.war` and `hello-green/backend.war`
+The approach will use the deployment descriptor `hello-green/mtad.yaml` and already built application binaries `hello-green/router.war` and `hello-green/backend.war`
 ```bash
-  $ cf bg-deploy hello-green/ -f
+  $ cf deploy hello-green/ -f --strategy blue-green
 ```
 
 #### Build and deploy
-The approach will use development descriptor `hello-green/mta.yaml` to build bineries from source code folders `hello-green/router/` and `hello-green/backend/`. Then builded MTAR will be deployed.
+The approach will use the development descriptor `hello-green/mta.yaml` to build binaries from the source code folders `hello-green/router/` and `hello-green/backend/`. Then the built MTAR will be deployed.
 ```bash
   $ mbt build -p cf -s hello-blue
-  $ cf bg-deploy hello-blue/mta_archives/hello_0.1.0.mtar
+  $ cf deploy hello-blue/mta_archives/hello_0.1.0.mtar --strategy blue-green
 ```
 
 ### Examine the result
-Verify that both application version are now available
+Verify that both application versions are now available
 ```bash
   $ cf a
 Getting apps in org xxx / space xxx as xxx...
 OK
 
-name                  requested state   instances   memory   disk   urls
-hello-router-blue     started           1/1         512M     256M   <org>-<space>-hello-router.cfapps.sap.hana.ondemand.com
-hello-backend-green   started           1/1         512M     256M   <org>-<space>-hello-backend-idle.cfapps.sap.hana.ondemand.com
-hello-router-green    started           1/1         512M     256M   <org>-<space>-hello-router-idle.cfapps.sap.hana.ondemand.com
-hello-backend-blue    started           1/1         512M     256M   <org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com
+name                 requested state   instances   memory   disk   urls
+hello-router-live    started           1/1         512M     256M   <org>-<space>-hello-router.cfapps.sap.hana.ondemand.com
+hello-backend-idle   started           1/1         512M     256M   <org>-<space>-hello-backend-idle.cfapps.sap.hana.ondemand.com
+hello-router-idle    started           1/1         512M     256M   <org>-<space>-hello-router-idle.cfapps.sap.hana.ondemand.com
+hello-backend-live   started           1/1         512M     256M   <org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com
 ```
-Verify that BLUE environment is still the productive one:
+Verify that the BLUE environment is still the productive one:
 ```bash
   $ curl https://<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com/router
   BLUE
 ```
-Verify that GREEN environment can be accessed and validated on temporary `-idle` routes:
+Verify that the GREEN environment can be accessed and validated on the temporary `-idle` routes:
 ```bash
   $ curl https://<org>-<space>-hello-router-idle.cfapps.sap.hana.ondemand.com/router
   GREEN
 ```
-NOTE: In case of a problem, the bg-deploy can be aborted without influencing the production environment. To stop the process copy-paste the suggested command by MTA CF CLI plugin: `cf bg-deploy -i xxxx -a abort`
+NOTE: In case of a problem, the deploy can be aborted without influencing the productive environment. To stop the process copy-paste the suggested command by MTA CF CLI plugin: `cf deploy -i xxxx -a abort`
 
-## Make GREEN environment the productive one
+## Make the GREEN environment the productive one
 
-At some point of time, you wil have similar environment, where both BLUE and GREEN applications are mapped to production routes.
+At some point in time, you will have a similar environment, where both BLUE and GREEN applications are mapped to productive routes.
 
 image::diagrams/bg-deploy-green-temp.png[]
 
-In the end of this part, you wil have similar environment:
+At the end of this part, you will have a similar environment:
 
 image::diagrams/bg-deploy-green-final.png[]
 ```bash
-  $ cf bg-deploy -i 1b59ca36-007e-11ea-bbed-eeee0a9e6b19 -a resume
+  $ cf deploy -i 1b59ca36-007e-11ea-bbed-eeee0a9e6b19 -a resume
 Executing action 'resume' on operation xxxx...
 ...
-Updating application "hello-backend-green"...
-Stopping application "hello-backend-green"...
-Starting application "hello-backend-green"...
-Application "hello-backend-green" started and available at "<org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com"
+Updating application "hello-backend-idle"...
+Stopping application "hello-backend-idle"...
+Starting application "hello-backend-idle"...
+Application "hello-backend-idle" started and available at "<org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com"
 Publishing publicly provided dependency "hello:backend"...
 Publishing publicly provided dependency "hello:hello-backend"...
-Deleting discontinued configuration entries for application "hello-backend-green"...
-Updating application "hello-router-green"...
-Stopping application "hello-router-green"...
-Starting application "hello-router-green"...
-Application "hello-router-green" started and available at "<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com"
+Deleting discontinued configuration entries for application "hello-backend-idle"...
+Updating application "hello-router-idle"...
+Stopping application "hello-router-idle"...
+Starting application "hello-router-idle"...
+Application "hello-router-idle" started and available at "<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com"
 Publishing publicly provided dependency "hello:hello-router"...
-Deleting discontinued configuration entries for application "hello-router-green"...
-Deleting routes for application "hello-router-blue"...
-Deleting routes for application "hello-backend-blue"...
-Stopping application "hello-router-blue"...
-Deleting application "hello-router-blue"...
-Stopping application "hello-backend-blue"...
-Deleting application "hello-backend-blue"...
+Deleting discontinued configuration entries for application "hello-router-idle"...
+Renaming application "hello-backend-idle" to "hello-backend"...
+Renaming application "hello-router-idle" to "hello-router"...
+Deleting routes for application "hello-router-live"...
+Deleting routes for application "hello-backend-live"...
+Stopping application "hello-router-live"...
+Deleting application "hello-router-live"...
+Stopping application "hello-backend-live"...
+Deleting application "hello-backend-live"...
 Process finished.
 ```
 ### Examine the result
-Verify that old BLUE applications are deleted and new GREEN applications are assigned to production routes:
+Verify that the old BLUE applications are deleted and the new GREEN applications are assigned to productive routes:
 ```bash
   $ cf a
 Getting apps in org xxx / space xxx as xxx...
 OK
 
-name                  requested state   instances   memory   disk   urls
-hello-backend-green   started           1/1         512M     256M   <org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com
-hello-router-green    started           1/1         512M     256M   <org>-<space>-hello-router.cfapps.sap.hana.ondemand.com
+name            requested state   instances   memory   disk   urls
+hello-backend   started           1/1         512M     256M   <org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com
+hello-router    started           1/1         512M     256M   <org>-<space>-hello-router.cfapps.sap.hana.ondemand.com
 ```
-Verify that GREEN environent is the production one and serves on the production routes:
+Verify that the GREEN environment is the productive one and serves on the productive routes:
 ```bash
   $ curl https://<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com/router
   GREEN
@@ -230,43 +237,46 @@ Verify that GREEN environent is the production one and serves on the production 
 ## Execute blue-green deployment of the BLUE environment without confirmation
 There is an option to run end-to-end blue-green deployment without user interaction. The option is useful for CI and CD, where one MTA is continuously re-deployed without downtime.
 
-In the end of this part, you wil have similar environment:
+At the end of this part, you will have a similar environment:
 
 image::diagrams/initial-bg-deploy-blue.png[]
 
 ```bash
-  $ cf bg-deploy hello-blue -f --no-confirm
+  $ cf deploy hello-blue -f --strategy blue-green --skip-testing-phase
 ...
-Deployed MTA color: GREEN
-New MTA color: BLUE
+Renaming application "hello-backend" to "hello-backend-live"...
+Renaming application "hello-router" to "hello-router-live"...
 ...
-Starting application "hello-backend-blue"...
-Application "hello-backend-blue" started and available at "deploy-service-i076083-2-hello-backend-idle.cfapps.sap.hana.ondemand.com"
+Starting application "hello-backend-idle"...
+Application "hello-backend-idle" started and available at "<org>-<space>-hello-backend-idle.cfapps.sap.hana.ondemand.com"
 ...
-Starting application "hello-router-blue"...
-Application "hello-router-blue" started and available at "deploy-service-i076083-2-hello-router-idle.cfapps.sap.hana.ondemand.com"
+Starting application "hello-router-idle"...
+Application "hello-router-idle" started and available at "<org>-<space>-hello-router-idle.cfapps.sap.hana.ondemand.com"
 ...
-Application "hello-backend-blue" started and available at "deploy-service-i076083-2-hello-backend.cfapps.sap.hana.ondemand.com"
+Application "hello-backend-idle" started and available at "<org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com"
 ...
-Starting application "hello-router-blue"...
-Application "hello-router-blue" started and available at "deploy-service-i076083-2-hello-router.cfapps.sap.hana.ondemand.com"
+Starting application "hello-router-idle"...
+Application "hello-router-idle" started and available at "<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com"
+...
+Renaming application "hello-backend-idle" to "hello-backend"...
+Renaming application "hello-router-idle" to "hello-router"...
 ...
 Process finished.
 Use "cf dmol -i xxx" to download the logs of the process.
 ```
 
 ### Examine the result
-Verify that old GREEN applications are deleted and new BLUE applications are assigned to production routes:
+Verify that the old GREEN applications are deleted and the new BLUE applications are assigned to productive routes:
 ```bash
   $ cf a
 Getting apps in org xxx / space xxx as xxx...
 OK
 
-name                  requested state   instances   memory   disk   urls
-hello-backend-blue   started           1/1         512M     256M   <org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com
-hello-router-blue    started           1/1         512M     256M   <org>-<space>-hello-router.cfapps.sap.hana.ondemand.com
+name            requested state   instances   memory   disk   urls
+hello-backend   started           1/1         512M     256M   <org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com
+hello-router    started           1/1         512M     256M   <org>-<space>-hello-router.cfapps.sap.hana.ondemand.com
 ```
-Verify that BLUE environent is the production one and serves on the production routes:
+Verify that the BLUE environent is the productive one and serves on the productive routes:
 ```bash
   $ curl https://<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com/router
   BLUE
