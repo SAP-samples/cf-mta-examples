@@ -1,0 +1,16 @@
+ID: ui5MTA-with-key
+_schema-version: '3.1'
+modules:
+ - name: ui5module
+   type: com.sap.application.content
+   path: content/content.zip
+   requires:
+    - name: ui5module-ui5-repo-service-instance-credentials
+      parameters:
+        content-target: true
+resources:
+ - name: ui5module-ui5-repo-service-instance-credentials # the name of the existing service key
+   parameters:
+      service-name: ui5-repo-service-instance # the name of the service
+   type: org.cloudfoundry.existing-service-key
+version: 0.0.1

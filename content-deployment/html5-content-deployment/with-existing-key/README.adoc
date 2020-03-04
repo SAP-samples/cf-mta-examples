@@ -1,0 +1,28 @@
+:toc:
+
+# Generic Application Content Deployment With Existing Key
+
+Another option is to deploy Generic Application Content to an already existing service instance, perhaps owned by another MTA. This can be done utilizing the `org.cloudfoundry.existing-service-key` resource type as shown in the `mtad.yaml`.
+
+# Prerequisites
+This example requires the service and service key to already be existing. The easiest way to ensure that is to run the link:/content-deployment[previous example] beforehand.
+
+# Try it out
+In the current directory execute `cf deploy`. This will automatically assemble the MTA archive and deploy it:
+
+```bash
+$ cf deploy
+Deploying multi-target app archive */with-existing-key/ui5MTA-with-key.mtar in org ******** / space ******** as ********...
+
+Uploading 1 files...
+  */with-existing-key/ui5MTA-with-key.mtar
+OK
+Deploying in org "********" and space "********"
+Detected MTA schema version: "3"
+No deployed MTA detected - this is initial deployment
+Detected new MTA version: "0.0.1"
+Uploading content module "ui5module" in target service "ui5module-ui5-repo-service-instance-credentials"...
+Deploying content module "ui5module" in target service "ui5module-ui5-repo-service-instance-credentials"...
+Skipping deletion of services, because the command line option "--delete-services" is not specified.
+Process finished.
+```

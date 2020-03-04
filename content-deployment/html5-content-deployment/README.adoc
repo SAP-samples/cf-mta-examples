@@ -30,6 +30,10 @@ The module, representing the content, is defined of `type: com.sap.application.c
 
 The required resource should be of type coresponding to a CF service instance, be it `org.cloudfoundry.existing-service`, `org.cloudfoundry.managed-service`,  or any type extending managed-service. 
 
+### Usage with existing service keys
+
+While the above example would create a service key in order to take the service credentials needed to deploy the content to the target service, it is also possible to model the MTA to use an already existing service key as shown in link:with-existing-key[Generic Application Content Deployment With Existing Key]
+
 ## Example of content deployment
 In the current directory you'll find example MTA. It contains a single zip archive, which in term containing three other archives of HTML5 Application content. 
 
