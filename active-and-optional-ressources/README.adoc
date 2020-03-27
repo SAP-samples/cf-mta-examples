@@ -1,0 +1,158 @@
+:toc:
+
+# Service instance and binding creation
+
+This example shows how to create a service instance and a service binding for an application to that service instance within an MTA deployment.
+
+Orchestration of the following CF features is covered:
+
+- creation of service instances: https://docs.cloudfoundry.org/devguide/services/managing-services.html
+- creation of app bindings to service instances https://docs.cloudfoundry.org/devguide/services/application-binding.html#bind
+
+## Modelling
+
+### Service instances
+Service instances are modelled as MTA resources of type `org.cloudfoundry.managed-service`.
+Parameters in the config parameter can be specified to configure the service instance on it's creation or update
+
+....
+...
+- name: my-cf-service-instance-resource
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: logging
+    service-plan: free
+    service-name: my-logging-service
+    config: 
+      map: of
+      creation: parameters
+....
+
+
+[cols=3*, options=header]
+|===
+|parameter 
+|configuration
+|optional 
+
+| service 
+| service offering (label)
+| mandatory
+
+| service-plan
+| the plan to be applied to the service instance
+| mandatory
+
+| service-name
+| the name of the service instance
+| optional (defaults to resource name)
+
+| config
+| creation/update parameters of the service instance
+| optional (defaults to no parameters specified)
+
+|===
+
+
+### Service Bindings
+Service instances are modelled as in the MTA moduels describing the bound apps.
+A binding is created/updated when a resource, describing a service instance is depicted as required by an app module.
+Parameters in the config parameter can be specified to configure the service binding on it's creation or update
+
+....
+...
+modules:
+- name: my-mta-managed-app-module
+  type: application
+  requires:
+    - name: my-cf-service-instance-resource
+      parameters:
+        config: 
+          binding-config: "binding-config-value"
+....
+
+[cols=3*, options=header]
+|===
+|parameter 
+|configuration
+|optional 
+
+| config
+| creation/update parameters of the service binding
+| optional (defaults to no parameters specified)
+
+|===
+
+
+# Related examples 
+- service instance and binding parameters(configurations) management with MTAs
+- update of service instances and bindings [updating parameters, changing plans and labels; recreation ]
+
+## Requirements
+- access to a CF space with quota for creation of service instances
+
+## Oficial documemtation in Help SAP Portal
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/a36df26b36484129b482ae20c3eb8004.html[Service creation parameters]
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/c7b09b79d3bb4d348a720ba27fe9a2d5.html[Service binding parameters]
+
+# Try out
+## Deploy the MTA
+The example demostrate 2 different approaches that lead to the same result.
+
+NOTE: please adjust the service label and plan values to match the available in your environment
+
+### Deploy with a deployment descriptor (mtad.yaml)
+That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+
+``` bash
+cf deploy ./ -f ;
+```
+
+_OR_
+
+First assemble an MTA archive using the `mtad.yaml` and then deploy the archive:
+
+``` bash
+mbt assemble -t ./ ;
+cf deploy my-mta_0.0.0.mtar ;
+```
+
+NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
+
+### Build and Deploy
+The approach is using development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build MTAR.
+Then the MTAR is deployed.
+
+``` bash
+mbt build -p cf -t . ;
+cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
+
+## Examine the result
+
+### List the deployed mta
+
+``` bash
+$ cf services
+Getting services in org deploy-service / space ****** as ******...
+name                                        service            plan          bound apps                 ...                 
+my-logging-service-instance-name            application-logs   lite          my-mta-managed-app-module    
+```
+
+### List app status and attributes 
+
+``` bash
+$ cf service my-logging-service-instance-name ;
+Showing info of service my-logging-service-instance-name in org deploy-service / space ****** as ******...
+name:             my-logging-service-instance-name
+service:          application-logs
+tags:             
+plan:             lite
+...
+bound apps:
+name                        binding name   status             message
+my-mta-managed-app-module                  create succeeded   
+```
