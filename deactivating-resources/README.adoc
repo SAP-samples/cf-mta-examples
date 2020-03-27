@@ -1,0 +1,106 @@
+:toc:
+
+# Deactivating resources
+
+With this tutorial you'll learn how to fine tune the deployment behavior of your mta when handling services. You can use element `active:` in a resource, to tell the mta deplyoer to (or not-to) apply any actions to manage this resource. Default value is `active: true`. 
+
+E.g. if `active:` is set to `false` for a resource describing a CF service instance, it will not get created or updated.
+```yaml
+...
+resources:
+- name: my-cf-service-instance-resource
+  type: org.cloudfoundry.managed-service
+  active: false # while active has the value false, the resource will not be processed during deployment
+...
+```
+
+## Requirements
+- Before you continue, you should know how link:../create-managed-service[CF services are described in MTAs].
+- entitlement to the application-logging service is required in this tutorial, but the descriptors can be modified to whatever service is available in your space.
+
+## Documemtation in Help SAP Portal
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[MTA Resources page (SCP development guide)]
+
+# Try out
+
+## Deploy with an inactive resource
+Deploy* an link:mtad.yaml[mta], which has a single resource marked as `active: false`. Literally no change will be done by mta deployment:
+
+```bash
+$ cf deploy .
+Deploying multi-target app archive ******/deactivating-resources/my-mta.mtar in org deploy-service / space ******** as ********...
+
+Uploading 1 files...
+  ********/cf-mta-examples/deactivating-resources/my-mta.mtar
+OK
+Deploying in org "deploy-service" and space "********"
+Detected MTA schema version: "3"
+No deployed MTA detected - this is initial deployment
+Detected new MTA version: "0.0.0"
+Service "my-cf-service-instance-resource" is inactive and will not be processed
+Service "my-cf-service-instance-resource" is inactive and will not be processed
+Skipping deletion of services, because the command line option "--delete-services" is not specified.
+Process finished.
+Use "cf dmol -i b63eca3c-70d3-11ea-a011-eeee0a8ee798" to download the logs of the process.
+```
+
+## Deploy with an active resource 
+Now let's use an extension descriptor to activate the resource for the current deployment. You should see the service instance get created
+
+Extension descriptor link:./enable-log-service-creation.mtaext[enable-log-service-creation.mtaext]:
+```yaml
+ID: enable-resource-creation
+extends: my-mta
+_schema-version: 3.3.0
+resources:
+- name: my-cf-service-instance-resource
+  active: true
+```
+output:
+
+```bash
+cf deploy ./ -e enable-log-service-creation.mtaext
+Deploying multi-target app archive ********/cf-mta-examples/deactivating-resources/my-mta.mtar in org deploy-service / space ******** as ********...
+Uploading 1 files...
+...
+Processing service "my-logging-service-instance-name"...
+Creating service "my-logging-service-instance-name" from MTA resource "my-cf-service-instance-resource"...
+```
+## Verify the result
+
+```bash
+#let's check the result
+$ cf services
+Getting services in org deploy-service / space ******** as ********...
+name                               service            plan   bound apps   last operation     broker          upgrade available
+my-logging-service-instance-name   application-logs   lite                create succeeded   sleeve-broker   
+
+#The service got created!
+```
+### *note
+
+Instead of directly deploying with mtad.yaml, one can always build an mta archive from an `mta.yaml` with `$ mbt build` or assemble already built arfifacts with an mtad.yaml using `mbt assemble`
+
+```bash
+$ mbt build  #to orchestrate build as defined in mta.yaml
+[2020-03-28 11:17:25]  INFO Cloud MTA Build Tool version 1.0.8
+[2020-03-28 11:17:25]  INFO generating the "Makefile_20200328111725.mta" file...
+[2020-03-28 11:17:25]  INFO done
+[2020-03-28 11:17:25]  INFO executing the "make -f Makefile_20200328111725.mta p=cf mtar= strict=true mode=" command...
+[2020-03-28 11:17:25]  INFO validating the MTA project
+[2020-03-28 11:17:25]  INFO validating the MTA project
+[2020-03-28 11:17:25]  INFO generating the metadata...
+[2020-03-28 11:17:25]  INFO generating the MTA archive...
+[2020-03-28 11:17:25]  INFO the MTA archive generated at: *******/deactivating-resources/mta_archives/my-mta_0.0.0.mtar
+[2020-03-28 11:17:25]  INFO cleaning temporary files...
+$ mbt assemble  #to assemble an archive of already built artifacts and an mtad.yaml
+...
+$ cf deploy mta_archives/my-mta_0.0.0.mtar  #to deploy an assembled MTA archive
+Deploying multi-target app archive mta_archives/my-mta_0.0.0.mtar in org deploy-service / space ******** as ********...
+Uploading 1 files...
+  ********/deactivating-resources/mta_archives/my-mta_0.0.0.mtar
+OK
+Deploying in org "deploy-service" and space "********"
+Detected MTA schema version: "3"
+...
+```

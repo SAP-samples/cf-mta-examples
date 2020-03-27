@@ -1,0 +1,12 @@
+ID: "my-mta"
+_schema-version: 3.3.0
+version: 0.0.0
+
+resources:
+- name: my-cf-service-instance-resource
+  type: org.cloudfoundry.managed-service
+  active: false
+  parameters:
+    service-name: "my-logging-service-instance-name"
+    service-plan: "lite"
+    service: application-logs 

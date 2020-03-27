@@ -1,0 +1,7 @@
+ID: enable-log-service-creation
+extends: my-mta
+_schema-version: 3.3.0
+
+resources:
+- name: my-cf-service-instance-resource
+  active: true
