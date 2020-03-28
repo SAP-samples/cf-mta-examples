@@ -1,0 +1,109 @@
+:toc:
+
+# Marking services as optional
+
+With this tutorial you'll learn how mark backing services in your MTA as optional. This allows the deployment to continue and eventually succeed, despite possible errors in the management of such service instances. Used with a resource element `optional:true`. Default is `optional: false`
+The feature is suitable for the folowing cases:
+- a single packaged MTA archive is delivered to multiple environemtns, some of which don't have lacking non-vital backing services.
+- a service is not-vital for the solution operation, and having a successful deployment of the rest of the MTA is more important than the proper service instance creation or update.
+
+link:mtad.yaml[Example]:
+```yaml
+...
+resources:
+- name: my-cf-service-instance-resource
+  type: org.cloudfoundry.managed-service
+  optional: true
+...
+```
+
+## Requirements
+- Before you continue, you should know how link:../create-managed-service[CF services are described in MTAs].
+
+## Documemtation in Help SAP Portal
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[MTA Resources page (SCP development guide)]
+
+# Try out
+
+## Deploy an optional resource 
+In this example link:mtad.yaml[MTA], a resource to a nonexistent `cat-gif-service` service offering is modelled. 
+```yaml
+resources:
+- name: my-cf-service-instance-resource
+  type: org.cloudfoundry.managed-service
+  optional: true # if the service creation/update fails, the deployment will not stop
+  parameters:
+    service-name: "my-cat-service-instance-name"
+    service-plan: "funny" 
+    service: cat-gif-service
+```
+
+The resource is marked as optional, meaning that failure to create such a service would *not* cause the deployment* to fail:
+
+
+```bash
+$ cf deploy ./
+Deploying multi-target app archive ********/optional-resources/my-mta.mtar in org deploy-service / space ******** as ********...
+Uploading 1 files...
+  ********/optional-resources/my-mta.mtar
+OK
+...
+Creating service "my-cat-service-instance-name" from MTA resource "my-cf-service-instance-resource"...
+Could not execute operation over optional service "my-cat-service-instance-name": 404 Not Found: Could not create service instance "my-cat-service-instance-name". Service plan "funny" from service offering "cat-gif-service" was not found.: 
+...
+Process finished.
+Use "cf dmol -i 81956a3a-70f6-11ea-b793-eeee0a82d575" to download the logs of the process.
+$ echo $?
+0
+```
+The deployment is overall successful, and if other modules/resources are described, they would have been processed just as usual. 
+
+## Deploy the same resource, marked mandatory
+Now let's change link:mtad.yaml[the mtad.yaml] to mark the resource as mandatory: `optional: false`. 
+```yaml
+resources:
+- name: my-cf-service-instance-resource
+  type: org.cloudfoundry.managed-service
+  optional: false # if the service creation/update fails, the deployment will fail
+```
+Deploy and see how the operatin fails, because of the missing service offering:
+```bash
+$ cf deploy ./
+Deploying multi-target app archive ********/optional-resources/my-mta.mtar in org deploy-service / space ******** as ********...
+...
+Processing service "my-cat-service-instance-name"...
+Creating service "my-cat-service-instance-name" from MTA resource "my-cf-service-instance-resource"...
+Service operation failed: Controller operation failed: 404 Updating service "my-cat-service-instance-name" failed: Not Found: Error creating service "my-cat-service-instance-name" from offering "cat-gif-service" and plan "funny": Could not create service instance "my-cat-service-instance-name". Service plan "funny" from service offering "cat-gif-service" was not found. 
+...
+Process failed.
+$ echo $?
+1
+```
+
+### *note
+
+Instead of directly deploying with mtad.yaml, one can always build an mta archive from an `mta.yaml` with `$ mbt build` or assemble already built arfifacts with an mtad.yaml using `mbt assemble`
+
+```bash
+$ mbt build  #to orchestrate build as defined in mta.yaml
+[2020-03-28 11:17:25]  INFO Cloud MTA Build Tool version 1.0.8
+[2020-03-28 11:17:25]  INFO generating the "Makefile_20200328111725.mta" file...
+[2020-03-28 11:17:25]  INFO done
+[2020-03-28 11:17:25]  INFO executing the "make -f Makefile_20200328111725.mta p=cf mtar= strict=true mode=" command...
+[2020-03-28 11:17:25]  INFO validating the MTA project
+[2020-03-28 11:17:25]  INFO validating the MTA project
+[2020-03-28 11:17:25]  INFO generating the metadata...
+[2020-03-28 11:17:25]  INFO generating the MTA archive...
+[2020-03-28 11:17:25]  INFO the MTA archive generated at: *******/deactivating-resources/mta_archives/my-mta_0.0.0.mtar
+[2020-03-28 11:17:25]  INFO cleaning temporary files...
+$ mbt assemble  #to assemble an archive of already built artifacts and an mtad.yaml
+...
+$ cf deploy mta_archives/my-mta_0.0.0.mtar  #to deploy an assembled MTA archive
+Deploying multi-target app archive mta_archives/my-mta_0.0.0.mtar in org deploy-service / space ******** as ********...
+Uploading 1 files...
+  ********/deactivating-resources/mta_archives/my-mta_0.0.0.mtar
+OK
+Deploying in org "deploy-service" and space "********"
+Detected MTA schema version: "3"
+...
+```
