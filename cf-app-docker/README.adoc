@@ -7,6 +7,10 @@ Documentated in the CF docs: link:https://docs.cloudfoundry.org/devguide/deploy-
 
 The actual image getting deployed is of a cf sample app written in go: https://github.com/cloudfoundry-samples/test-app.git 
 
+
+NOTE: See link:mtad.yaml[mtad.yaml] for up-to-date details on the attributes and environment and deployer parameters used.  See link:mtad.yaml[mta.yaml] for up-to-date details on the required build parameters.
+
+
 # Try it out
 
 ## Deploy an MTA containing a cf app referencing a docker image.
@@ -33,17 +37,28 @@ Application "my-mta-managed-app" started and available at "my.my-mta-managed-app
 ...
 Process finished.
 ```
-### Or Assemble an MTA archive and deploy it
-The approach uses deployment descriptor `mtad.yaml` and Cloud MTA Build Tool uses it to assemble already built binaries in an MTAR.
-Then the newly generated MTAR is used for deployment.
+### Or Create an MTA archive and deploy it
+To generate the MTA archive based on the design time MTA decriptor link:mta.yaml[mta.yaml] use the Cloud MTA Build tool link:https://sap.github.io/cloud-mta-build-tool/usage/#one-step-build['build'] command that creates the MTAR from the project sources:
 
 ```bash
-mbt assemble
-cf deploy mta_archives/a.docker.cf.app_0.0.0.mtar ;
+mbt build
 
 ```
 
-NOTE: See link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
+To generate the MTA archive based on the deployment time MTA decriptor link:mtad.yaml[mtad.yaml] use the Cloud MTA Build tool link:https://sap.github.io/cloud-mta-build-tool/usage/#how-to-build-an-mta-archive-from-the-modules-build-artifacts['assemble'] command that assembles the MTAR from already built binaries:
+
+```bash
+mbt assemble
+
+```
+
+Then the newly generated MTAR is used for deployment.
+
+```bash
+
+cf deploy mta_archives/a.docker.cf.app_0.0.0.mtar ;
+
+```
 
 ## Examine the result
 
