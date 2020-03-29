@@ -8,7 +8,7 @@ Documentated in the CF docs: link:https://docs.cloudfoundry.org/devguide/deploy-
 The actual image getting deployed is of a cf sample app written in go: https://github.com/cloudfoundry-samples/test-app.git 
 
 
-NOTE: See link:mtad.yaml[mtad.yaml] for up-to-date details on the attributes and environment and deployer parameters used.  See link:mtad.yaml[mta.yaml] for up-to-date details on the required build parameters.
+NOTE: See link:mtad.yaml[mtad.yaml] for up-to-date details on the attributes and environment and deployer parameters used.  See link:mta.yaml[mta.yaml] for up-to-date details on the required build parameters.
 
 
 # Try it out
