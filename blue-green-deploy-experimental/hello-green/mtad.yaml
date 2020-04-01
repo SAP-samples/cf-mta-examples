@@ -1,0 +1,32 @@
+_schema-version: "2.0.0"
+ID: hello
+version: 0.1.0
+
+modules:
+  - name: hello-router
+    type: java.tomee
+    path: router.war
+    requires:
+      - name: backend
+        properties:
+          backend: ~{url}/backend
+          name: backend
+          url: ~{url}
+    parameters:
+      memory: 512M
+      disk-quota: 256M
+    properties:
+      MEMORY_CALCULATOR_V1: true
+
+  - name: hello-backend
+    type: java.tomee
+    path: backend.war
+    provides:
+      - name: backend
+        properties:
+          url: "${default-url}"
+    parameters:
+      memory: 512M
+      disk-quota: 256M
+    properties:
+      MEMORY_CALCULATOR_V1: true
