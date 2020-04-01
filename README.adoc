@@ -25,8 +25,9 @@ Clone the repository, following the link:https://help.github.com/en/github/creat
 * link:/cf-app-docker[Docker images as cf apps]
 * link:/app-routes[Managing cf app routes]
 
-## Deploy other SCP Application Content
-* link:/content-deployment[Generic Application Content Deployment]
+## SAP Content Deployment
+* link:/content-deployment/[SAP Content Deployment]
+** link:/content-deployment/html5-content-deployment/[HTML5 Application Content Deployment]
 
 ## Manage CF Services
 * link:/create-managed-services[Service and binding creation]

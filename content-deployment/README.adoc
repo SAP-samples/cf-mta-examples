@@ -1,186 +1,23 @@
 :toc:
 
-# Content deployment
+# SAP Content Deployment
 
-An MTA archive deployed in SAP Cloud Platform Cloud Foundry environment may contain multiple types of contnet, including:
+An MTA archive deployed in SAP Cloud Platform Cloud Foundry environment may contain multiple types of contnet. The section covers SAP specific types of `application content` that excludes link:../cf-app[standard CF applications].
 
-* generic CF App bits 
-* other types of `application content`
-** Worklflow content (used with workflow service)
-** UI5 content (used with HTML5 Application Repository service)
-** FLP content (used with fiori launchpad service)
-* deployer CF apps, containing other application content
-** hdi deployer apps
-** business loggging content deployer app
-** ...
+Various types of `application content` are deployed using two different approaches:
 
-Some types of application content are directly deployed by the MTA deployment service (e.g. workflow). It takes care to instantiate a service instance, which would receive the content, and to deploy the content to it. This is the experience explored in this example.
+* Using temprary deployer application which will receive the content and deploy it to the final backing service.
+* Using service instance and directly deploy content in the final destination
 
-## Usage
-The following MTA modeling in development (mta.yaml) or deployment (mtad.yaml) descriptors utilizes the feature
+The following types are supported:
 
-```yaml
-...
-modules:
- - name: content-module
-   type: com.sap.application.content
-   requires:
-    - name: content-consuming-service-instance
-      parameters:
-        content-target: true
-resources:
- - name: content-consuming-service-instance
-   type: org.cloudfoundry.existing-service 
-```
-The module, representing the content, is defined of `type: com.sap.application.content`. The service(s) to which content is deployed are listed in the module's `requires` list and are depicted with a parameter `content-target: true`
+* link:./html5-content-deployment[HTML5 Application Repository]
+* Worklflow content - using with `workflow` service
+* FLP content - using directly `portal` service
+* HDI content -  using deployer application
+* Business Loggging content - using deployer application
 
-The required resource should be of type coresponding to a CF service instance, be it `org.cloudfoundry.existing-service`, `org.cloudfoundry.managed-service`,  or any type extending managed-service. 
+## Oficial documemtation in Help SAP Portal
 
-## Example of content deployment
-In the current directory you'll find example MTA. It contains a single zip archive, which in term containing three other archives of HTML5 Application content. 
-
-* deployment descriptor: link:mtad.yaml[mtad.yaml]
-
-NOTE: Though the example showcases HTML5 Application content, this generic modelling and mechanism works with a variaty of SCP service contents
-
-## Try it out
-The example demonstrates 2 different approaches, leading to the same result.
-
-### Deploy directly from directory
-The approach uses deployment descriptor `mtad.yaml` and existing app binary.
-
-In the current directory, run `cf deploy`. This will automatically assemble an MTA archive and deploy it 
-```bash
-$ cf deploy ./
-Deploying multi-target app archive */mta-examples/ui5MTA.mtar in org ******** / space ******** as ********...
-
-Uploading 1 files...
-  */mta-examples/ui5MTA.mtar
-OK
-Deploying in org "********" and space "********"
-Detected MTA schema version: "3"
-No deployed MTA detected - this is initial deployment
-Detected new MTA version: "0.0.1"
-Processing service "ui5-repo-service-instance"...
-Creating service "ui5-repo-service-instance" from MTA resource "ui5-repo-service-instance"...
-Creating service key "ui5module-ui5-repo-service-instance-credentials" for service "ui5-repo-service-instance"...
-Uploading content module "ui5module" in target service "ui5-repo-service-instance"...
-Deploying content module "ui5module" in target service "ui5-repo-service-instance"...
-Skipping deletion of services, because the command line option "--delete-services" is not specified.
-Process finished.
-```
-### Assemble MTA archive and deploy
-The approach uses deployment descriptor `mtad.yaml` and Cloud MTA Build Tool uses it to package the ready binaries in MTAR.
-Then the newly generated MTAR is used for deployment.
-
-First use `mbt assemble` to create the *.mtar and than deploy it with `cf deploy`.
- 
-```bash
-$ mbt assemble 
-  INFO assembling the MTA project...
-  INFO copying the MTA content...
-  INFO generating the metadata...
-  INFO generating the MTA archive...
-  INFO the MTA archive generated at: /mta_examples/content-deployment/mta_archives/ui5MTA_0.0.1.mtar
-  INFO cleaning temporary files...
-$ cf deploy mta_archives/ui5MTA_0.0.1.mtar
-  ...
-```
-
-## Build MTA archive via mta.yaml
-
-If you maintain you project's sources in an MTA format and have the mta.yaml descriptor where content module is modeled as described above, you can create an MTA archive for this project using a regular build command of the MTA build tool of your choice.  Since we recommend the new  link:https://github.com/SAP/cloud-mta-build-tool[Cloud MTA Build tool] for buiding MTA projects, here is the example of such command: `mbt build`.
-
-### Modeling and building of HTML5 modules
-
-If you have several HTML5 modules in your project and would like to deploy their content into HTML5 repository, you need to adjust the build process as follows:
-
-* The build scripts of each HTML5 module should produce a `zip` archive.
-For example, if you are using a Grunt build based on `@sap/grunt-sapui5-bestpractice-build`:
-
-*In package.json*: add dependency to the `grunt-zip` package
-
-```json
-  ...
-
-  "devDependencies": {
-    ...
-    "grunt-zip": "latest"
-  },
-
-  ...
-```
-
-*In Gruntfile.js*: add definition of the `grunt-zip` task and add the `zip` task as the last step of the `default` task.
-Pay attention that the name of the result zip file should be unique cross HTML5 modules of the project. You can achieve it by using the format: `<modulename>-content.zip`
-```
-  ...
-	grunt.registerTask("default", [
-		"clean",
-		"lint",
-		"build",
-		"zip"        
-	]);
-  ...
-	
-	 // Define a zip task
-	grunt.loadNpmTasks('grunt-zip');
-    grunt.config.merge({
-    zip: {
-		'using-cwd': {
-			
-			cwd: 'dist/',
-			src: ['dist/*'],
-			dest: 'dist/<modulename>-content.zip'  
-		  }
-     
-	}
-		
-  ...
-```
-
-
-* *In mta.yaml file*, build parameters of each HTML5 should include `supported-platforms` and `dist` parameters with the values below:
-
-```yaml
-- name: ui1
-    type: html5
-    path: ui1
-    build-parameters:
-      builder: grunt   
-      supported-platforms: []  
-      build-result: dist
-```
-
-`supported-platforms: []` indicates that this module will not appear in the resulting deployment descriptor. It's content will be deployed via a module where we collect content from all HTML5 modules.
-`build-result: dist` instructs the MBT where to look for build result of this module.
-
-* The *mta.yaml file* should contain a module that is defined as a content one. Also you will need to configure it's build parameters to copy content  from all HTML5 modules (`zip` archive created during their build) into its internal folder (e.g. `resources` as in the example below). The content of this folder will be packaged as build result into the resulting MTA archive and this is the content (`zip` of `zips`) that will be deployed to the HTML5 repository.
-
-```yaml
-  - name: mta_ui1_ui_deployer
-    type: com.sap.application.content  # Generic type for the content module
-    path: mta_ui1_ui_deployer
-    requires:
-      - name: mta_ui1_html5_repo_host  # HTML5 repository service
-        parameters:                     
-          content-target: true
-    build-parameters:
-      build-result: resources  # specify folder to package
-      requires:
-        - name: ui1
-          artifacts:
-            - 'ui1-content.zip'   
-          target-path: resources/
-        - name: ui2
-          artifacts:
-            - 'ui2-content.zip'
-          target-path: resources/
-```
-
-* Now you can build your project: `mbt build` and deploy to the target environment `cf deploy <path to the mtar>`
-
-## Links
-
-TODO: link to documentation
-TODO: link to list of supported content types
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d3e23196166b443db17b3545c912dfc0.html[Content Deployment]
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html[Modules] -> MTA Module Types 
