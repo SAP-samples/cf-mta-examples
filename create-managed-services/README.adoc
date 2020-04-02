@@ -98,9 +98,9 @@ modules:
 
 # Try out
 ## Deploy the MTA
-The example demostrate 2 different approaches that lead to the same result.
+The example demostrates 2 different approaches that lead to the same result.
 
-NOTE: please adjust the service label and plan values to match the available in your environment
+NOTE: you can adjust the service label and plan values to match the available in your environment
 
 ### Deploy with a deployment descriptor (mtad.yaml)
 That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
