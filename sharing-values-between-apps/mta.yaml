@@ -1,0 +1,32 @@
+ID: my-mta
+version: 0.0.0-SNAPSHOT
+_schema-version: 3.3.0
+
+modules:
+  - name: providing-module
+    type: application
+    path: appBits.zip
+    properties: #will be set as app environment variables
+      my-generated-user: ${generated-user}   # ${generated-user} parameter has a randomly generated value for each deployment operation
+    provides:
+      - name: module-1-provided #declare all values this module would share in such provided objects
+        properties:
+          user: ${generated-user}  # the ${generated-user} parameter has an unique generated value for each module
+          config: "static-string"
+          url: ${default-url} # properties in the provides section can reference all glboal and module parameters, including the ones provided by default as default-url
+    parameters:
+        no-start: true
+
+  
+  - name: consuming-module
+    type: application
+    path: appBits.zip
+    requires:
+      - name: module-1-provided #declare this in order to 'access' and resolve the provided values
+    properties: #will be set as app environment variables
+      m1-user: ~{module-1-provided/user}  # note, the ~{<provides>/<property-name>} synthax. The property names are the ones defined in the 'provides' section of module 1
+      m1-config: '~{module-1-provided/config}-with-suffix' # such references can be part of yaml string expressions
+      m1-url: ~{module-1-provided/url}
+    parameters:
+        no-start: true
+      
