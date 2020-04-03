@@ -1,0 +1,19 @@
+ID: "my-mta"
+_schema-version: 3.3.0
+version: 0.0.0
+
+resources:
+- name: my-service-instance
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: config.json      #The content of the json will be taken as a base
+    config:                #Those configurations will be merged in the config.json content
+      xsappname: "appname-with-suffix-${org}${space}"
+    service-plan: "application" 
+    service: xsuaa
+- name: my-user-provided-service-instance
+  type: org.cloudfoundry.user-provided-service
+  parameters:
+    path: upsconfig.json      #The content of the json will be taken as a base
+    config:                #Those configurations will be merged in the config.json content
+      xsappname: "appname-with-suffix-${org}${space}"

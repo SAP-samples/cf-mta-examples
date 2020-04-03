@@ -40,6 +40,7 @@ Clone the repository, following the link:https://help.github.com/en/github/creat
 ## Managing deployment configurations
 * link:/modify-packaged-mta[Modifying an assembled MTA archive]
 * link:/extension-descriptor-different-environments[Configure same MTA for different environments]
+* link:/externalize-service-configurations[Externalize service parameters to file]
 
 ## Parallel deployment
 Optimize deploy time by executing deploy operations in parallel
