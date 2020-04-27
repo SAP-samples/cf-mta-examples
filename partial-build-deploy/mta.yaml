@@ -8,27 +8,43 @@ parameters:
 modules:
 - name: module-a
   type: staticfile
-  path: content/hello_world.zip
+  path: content
   requires:
     - name: service-1
   parameters:
     memory: 64M
 
+  build-parameters:
+    build-result: resources
+    requires:
+     - name: module-b
+       artifacts:
+          - '*'
+       target-path: resources/
+     - name: module-c
+       artifacts:
+          - '*'
+       target-path: resources/   
+
 - name: module-b
   type: staticfile
-  path: content/hello_world.zip
+  path: content/
   requires:
     - name: service-2
   parameters:
     memory: 64M
+  build-parameters:
+    build-result: hello_world.zip
     
 - name: module-c
   type: staticfile
-  path: content/hello_world.zip
+  path: content/
   requires:
     - name: service-3
   parameters:
     memory: 64M
+  build-parameters:
+    build-result: hello_world.zip
 
 resources:
 - name: service-1
