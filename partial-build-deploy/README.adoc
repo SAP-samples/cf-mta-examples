@@ -91,10 +91,13 @@ $ cf deploy mta_archives/hello-world_1.0.0.mtar -m module-c -r service-3
 ```
 ## Build only specific MTA modules defined in the mta.yaml file and deploy them
 
-NOTE: Since even partial deploymnet requires that all the modules' and resources' dependencies are resolved, we recommend you first build and deploy the complete MTA project (using the `mbt build` command to create the MTA archive (`mtar`) file and the `cf deploy` command to deploy it) and then build and deploy only the changing modules.
+NOTE: Since partial deploymnet requires that all the modules' and resources' dependencies are resolved, we recommend you first build and deploy the complete MTA project (using the `mbt build` command to create the MTA archive (`mtar`) file and the `cf deploy` command to deploy it) and then build and deploy only the changing modules.
 
-The command for building specific modules using the Cloud MTA Builder Tool is:
-`mbt module-build -m=<list of modules to build> [options]`. 
+The command for building specific modules using the Cloud MTA Builder Tool is: 
+```bash
+`mbt module-build -m=<list of modules to build> [options]`
+```
+
 
 NOTE: We recommend you to always apply `-g` option that generates also the deployment descriptor, the `mtad.yaml` file. The `path` property for the selected deployable modules in this `mtad.yaml` will point to the build results of these modules, so you will be able to immediately run the partial deployment command as described in the "Deploy directly from directory, via mtad.yaml" section. 
 
