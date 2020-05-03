@@ -61,6 +61,9 @@ Optimize deploy time by executing deploy operations in parallel
 * link:/keep-existing-bindings[Keep exisiting service bindings on update]
 * link:/keep-existing-env[Keep exisiting app env variables on update]
 
+## Scenarios
+* link:/dynatrace-monitoring[Enable Dynatrace monitoring of an SCP CF app]
+
 # Limitations
 
 Most examples are generic for link:https://github.com/cloudfoundry-incubator/multiapps-controller[MultiApps Controller] that is the standard MTA Deployment service for Cloud Foundry. Some, however are runnable only on SAP Cloud Platform Cloud Foundry, because of speciffic service offerings or functionalities available only there.

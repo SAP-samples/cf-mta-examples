@@ -1,0 +1,27 @@
+_schema-version: 3.1.0
+ID: enable.dynatrace.example
+version: 1.0.0
+
+resources:
+  - name: my-dynatrace-ups #The dynatrace user provided service
+    type: org.cloudfoundry.user-provided-service
+    parameters:
+      service-name: my-dynatrace-credentials #Note! The service name must contain 'dynatrace' for the build pack to detect it.
+      config: #The concrete credentials. Note! Consider specifying such in an extension descriptor (*.mtaext), external to a packaged MTA archive (*.mtar).
+        environmentid: "YOUR_ENVIRONMENTID"
+        apitoken: "YOUR_API_TOKEN"
+        apiurl: "https://<YourManagedServerURL>/e/<environmentID>/api"
+
+modules:
+  - name: my-java-app-module
+    type: application
+    path: gs-rest-service/complete/target/gs-rest-service-0.1.0.jar
+    parameters:
+      buildpack: sap_java_buildpack #Not all buildpacks can enable dynatrace integration
+      app-name: spring-app
+      memory: 512M
+    requires:
+      - name: my-dynatrace-ups  #Binding to the dynatrace service
+    properties: #Environemnt variables
+      DT_CLUSTER_ID: ${app-name} #DT One Agent setting - ignoring application name changes, e.g. during zdm updates. 
+      

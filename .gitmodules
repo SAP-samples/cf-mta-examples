@@ -1,0 +1,6 @@
+[submodule "gs-rest-service"]
+	path = gs-rest-service
+	url = https://github.com/spring-guides/gs-rest-service.git
+[submodule "dynatrace-monitoring/gs-rest-service"]
+	path = dynatrace-monitoring/gs-rest-service
+	url = https://github.com/spring-guides/gs-rest-service.git
