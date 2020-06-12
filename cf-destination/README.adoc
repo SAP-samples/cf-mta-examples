@@ -1,0 +1,41 @@
+:toc:
+
+# Managing CF Apps with an MTA
+
+This example shows how to model a simple CF application in an MTA, and a SCP sub-account destination pointing to it's url.
+
+# Try out
+
+## Deploy an MTA containing an cf app.
+
+The example demostrate 2 different approaches that lead to the same result.
+
+### Deploy from directory
+That approach uses deployment descritpr `mtad.yaml` and ready application binaries `appBits.zip`:
+``` bash
+cf deploy ./ -f ;
+```
+### Build and Deploy
+The approach is using development descriptor `mta.yaml`and application binaries `appBits.zip` to build MTAR.
+Then the MTAR is deployed.
+
+``` bash
+mbt build -p cf -t . ;
+cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
+
+## Examine the result
+
+### List the deployed mta
+```bash
+$ cf mta a.cf.app ;
+Showing health and status ...
+OK
+Version: 0.0.0
+Apps:
+name        requested state   instances   memory   disk   urls   
+my-cf-app   started           1/1         1G       1G     orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com, my-custom-host.at.some.domain 
+```
+
