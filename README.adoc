@@ -28,14 +28,15 @@ Clone the repository, following the link:https://help.github.com/en/github/creat
 ## SAP Content Deployment
 * link:/content-deployment/[SAP Content Deployment]
 ** link:/content-deployment/html5-content-deployment/[HTML5 Application Content Deployment]
-** link:/content-deployment/html5-content-deployment/with-service-key[Content deployment to an existing service key]
+** link:/content-deployment/html5-content-deployment/with-service-key[Content Deployment to an Existing Service Key]
 
 ## Manage CF Services
-* link:/create-managed-services[Service and binding creation]
+* link:/create-managed-services[Service and Binding creation]
 * link:/user-provided-service[Manage User-Provided Service Instances]
+* link:/active-optional-resources[Optional and Active Service Instances]
 
 ## Share configuration values between MTAs via a configuration registry
-* link:/cross-mta-configurations[Cross MTA configurations]
+* link:/cross-mta-configurations[Cross MTA Configurations]
 
 ## Managing deployment configurations
 * link:/modify-packaged-mta[Modifying an assembled MTA archive]
