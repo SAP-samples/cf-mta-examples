@@ -11,7 +11,7 @@ modules:
   - name:...
     parameters:
       keep-existing: 
-        routes:true
+        env:true
 ```
 NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current directory.
 
