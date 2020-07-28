@@ -7,7 +7,7 @@ Define and execute hooks at specific phases of module deployment.
 You can use hooks to change the typical deployment process, in this case to enable tasks to be executed during a specific moment of the application deployment. For example, you can set hooks can be executed before or after the actual deployment steps for a module, depending on the applications' need.
 
 ## Official Documentation
-* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b9245ba90aa14681a416065df8e8c593.html[Module Hooks]
+* SAP Help Portal: link: https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b9245ba90aa14681a416065df8e8c593.html [Module Hooks]
 
 ## Activation
 
