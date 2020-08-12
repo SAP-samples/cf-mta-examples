@@ -1,0 +1,38 @@
+_schema-version: "3.1"
+ID: hello
+version: 1.0.0
+
+modules:
+
+  - name: hello-router
+    type: java.tomee
+    path: backend.war
+    requires:
+      - name: backend
+        properties:
+          backend: ~{url}
+          name: backend
+          url: ~{url}
+    parameters:
+      memory: 256M
+      disk-quota: 256M
+      routes:
+        - route:  ${app-name}.${default-domain}
+    properties:
+      MEMORY_CALCULATOR_V1: true
+        
+  - name: hello-backend
+    type: java.tomee
+    path: backend.war
+    provides:
+      - name: backend
+        properties:
+          url: "https://${routes/0/route}"
+    parameters:
+      memory: 256M
+      disk-quota: 256M
+      routes:
+        - route: ${app-name}.${default-domain}/content
+    properties:
+      message: "Hello, from ${app-name}!"
+      MEMORY_CALCULATOR_V1: true

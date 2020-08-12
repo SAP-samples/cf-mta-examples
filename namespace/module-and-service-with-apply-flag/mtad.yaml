@@ -1,0 +1,22 @@
+_schema-version: "3.1"
+ID: hello
+version: 1.0.0
+
+modules:
+  - name: hello-backend
+    type: java.tomee
+    path: backend.war
+    parameters:
+      memory: 256M
+      disk-quota: 256M
+      routes:
+        - route:  ${app-name}.${default-domain}
+      apply-namespace: true
+    properties:
+      message: "Hello World!"
+      MEMORY_CALCULATOR_V1: true
+resources:
+  - name: hello-service
+    type: auditlog
+    parameters:
+      apply-namespace: false
