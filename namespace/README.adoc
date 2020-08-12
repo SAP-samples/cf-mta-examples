@@ -1,0 +1,7 @@
+# Deploying mta in a namespace
+:toc:
+
+## Overview
+This example shows how to a single MTA multiple times in a space using namespaces. 
+
+TODO: fill readme text
