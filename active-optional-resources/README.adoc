@@ -39,7 +39,9 @@ To give fine control over what get's deployed or not, resources representing ser
     ...
 ....
 
-NOTE: the value of the `optional` resource attribute can be changed for each deployment by using an extension descriptor (TODO link to tutorial) 
+NOTE: the value of the `active` resource attribute can be changed for each deployment by using an extension descriptor (TODO link to tutorial) 
+
+NOTE: the `active` attribute can also be specified for resources of tyme `org.cloudfoundry.existing-service`. In that case it determines if app bindings to the service would be created or not. E.g. If an app module has a reference to an existing-serviice resource via `requires: ...` and the resource has `active: false`, a service binding between them will not be created during deployment. 
 
 ## Related examples 
 - service instance and binding creation(configurations) management with MTAs
