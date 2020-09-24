@@ -4,7 +4,11 @@
 ## Overview
 This example shows how to a single MTA multiple times in a space using namespaces.
 
-NOTE: Prerequisites for this deployment - verify that you have multiapps cli plugin version 2.5.0 or above
+## Requirements
+* Installed MultiApps CF CLI Plugin v2.5.0 or above
+
+## Official documemtation
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b28fd77836d44bde8c404618bf0f1228.html[(Experimental) Namespaces]
 
 ## Deploying two applications in namespace
 Checkout the repository and navigate to 'cf-mta-examples/namespace/two-modules'
