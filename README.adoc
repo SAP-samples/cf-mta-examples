@@ -1,5 +1,7 @@
 # Description
 
+image:https://api.reuse.software/badge/github.com/SAP-samples/cf-mta-examples["REUSE status", link="https://api.reuse.software/info/github.com/SAP-samples/cf-mta-examples"]
+
 The repository contains Multitarget Application (MTA) examples for SAP Cloud Platform Cloud Foundry environment. Examples demonstrate how to achieve different goals using MTAs and what are the capabilities of MTA Deployment service in Cloud Foundry environment.
 
 Before you start with the examples, please make sure that:
