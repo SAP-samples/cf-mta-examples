@@ -1,0 +1,177 @@
+:toc:
+
+# Skipping service configurations on update
+
+This example shows how to skip individual service instance configurations when updating a service.
+
+Orchestration of the following CF features is covered:
+
+- updating service instances: https://docs.cloudfoundry.org/devguide/services/managing-services.html#update_service
+
+## Modelling
+
+### Service instances
+Service instances are modelled as MTA resources of type `org.cloudfoundry.managed-service`.
+Parameters in the config parameter can be specified to configure the service instance on it's creation or update
+The parameters in the skip-service-updates parameter specify which confiuration to not update
+
+....
+resources:
+- name: my-cf-service-instance-resource
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: application-logs
+    service-plan: "lite"
+    service-name: "my-logging-service-instance-name"
+    config: 
+      map: of
+      creation: parameters
+    skip-service-updates:
+      parameters: false
+      plan: false
+      tags: false
+....
+
+
+[cols=3*, options=header]
+|===
+|parameter 
+|configuration
+|optional 
+
+| skip-service-updates
+| the configs which to skip on update
+| optional (defaults to not skip anything on update)
+
+|===
+
+Additional information about the other parameters can be found here link:https://github.com/SAP-samples/cf-mta-examples/tree/master/create-managed-services[Creating managed services]
+
+## Requirements
+- access to a CF space with quota for creation of service instances
+
+## Oficial documemtation in Help SAP Portal
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/a36df26b36484129b482ae20c3eb8004.html[Service creation parameters]
+
+# Try out
+## Deploy the MTA
+The example demostrates 2 different approaches that lead to the same result.
+
+NOTE: you can adjust the service label and plan values to match the available in your environment
+
+### Deploy with a deployment descriptor (mtad.yaml)
+That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+
+``` bash
+cf deploy ./ -f ;
+```
+
+_OR_
+
+First assemble an MTA archive using the `mtad.yaml` and then deploy the archive:
+
+``` bash
+mbt assemble -t ./ ;
+cf deploy my-mta_0.0.0.mtar ;
+```
+
+NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
+
+### Build and Deploy
+The approach is using development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build MTAR.
+Then the MTAR is deployed.
+
+``` bash
+mbt build -p cf -t . ;
+cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
+
+---
+NOTE: The MTA that was deployed has a service with plan "lite"
+
+## Change the service plan
+
+....
+resources:
+- name: my-cf-service-instance-resource
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: application-logs
+    service-plan: "standard"
+    service-name: "my-logging-service-instance-name"
+    config: 
+      map: of
+      creation: parameters
+    skip-service-updates:
+      parameters: false
+      plan: false
+      tags: false
+....
+
+The difference between this yaml and the one used for deployment is that "serivce-plan" is now "standard".
+
+## Try deploying again
+
+Some service brokers don't support plan and/or parameters chaging after creation.
+"application-logs" is one such service.
+When re-deploying the MTA with the changed plan, the deployment will fail.
+To avoid such failures during re-deployment of the same MTA, you can specify the `skip-service-updates` parameter.
+When the parameter is specified, MTA deployment will process the service as create only.
+
+## Add a parameter to skip update of the service plan and parameters
+
+....
+resources:
+- name: my-cf-service-instance-resource
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: application-logs
+    service-plan: "standard"
+    service-name: "my-logging-service-instance-name"
+    config: 
+      map: of
+      creation: parameters
+    skip-service-updates:
+      parameters: true
+      plan: true
+....
+
+## Deploy again
+
+Either with a deployment descriptor or with the MTA build tool.
+
+This message will show up, signifying that the service plan update will be skipped:
+``` bash
+...
+Service plan for service "my-logging-service-instance-name" will not be updated, as the option for skipping service plan updates is enabled.
+...
+```
+
+## Examine the result
+
+### List the deployed mta
+
+``` bash
+$ cf services
+Getting services in org deploy-service / space ****** as ******...
+name                                        service            plan          bound apps                 ...                 
+my-logging-service-instance-name            application-logs   lite          my-mta-managed-app-module    
+```
+
+### List app status and attributes 
+
+``` bash
+$ cf service my-logging-service-instance-name ;
+Showing info of service my-logging-service-instance-name in org deploy-service / space ****** as ******...
+name:             my-logging-service-instance-name
+service:          application-logs
+tags:             
+plan:             lite
+...
+bound apps:
+name                        binding name   status             message
+my-mta-managed-app-module                  create succeeded   
+```

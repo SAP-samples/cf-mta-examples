@@ -1,0 +1,25 @@
+ID: "my-mta"
+_schema-version: 3.3.0
+version: 0.0.0
+
+resources:
+- name: my-cf-service-instance-resource
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service-name: "my-logging-service-instance-name" #optional, can be skipped
+    service-plan: "lite" # set the service plan to use
+    service: application-logs #set the service offering (label) 
+    skip-service-updates:
+      parameters: false
+      plan: false
+      tags: false
+    # config:  #optional, can configure service creation/update with service speciffic parameters 
+    #       service-config-key: "service-config-value" 
+
+modules:
+  #A cf app which will be bound to the service
+- name: my-mta-managed-app-module
+  type: application
+  path: "appBits.zip"
+  requires:
+    - name: my-cf-service-instance-resource
