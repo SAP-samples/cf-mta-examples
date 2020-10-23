@@ -2,7 +2,7 @@
 :toc:
 
 ## Overview
-This example shows how to a single MTA multiple times in a space using namespaces.
+This example shows how to deploy a single MTA multiple times in a space using namespaces.
 
 ## Requirements
 * Installed MultiApps CF CLI Plugin v2.5.0 or above
