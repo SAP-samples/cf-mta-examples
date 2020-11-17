@@ -44,14 +44,6 @@ The war we're deploying contains two simple servlets - one (the 'backend') retur
 ...
 
 ```
-Make note of the route assignment in the descriptor:
-```yaml
-...
-      routes:
-        - route:  ${app-name}.${default-domain} #adding the ${app-name} parameter to the host of the deployed application; this ensures no route conflicts
-...
-
-```
 
 ### 2 Deploy 
 To deploy the mta initially simply execute:
@@ -106,3 +98,17 @@ The steps here can be repeted as above, the notable difference is that in this d
 Using this parameter ensures that the service will be unique in the space even across multiple deployments in different namespaces. If you deply the archive in two namespaces consecutively the service instance will only be instantiated once.
 
 NOTE: It can be applied to any module or resource in the descriptor - if used in the example with two modules (e.g. setting it false for hello-backend module) it will result in only 1 hello-backend application being created and replaced on a second deployment.
+
+## Deploying an application, namespace applied to only 1 of the routes
+Checkout the repository and navigate to 'cf-mta-examples/namespace/module-with-apply-flag-to-route'.
+
+The steps are the same as previous examples, the difference is that 'apply-namespace' parameter is used inside module route map:
+```yaml
+...
+ routes:
+  - route: hello-backend.${default-domain}
+  - route: route-without-namespace.${default-domain}
+    apply-namespace: false
+...
+
+```
