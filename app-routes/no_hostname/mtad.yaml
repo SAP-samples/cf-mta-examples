@@ -1,0 +1,15 @@
+ID: a.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+
+modules:
+  - name: my-app-module
+    type: application 
+    path: "appBits.zip"
+    parameters: 
+      routes: # if not defined, a default route would be auto assigned unless no-route is specified
+        - route: host1.some-domain.com
+        - route: host2.some-domain.com
+          no-hostname: false # same as the above, 'false' is the default
+        - route: subdomain.some-domain.com
+          no-hostname: true # this tells the deployer that 'subdomain' is not a separate host, the whole route will be used as a cf domain
