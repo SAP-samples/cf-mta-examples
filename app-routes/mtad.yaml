@@ -7,7 +7,7 @@ modules:
     type: application 
     path: "appBits.zip"
     parameters: 
-      routes: # if not defined, a default route would be auto assinged unless no-route is specified
+      routes: # if not defined, a default route would be auto assigned unless no-route is specified
         - route: "my-custom-host.at.some.domain/with/path"
         - route: ${default-host}-with-custom-suffix.${default-domain} 
         - route: "*.wildcard.for.host.at.some.domain"

@@ -24,7 +24,7 @@ modules:
       no-route: false 
       no-start: false 
       instances: 1 
-      routes: # if not defined, a default route would be auto assinged unless no-route is specified
+      routes: # if not defined, a default route would be auto assigned unless no-route is specified
         - route: ${default-host}.${default-domain}
         - route: my-custom-host.at.some.domain
       upload-timeout: 180 #seconds

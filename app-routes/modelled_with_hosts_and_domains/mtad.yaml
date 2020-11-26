@@ -7,7 +7,7 @@ modules:
     type: application 
     path: "appBits.zip"
     parameters: 
-      hosts: # if not defined, a default route would be auto assinged unless no-route is specified
+      hosts: # if not defined, a default route would be auto assigned unless no-route is specified
         -  my-custom-host
         - ${default-host}-with-custom-suffix
       domains:
