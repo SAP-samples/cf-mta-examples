@@ -2,8 +2,8 @@
 
 # Partial deployment
 
-Partial deployment is a feature allowing fine control over which parts of the MTA are getting processed by the MTA Deployment service and which not.
-One is able to select only certain module(s) and/or resource(s) for deployment. The MTA Deployment service takes care to orchestrate the deployment only for the selected parts and skips the rest.
+Partial deployment is a feature allowing fine control over which parts of the MTA are getting processed by the SAP Cloud Deployment service and which not.
+One is able to select only certain module(s) and/or resource(s) for deployment. The SAP Cloud Deployment service takes care to orchestrate the deployment only for the selected parts and skips the rest.
 
 WARNING: All descriptor validations and dependency cheks on the processed modules are always executed. If the MTA archive is invalid or e.g. an module has a missing dependency (i.e. service instance which should be bound to but does not exist), deployment fails. 
 
@@ -24,7 +24,7 @@ Deploy all resources.ß
 |===
 
 ## Partial build & assembly
-Only selected moduels would be built and included in the MTA archive. This optimizes built & assembly time, the archive size and respectfully upload & processing time in the MTA deployment service. 
+Only selected moduels would be built and included in the MTA archive. This optimizes built & assembly time, the archive size and respectfully upload & processing time in the SAP Cloud Deployment service. 
 
 ### Partial build
 
@@ -77,7 +77,7 @@ Process finished.
 ## Assemble MTA archive via mtad.yaml and deploy
 First use `mbt assemble` to create the *.mtar and than deploy it with `cf deploy`.
 
-NOTE: This approach is less efficient, as all modules are included in the MTA archive and uploaded to the MTA deployment service. Regardless that only the selected ones are processed. 
+NOTE: This approach is less efficient, as all modules are included in the MTA archive and uploaded to the SAP Cloud Deployment service. Regardless that only the selected ones are processed. 
 ```bash
 $$ mbt assemble
   INFO assembling the MTA project...

@@ -5,7 +5,7 @@
 User-provided service instances enable developers to use services that are not available in the marketplace with their apps running on Cloud Foundry.
 
 The example will demonstrate how to manage User-Provided Service Instances with MTA.
-Real use case for SAP Cloud Platform Cloud Foundry environment where user-provided service are needed is Dynatrace service. With dynatrace you can monitor your application and get insights of it.
+Real use case for SAP Business Technology Platform Cloud Foundry environment where user-provided service are needed is Dynatrace service. With dynatrace you can monitor your application and get insights of it.
 
 To create user-provided services, you need resource with type `org.cloudfoundry.user-provided-service`.
 The resource has only one required parameter `config` that represents credentials of the service.

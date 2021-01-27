@@ -3,7 +3,7 @@
 
 ## Overview
 
-This example shows how to model network route mapping to a CF application. The MTA Deployment service can create, map and unmap CF app routes. 
+This example shows how to model network route mapping to a CF application. The SAP Cloud Deployment service can create, map and unmap CF app routes. 
 There a three major ways to do the modelling:
 
 * <<routes>> parameter (*recommended*)

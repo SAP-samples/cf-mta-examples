@@ -4,7 +4,7 @@
 
 Parallel deployment is a feature that allows to speed-up the deploy proces by processing multiple MTA modules in parallel. The feature is applicable either for standard and blue-green deployment scenarios.
 
-Parallel deployment feature concerns SAP Cloud Platform entities that are represented by MTA modules - applications and application contents.
+Parallel deployment feature concerns SAP Business Technology Platform entities that are represented by MTA modules - applications and application contents.
 
 The feature does not relate to entities represented by MTA resources, for instance Cloud Foundry services. By default Cloud Foundry servicecs are processed in parallel without need of any additional configuration.
 
