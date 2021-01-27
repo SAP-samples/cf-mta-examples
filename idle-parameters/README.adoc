@@ -11,7 +11,7 @@ Idle parameters are used in the validation phase of blue-green deployment where 
 
 NOTE: *The reccomended way to create idle route(s) is by using `idle-routes` parameter! All other combinations are possible but should be avoided and used carefully if needed!*
 
-When idle parameter are not defined MTA Deployment service will use default behavior to calculate the temporary idle routes:
+When idle parameter are not defined the SAP Cloud Deployment service will use default behavior to calculate the temporary idle routes:
 ```text
 ${org}-${space}-${app-name}-idle.${default-domain}
 ```
@@ -32,7 +32,7 @@ It is possible to define multiple idle routes:
 idle-routes = idle-hosts X idle-domains
 ```
 
-NOTE: *If you are using custom idle domain, make sure it is already created and existing in the org! MTA Deployment service does not create idle domains. The point is applicable when you define any of parameters `idle-routes`, `idle-domain` or `idle-domains`.*
+NOTE: *If you are using custom idle domain, make sure it is already created and existing in the org! The SAP Cloud Deployment service does not create idle domains. The point is applicable when you define any of parameters `idle-routes`, `idle-domain` or `idle-domains`.*
 
 ## Requirements
 * Awareness of link:../blue-green-deploy[MTA blue-green deployment]
