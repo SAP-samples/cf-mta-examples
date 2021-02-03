@@ -1,0 +1,53 @@
+:toc:
+
+# Deploy an MTAR referenced by a remote URL
+
+This example shows how to deploy an mtar that isn't present on your local system.
+
+NOTE: With this scenario, the Deploy Service *will not* check for any ongoing operations with the current MTA.
+
+# Try out
+
+## Deploy the MTA
+
+``` bash
+cf deploy https://github.com/SAP-samples/cf-mta-examples/blob/master/deploy-with-url/anatz.zip?raw=true ;
+```
+
+NOTE: The referenced MTA archive must be publicly accessible.
+
+## Examine the result
+
+### List the deployed mta
+
+``` bash
+$ cf mta anatz ;
+Showing health and status for multi-target app anatz in org ****** / space ****** as ******...
+OK
+Version: 4.0.0
+Namespace:
+
+Apps:
+name    requested state   instances   memory   disk   urls
+anatz   started           1/1         64M      1G     <org>-<space>-anatz.cfapps.sap.hana.ondemand.com
+```
+
+### List app status and attributes 
+
+``` bash
+$ cf app anatz ;
+Showing health and status for app anatz in org ****** / space ****** as ******...
+
+name:              anatz
+requested state:   started
+routes:            <org>-<space>-anatz.cfapps.sap.hana.ondemand.com
+last uploaded:     Wed 03 Feb 11:33:55 EET 2021
+stack:             cflinuxfs3
+buildpacks:        staticfile
+
+type:           web
+instances:      1/1
+memory usage:   64M
+     state     since                  cpu    memory         disk       details
+#0   running   2021-02-03T09:34:39Z   0.5%   13.8M of 64M   6M of 1G
+```
