@@ -44,6 +44,7 @@ Clone the repository, following the link:https://help.github.com/en/github/creat
 ## Managing deployment configurations
 * link:/modify-packaged-mta[Modifying an assembled MTA archive]
 * link:/extension-descriptor-different-environments[Configure same MTA for different environments]
+* link:/extension-descriptor-hanatrial[Configure MTA with HANA services for Trial accounts]
 * link:/externalize-service-configurations[Externalize service parameters to file]
 
 ## Parallel deployment
