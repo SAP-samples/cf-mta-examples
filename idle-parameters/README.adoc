@@ -35,10 +35,11 @@ idle-routes = idle-hosts X idle-domains
 NOTE: *If you are using custom idle domain, make sure it is already created and existing in the org! The SAP Cloud Deployment service does not create idle domains. The point is applicable when you define any of parameters `idle-routes`, `idle-domain` or `idle-domains`.*
 
 ## Requirements
-* Awareness of link:../blue-green-deploy[MTA blue-green deployment]
+* Awareness of link:../blue-green-deploy-strategy[MTA blue-green deployment]
 
 ## Official documemtation
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/37eedfdf814d4845ad784334d7ad6f8e.html[MTA Module Types, Resource Types, and Parameters for Applications in the Cloud Foundry Environment]
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/772ab72204f04946b79ce2d962e64970.html[Blue-Green Deployment of Multitarget Applications]
 
 # Try out
 
