@@ -1,5 +1,5 @@
 :toc:
-# Blue-green deployment
+# Blue-Green Deployment Strategy
 
 Blue-green deployment is a technique that reduces downtime and risk by running two identical productive environments called Blue and Green.
 
@@ -23,7 +23,7 @@ During third phase all new applications are assigned to productive routes and th
 * Installed MultiApps CF CLI Plugin v2.3.0 and above
 
 ## Official documemtation
-* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/764308c52e68488dac848bae93e9137b.html[Blue-Green Deployment of Multitarget Applications (MTA)]
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/7c83810c31d842938cbc39c135a2d99f.html[Blue-Green Deployment Strategy]
 
 # Try out
 
