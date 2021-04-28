@@ -1,5 +1,5 @@
 :toc:
-# Blue-green deployment
+# Legacy Blue-Green Deployment
 
 Blue-green deployment is a technique that reduces downtime and risk by running two identical production environments called Blue and Green.
 
@@ -20,7 +20,7 @@ During second phase all new applications are assigned to production routes and t
 * Awarenes of blue green deploy in Cloud Foundry: link:https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html[Using Blue-Green Deployment to Reduce Downtime and Risk]
 
 ## Official documemtation
-* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/764308c52e68488dac848bae93e9137b.html[Blue-Green Deployment of Multitarget Applications (MTA)]
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/764308c52e68488dac848bae93e9137b.html[Legacy Blue-Green Deployment]
 
 # Try out
 
