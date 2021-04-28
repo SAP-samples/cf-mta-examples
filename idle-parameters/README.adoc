@@ -38,7 +38,7 @@ NOTE: *If you are using custom idle domain, make sure it is already created and 
 * Awareness of link:../blue-green-deploy-strategy[MTA blue-green deployment]
 
 ## Official documemtation
-* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html[Modules] -> Table Module-Specific Parameters 
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_moduleSpecificParameters[Modules] -> Table Module-Specific Parameters 
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/772ab72204f04946b79ce2d962e64970.html[Blue-Green Deployment of Multitarget Applications]
 
 # Try out
