@@ -22,4 +22,4 @@ The following types are supported:
 ## Official documemtation in Help SAP Portal
 
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d3e23196166b443db17b3545c912dfc0.html[Content Deployment]
-- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html[Modules] -> MTA Module Types 
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_mtaModuleTypes[Modules] -> MTA Module Types 
