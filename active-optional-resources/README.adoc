@@ -1,6 +1,6 @@
 :toc:
 
-# Service instance and binding creation
+# Active and Optional Resources
 
 This example shows how to mark service resources as optional/mandatory or active/inactive in order to influence the deployment behaviour
 
