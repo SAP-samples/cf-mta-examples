@@ -12,7 +12,7 @@ The resource has only one required parameter `config` that represents credential
 
 
 ## Oficial documemtation in Help SAP Portal
-- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/37eedfdf814d4845ad784334d7ad6f8e.html[MTA Module Types, Resource Types, and Parameters for Applications in the Cloud Foundry Environment] -> Special Resource Types
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html#loio9e34487b1a8643fb9a93ae6c4894f015__section_mtaResourceTypes[Resources] -> Special Resource Types
 
 # Try out
 
