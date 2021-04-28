@@ -15,7 +15,7 @@ modules:
 
 ## Official Documentation
 
-* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/37eedfdf814d4845ad784334d7ad6f8e.html[MTA Module Types, Resource Types, and Parameters for Applications in the Cloud Foundry Environment]
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_moduleSpecificParameters[Modules] -> Table Module-Specific Parameters
 
 NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current directory.
 
