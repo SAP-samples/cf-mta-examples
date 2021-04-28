@@ -23,7 +23,7 @@ To enable deployment of the same MTA, you can use MTA extension descriptors.  Ex
 
 ## Oficial documemtation in Help SAP Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/50df803465324d36851c79fd07e8972c.html[Defining MTA Extension Descriptors]
-- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resource Types]
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html#loio9e34487b1a8643fb9a93ae6c4894f015__section_mtaResourceTypes[Resources] -> MTA Resource Types
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/046f127f2a614438b616ccfc575fdb16.html[Trial Accounts]
 - link:https://saphanajourney.com/hana-cloud/learning-article/starting-a-sap-hana-cloud-trial-when-you-have-an-existing-sap-cloud-platform-trial/[Starting your trial when you have an existing SAP Cloud Platform trial account]
 
