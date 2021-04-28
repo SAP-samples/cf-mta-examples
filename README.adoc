@@ -54,7 +54,7 @@ Optimize deploy time by executing deploy operations in parallel
 
 ## Zero downtime update
 * link:/blue-green-deploy-legacy[Legacy Blue-green deployment]
-* link:/blue-green-deploy-strategy/[Deploy wiht Blue-green strategy]
+* link:/blue-green-deploy-strategy/[Deploy with Blue-green strategy]
 
 ### Idle host and domain during blue-green deployment
 * link:/idle-parameters[Idle route(s), idle host(s) and idle domain(s)]
