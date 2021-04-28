@@ -15,7 +15,13 @@ modules:
 ```
 NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current directory.
 
-### 1 Deploy 
+## Official Documentation
+
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_moduleSpecificParameters[Modules] -> Table Module-Specific Parameters
+
+## Try out
+
+### Initial deployment  
 directly from an mtad.yaml
 ```bash
   $ cf deploy ./ -f ;
@@ -25,7 +31,7 @@ or start from an mta.yaml:
   $ mbt build -p cf -t . ;
   $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
-### 2 Examine initial state
+### Examine the initial state
 ```bash
   $ cf env cf-app-keeping-env-changes
 ...
@@ -40,7 +46,7 @@ User-Provided:
 ...
 managed-env-variable: original-env-var-val
 ```
-### 3 Manually set a new env variable
+### Manually set a new env variable
 ```bash
   $ cf set-env cf-app-keeping-env-changes new-env-variable new-env-var-val
   $ cf set-env cf-app-keeping-env-changes managed-env-variable changed-env-var-val
@@ -48,7 +54,7 @@ managed-env-variable: original-env-var-val
   $ cf set-env cf-app-resetting-env managed-env-variable changed-env-var-val
   
 ```
-### 4 Examine the change
+### Examine the change
 ```bash
   $ cf env cf-app-keeping-env-changes
 ...
@@ -65,14 +71,14 @@ User-Provided:
 managed-env-variable: changed-env-var-val
 new-env-variable: new-env-var-val
 ```
-### 5 Re-deply to simulate update
+### Re-deply to simulate update
 ```bash
   $ cf deploy -f ;
   # or 
   $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
-### 6 Check out the result
+### Check out the result
 ```bash
   $ cf env cf-app-keeping-env-changes
 ...
