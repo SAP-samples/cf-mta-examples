@@ -1,0 +1,38 @@
+:toc:
+
+# Generic Application Content Deployment With User-Provided Service
+
+Another option is to deploy Generic Application Content with a user-provided service.
+
+This can be done utilizing the `org.cloudfoundry.user-provided-service` resource type as shown in the `mtad.yaml`.
+
+# Prerequisites
+This example requires a content deployer agent (app or service) to already be existing.
+However, it doesn't have to be in the same space as the deployment.
+
+NOTE: The credentials that will be used for the content deployment *must* be in either
+the user-provided service's credentials (passed either as an inline json or a json file when creating the service)
+_or_
+the `config` parameter of the resource definition.
+
+link:https://cli.cloudfoundry.org/en-US/v7/create-user-provided-service.html[Creating user-provided services]
+
+# Try it out
+In the current directory execute `cf deploy`. This will automatically assemble the MTA archive and deploy it:
+
+```bash
+$ cf deploy
+Deploying multi-target app archive */with-user-provided-service/ui5MTA-with-ups.mtar in org ******** / space ******** as ********...
+
+Uploading 1 files...
+  */with-user-provided-service/ui5MTA-with-ups.mtar
+OK
+Deploying in org "********" and space "********"
+Detected MTA schema version: "3"
+No deployed MTA detected - this is initial deployment
+Detected new MTA version: "0.0.1"
+Uploading content module "ui5module" in target service "ui5-repo-service-instance-credentials"...
+Deploying content module "ui5module" in target service "ui5-repo-service-instance-credentials"...
+Skipping deletion of services, because the command line option "--delete-services" is not specified.
+Process finished.
+```
