@@ -1,0 +1,28 @@
+ID: ui5MTA-with-ups
+_schema-version: '3.1'
+version: 0.0.1
+
+modules:
+ - name: ui5module
+   type: com.sap.application.content
+   path: content/content.zip
+   requires:
+    - name: ui5-repo-service-instance-credentials
+      parameters:
+        content-target: true
+
+resources:
+ - name: ui5-repo-service-instance-credentials # the name of the user provided service
+   type: org.cloudfoundry.user-provided-service
+   parameters:
+      config:
+        # the credentials could either be here or passed to the cli when creating the service
+        content_endpoint: "https://my.content.backend.com" # Endpoint, implementing generic content deploy API.
+        uaa:
+          clientid: "my-client-id"
+          clientsecret: "my-client-secret"
+          url: https://my-uaa.authentication.sap.hana.ondemand.com # uaa endpoint which is used to get oauth token for further calls to content endpoint
+      # if the service exists, include this so as to not overwrite the credentials
+      #skip-service-updates:
+        #parameters: true
+   
