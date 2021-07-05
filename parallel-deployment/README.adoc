@@ -56,7 +56,7 @@ In the current directory you'll find example cf app payload modelled to be deplo
 * deployment descriptor: link:mtad.yaml[mtad.yaml]
 * extension descriptors
 ** enabling parallelization: link:hello-world-parallel.mtaext[hello-world-parallel.mtaext]
-** disabling parallelization: link:[hello-world-no-parallel.mtaext]
+** disabling parallelization: link:hello-world-no-parallel.mtaext[hello-world-no-parallel.mtaext]
 
 The example MTA contains 4 modules `hello-world`, `hello-world-first`, `hello-world-second` and `hello-world-third` where 3 of them does not have any dependency order and will be processed in parallel accordingly. Only `hello-world-third` depends on `hello-world`, so it will be processed after `hello-world` is completed.
 
