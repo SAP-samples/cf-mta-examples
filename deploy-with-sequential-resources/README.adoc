@@ -1,0 +1,158 @@
+:toc:
+
+# Deploy an MTAR using sequential Resource processing
+
+This example shows how to make use of the resource parameter 'processed-after' in order to influence the order of resource processing.
+
+- creation of service instances: https://docs.cloudfoundry.org/devguide/services/managing-services.html
+- creation of app bindings to service instances https://docs.cloudfoundry.org/devguide/services/application-binding.html#bind
+
+## Modelling
+
+### Service instances having processed-after parameter
+Whenever order of service processing is necessary, the 'processed-after' parameter comes handy. By using the parameter, we create a sequence of services (an order) in which the services should be processed. 
+For example let's say service 'A' requires service 'B' and service 'C' to be processed first. On the other hand both service 'B' and service 'C' require service 'D' to be pocessed first. Service 'D' does not require any other service. So the order for processing should be:
+ D -> B, C -> A.
+We can achieve this with the following mtad.yaml:
+
+....
+...
+resources:
+  - name: serviceA
+    type: org.cloudfoundry.managed-service
+    parameters:
+      ...
+    processed-after: [serviceB, serviceC]
+  - name: serviceB
+    type: org.cloudfoundry.managed-service
+    parameters:
+      ...
+    processed-after: [serviceD]
+  - name: serviceC
+    type: org.cloudfoundry.managed-service
+    parameters:
+      ...
+    processed-after: [serviceD]
+  - name: serviceD
+    type: org.cloudfoundry.managed-service
+    parameters:
+      ...
+....
+
+NOTE: If the parameter 'processed-after' is not specified, the resources are processed in parallel.
+
+NOTE: The 'processed-after' parameter is supported from schema version 3 onwards. If it's used in a descriptor with schema version 2 or lower, the following message should appear: 
+``` bash
+Entities from class "Resource" with schema version "2" do not support this operation. At least "3" is required.
+```
+
+NOTE: In case two dependencies depend on each other for processing an error will be shown: 
+``` bash
+Resources "<resource1>" and "<resource2>" both depend on each other for processing
+```
+
+NOTE: It is NOT allowed a service to depend on itself. If attempt for doing so is made the follwoing error should be displayed:
+``` bash
+Resource "{0}" is required by itself for processing
+```
+
+## Requirements
+- access to a CF space with quota for creation of service instances
+
+## Oficial documemtation in Help SAP Portal
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
+
+## Try out
+### Deploy the MTA
+The example can be run with 2 approaches for building an MTA. Both lead to the same result.
+
+#### A. Deeploying from a directory 
+That approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+
+``` bash
+cf deploy ./ -f
+
+...
+Deploying multi-target app archive /Users/*****/*****/cf-mta-examples/deploy-with-sequential-resources/multiple-anatz.mtar in org deploy-service / space ***** as *********************...
+
+Uploading 1 files...
+  /Users/******/******/cf-mta-examples/deploy-with-sequential-resources/multiple-anatz.mtar
+
+OK
+Operation ID: ee6a0cf1-3005-11ec-bf71-eeee0a90baae
+Operation ID: ee6a0cf1-3005-11ec-bf71-eeee0a90baae
+Deploying in org "deploy-service" and space "******"
+Detected MTA schema version: "3"
+No deployed MTA detected - this is initial deployment
+Detected new MTA version: "3.0.0"
+Processing service "serviceD"...
+Creating service "serviceD" from MTA resource "serviceD"...
+1 of 1 done
+Processing service "serviceC"...
+Creating service "serviceC" from MTA resource "serviceC"...
+Processing service "serviceB"...
+Creating service "serviceB" from MTA resource "serviceB"...
+1 of 1 done
+1 of 1 done
+Processing service "serviceA"...
+Creating service "serviceA" from MTA resource "serviceA"...
+1 of 1 done
+Creating application "multiple-anatz" from MTA module "multiple-anatz"...
+Uploading application "multiple-anatz"...
+Started async upload of application "multiple-anatz"
+Scaling application "multiple-anatz" to "1" instances... 
+Staging application "multiple-anatz"...
+Application "multiple-anatz" staged
+Starting application "multiple-anatz"...
+Application "multiple-anatz" started and available at "******   ******-multiple-anatz.cfapps.sap.hana.ondemand.com"
+Skipping deletion of services, because the command line option "--delete-services" is not specified.
+Process finished.
+Use "cf dmol -i ee6a0cf1-3005-11ec-bf71-eeee0a90baae" to download the logs of the process.
+...
+```
+
+_OR_
+
+First assemble an MTA archive using the link:mtad.yaml[mtad.yaml]` and then deploy the archive:
+
+``` bash
+mbt assemble -t ./ ;
+cf deploy multiple-anatz_0.0.0.mtar ;
+```
+
+NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
+
+NOTE: please adjust the service label and plan values to match the available in your environment
+
+#### B. Build and Deploy
+The approach is using development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build MTAR.
+Then the MTAR is deployed.
+
+``` bash
+mbt build -p cf -t . ;
+cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
+
+## Print the MTA details to confirm the deployment
+At any step you can check the created deployment with the following:
+
+``` bash
+$cf mta multiple-anatz 
+Showing health and status for multi-target app multiple-anatz in org deploy-service / space ******** as ********...
+OK
+Version: 3.0.0
+Namespace: 
+
+Apps:
+name             requested state   instances   memory   disk   urls   
+multiple-anatz   started           1/1         1G       1G     deploy-service-*******-multiple-anatz.cfapps.sap.hana.ondemand.com   
+
+Services:
+name       service    plan       bound apps   last operation   
+serviceA   auditlog   standard                create succeeded   
+serviceB   auditlog   standard                create succeeded   
+serviceC   auditlog   standard                create succeeded   
+serviceD   auditlog   standard                create succeeded   
+```
