@@ -1,0 +1,99 @@
+:toc:
+
+# Streaming application logs using User-Provided service instances
+
+Cloud Foundry aggregates logging information for your apps, like inbound requests and output to the standard output and error streams. To persist that information in a more flexible or, generally speaking custom manner, you can redirect these logs to a log management service.
+
+In the absence of compatible log managment services in the marketplace, user-provided service instances can enable the streaming of app logs to a log service of your choice using the optional parameter `syslog-drain-url`.
+It specifies the URL to which logs for bound applications will be streamed.
+
+This example will demonstrate how to create a user-provided-service, which streams the logs of its bound applications to a log managment service.
+
+
+Documented feature in the CF docs:
+link:https://docs.cloudfoundry.org/devguide/services/user-provided.html#syslog[Stream App Logs to a Service
+]
+
+link:https://docs.cloudfoundry.org/devguide/streaming-logs-index.html[More info about streaming app logs in CF]
+
+## Modelling
+
+`syslog-drain-url` can be defined under `parameters` in a resource of type `org.cloudfoundry.user-provided-service`, as shown in `link:mtad.yaml[mtad.yaml]`:
+```text
+resources:
+ - name: my-syslog-service
+   type: org.cloudfoundry.user-provided-service
+   parameters:
+    syslog-drain-url: syslog://example.log-aggregator.com
+
+```
+
+NOTE: the value of the `syslog-drain-url` parameter can be changed for each deployment by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/extension-descriptor-different-environments[using an extension descriptor]
+
+
+
+## Requirements
+- access to a CF space with quota for creation of service instances
+
+## Related examples
+- link:../user-provided-service/README.adoc[Manage User-Provided Service Instances]
+
+## Official documentation in Help SAP Portal
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html#loio9e34487b1a8643fb9a93ae6c4894f015__section_resourceSpecificParameters[Resource-Specific Parameters]
+
+## Try out
+
+### Create a user-provided instance with a specified syslog drain url
+
+#### Deploy with deployment descriptor `link:mtad.yaml[mtad.yaml]`
+
+```bash
+$ cf deploy ./
+
+...
+Creating service "my-syslog-service" from MTA resource "my-syslog-service"...
+Creating application "my-mta-managed-app-module" from MTA module "my-mta-managed-app-module"...
+Binding service instance "my-syslog-service" to application "my-mta-managed-app-module"...
+...
+```
+
+_OR_
+
+#### First assemble an MTA archive using `link:mtad.yaml[mtad.yaml]` and then deploy the archive:
+
+``` bash
+mbt assemble -t ./ ;
+cf deploy create.syslog.service.example_0.0.0.mtar ;
+```
+
+NOTE: Re-deploying the MTA with a new `syslog-drain-url` will update its value. Updates for the parameter can be skipped by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/skip-service-updates[setting it under the skip-service-updates parameter]
+
+## Verify the result
+
+### List the bound apps to the service
+```bash
+$ cf service my-syslog-service
+Showing info of service my-syslog-service in org ******* / space ****** as ******...
+
+name:      my-syslog-service
+service:   user-provided
+tags:
+
+bound apps:
+name                        binding name   status             message
+my-mta-managed-app-module                  create succeeded
+```
+
+
+### View the user-provided syslog drain URL using a cURL request
+```bash
+$ cf curl v3/service_instances/$(cf service my-syslog-service --guid)
+
+...
+"name": "my-syslog-service",
+   "tags": [],
+   "last_operation": {},
+   "type": "user-provided",
+   "syslog_drain_url": "syslog://example.log-aggregator.com",
+...
+```

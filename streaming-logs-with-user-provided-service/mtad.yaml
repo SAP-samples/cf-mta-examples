@@ -1,0 +1,17 @@
+_schema-version: 3.1.0
+ID: create.syslog.service.example
+version: 0.0.0
+
+resources:
+ - name: my-syslog-service
+   type: org.cloudfoundry.user-provided-service
+   parameters:
+    syslog-drain-url: syslog://example.log-aggregator.com
+
+modules:
+  #A cf app which will be bound to the service
+- name: my-mta-managed-app-module
+  type: application
+  path: "appBits.zip"
+  requires:
+    - name: my-syslog-service
