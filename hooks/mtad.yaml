@@ -48,7 +48,7 @@ modules:
         phases:
           - blue-green.application.before-unmap-routes.live
         parameters:
-          command: "echo 'Will be executed before the unmapping of the live application's routes druing blue-green deployment (resume phase)'"
+          command: "echo 'Will be executed before the unmapping of the live application routes druing blue-green deployment (resume phase)'"
       - name: deploy-before-start
         type: task
         phases:
