@@ -1,0 +1,137 @@
+:toc:
+# Blue-Green Deployment Strategy with skip-idle-start
+
+## Execute initial deployment
+
+You've already executed a deployment and your live applications are deployed and up and running. The following is an example of an output of a normal non-blue-green deployment.
+
+image::../diagrams/initial-bg-deploy-blue.png[]
+
+#### Deploying a new MTA application
+```bash
+  $ cf deploy hello-green/hello.mtar -f
+  Deploying multi-target app archive hello.mtar in org xxx / space xxx as xxx...
+  Uploading 1 files...
+    ./hello-green/hello.mtar
+  OK
+  Operation ID: xxx
+  Deploying in org "xxx" and space "xxx"
+  Detected MTA schema version: "3"
+  No deployed MTA detected - this is initial deployment
+  Detected new MTA version: "0.1.0"
+  Creating application "hello-backend" from MTA module "hello-backend"...
+  Uploading application "hello-backend"...
+  Started async upload of application "hello-backend"
+  Scaling application "hello-backend" to "1" instances...
+  Staging application "hello-backend"...
+  Application "hello-backend" staged
+  Starting application "hello-backend"...
+  Application "hello-backend" started and available at "<org>-<space>-hello-backend.<domain>"
+  Publishing publicly provided dependency "hello:backend"...
+  Creating application "hello-router" from MTA module "hello-router"...
+  Uploading application "hello-router"...
+  Started async upload of application "hello-router"
+  Scaling application "hello-router" to "1" instances...
+  Staging application "hello-router"...
+  Application "hello-router" staged
+  Starting application "hello-router"...
+  Application "hello-router" started and available at "<org>-<space>-hello-router.<domain>"
+  Skipping deletion of services, because the command line option "--delete-services" is not specified.
+  Process finished.
+  Use "cf dmol -i xxx" to download the logs of the process.```
+```
+
+### Examine the result
+Verify that the applications are deployed.
+```bash
+$ cf a
+Getting apps in org xxx / space xxx as xxx...
+OK
+
+name            requested state   processes   routes
+hello-backend   started           web:1/1     <org>-<space>-hello-backend.<domain>
+hello-router    started           web:1/1     <org>-<space>-hello-router.<domain>
+```
+
+## Execute a blue-green deployment with --skip-idle-start
+
+As it can be seen from the logs the validation test is skipped as well as the start of the idle applications. The newly deployed applications are not started on idle routes which can save time during the deployment. When using "skip-idle-start" the following three hooks will not take effect:
+
+- blue-green.application.before-stop.idle
+- blue-green.application.after-stop.idle
+- blue-green.application.before-start.idle
+
+The hooks do not take effect because the newly deployed applications are not started/stopped (restarted) during the blue-green deployment.
+
+
+#### Execute the deployment
+```bash
+Deploying multi-target app archive hello.mtar in org xxx / space xxx as xxx...
+
+Uploading 1 files...
+  ./hello-green/hello.mtar
+OK
+Operation ID: xxx
+Deploying in org "xxx" and space "xxx"
+Detected MTA schema version: "3"
+Detected deployed MTA with namespace "null", ID "hello" and version "0.1.0"
+Renaming application "hello-router" to "hello-router-live"...
+Renaming application "hello-backend" to "hello-backend-live"...
+Detected new MTA version: "0.1.0"
+Deployed MTA version: "0.1.0"
+Idle applications will not be started because "skipIdleStart" is set to "true"
+Creating application "hello-backend-idle" from MTA module "hello-backend"...
+Uploading application "hello-backend-idle"...
+Started async upload of application "hello-backend-idle"
+Scaling application "hello-backend-idle" to "1" instances...
+Staging application "hello-backend-idle"...
+Application "hello-backend-idle" staged
+Creating application "hello-router-idle" from MTA module "hello-router"...
+Uploading application "hello-router-idle"...
+Started async upload of application "hello-router-idle"
+Scaling application "hello-router-idle" to "1" instances...
+Staging application "hello-router-idle"...
+Application "hello-router-idle" staged
+Detected new MTA version: "0.1.0"
+Deployed MTA version: "0.1.0"
+Updating application "hello-backend-idle"...
+Starting application "hello-backend-idle"...
+Application "hello-backend-idle" started and available at "<org>-<space>-hello-backend.<domain>
+Updating application "hello-router-idle"...
+Starting application "hello-router-idle"...
+Application "hello-router-idle" started and available at "<org>-<space>-hello-router.<domain>"
+Deleting discontinued publicly provided dependency "hello:backend"...
+Renaming application "hello-backend-idle" to "hello-backend"...
+Renaming application "hello-router-idle" to "hello-router"...
+Deleting routes for application "hello-router-live"...
+Deleting routes for application "hello-backend-live"...
+Route "<org>-<space>-hello-backend.<domain>" not deleted since it is in use
+Stopping application "hello-backend-live"...
+Deleting application "hello-backend-live"...
+Route "<org>-<space>-hello-router.<domain>" not deleted since it is in use
+Stopping application "hello-router-live"...
+Deleting application "hello-router-live"...
+Skipping deletion of services, because the command line option "--delete-services" is not specified.
+Process finished.
+Use "cf dmol -i xxx" to download the logs of the process.```
+```
+
+At some point in time, you will have a similar environment, where both IDLE and LIVE applications are mapped to productive routes.
+
+image::../diagrams/bg-deploy-green-temp.png[]
+
+After that the already deployed (old) applications routes are unmapped and the applications get deleted.
+
+image::../diagrams/bg-deploy-green-final.png[]
+
+### Examine the result
+Verify that old applications are deleted and new applications are assigned to production routes:
+```bash
+$ cf a
+Getting apps in org xxx / space xxx as xxx...
+OK
+
+name            requested state   processes   routes
+hello-backend   started           web:1/1     <org>-<space>-hello-backend.<domain>
+hello-router    started           web:1/1     <org>-<space>-hello-router.<domain>
+```
