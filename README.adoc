@@ -53,6 +53,9 @@ Optimize deploy time by executing deploy operations in parallel
 
 * link:/parallel-deployment[Parallel module deployment]
 
+## Sequential resource processing
+* link:/deploy-with-sequential-resources[Sequential resource processing]
+
 ## Zero downtime update
 * link:/blue-green-deploy-legacy[Legacy Blue-green deployment]
 * link:/blue-green-deploy-strategy/[Deploy with Blue-green strategy]
