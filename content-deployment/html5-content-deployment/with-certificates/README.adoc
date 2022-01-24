@@ -1,0 +1,30 @@
+:toc:
+
+# Generic Application Content Deployment With Service Key With XSUAA managed certificates
+
+The Deployment Service is capable of deploying content to services using a service key that has a 'certificate', 'key' and 'clientId'. This way the Deployment Service does not use the standard token exchange with 'clientId' and 'clientSecret' but uses the provided certificate (mTLS).
+
+# Try it out
+In the current directory execute `cf deploy`. This will automatically assemble the MTA archive and deploy it:
+
+```bash
+$ cf deploy
+Deploying multi-target app archive */with-certificates/ui5MTA.mtar in org ******** / space ******** as ********...
+
+Uploading 1 files...
+  */with-certificates/ui5MTA.mtar
+OK
+Operation ID: ********
+Deploying in org "********" and space "********"
+Detected MTA schema version: "3"
+No deployed MTA detected - this is initial deployment
+Detected new MTA version: "0.0.1"
+Processing service "ui5-repo-service-instance"...
+Creating service "ui5-repo-service-instance" from MTA resource "ui5-repo-service-instance"...
+1 of 1 done
+Creating service key "html5-service-key" for service "ui5-repo-service-instance"...
+Uploading content module "ui5module" in target service "ui5-repo-service-instance"...
+Deploying content module "ui5module" in target service "ui5-repo-service-instance"...
+Skipping deletion of services, because the command line option "--delete-services" is not specified.
+Process finished.
+```

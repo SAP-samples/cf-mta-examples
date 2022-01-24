@@ -1,0 +1,25 @@
+ID: ui5MTA
+_schema-version: '3.1'
+version: 0.0.1
+
+modules:
+  - name: ui5module
+    type: com.sap.application.content
+    path: content/content.zip
+    requires:
+      - name: ui5-repo-service-instance
+        parameters:
+          content-target: true
+          service-key:
+            name: html5-service-key
+            config:
+              xsuaa:
+                credential-type: x509
+                key-length: 1024
+
+resources:
+  - name: ui5-repo-service-instance
+    parameters:
+      service-plan: app-host
+      service: html5-apps-repo
+    type: org.cloudfoundry.managed-service
