@@ -15,7 +15,10 @@ modules:
             config:
               xsuaa:
                 credential-type: x509
-                key-length: 1024
+                x509:
+                  key-length: 2048
+                  validity: 7
+                  validity-type: DAYS
 
 resources:
   - name: ui5-repo-service-instance
