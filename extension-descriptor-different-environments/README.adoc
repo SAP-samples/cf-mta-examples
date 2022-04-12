@@ -11,8 +11,8 @@ The MTA will be deployed in DEV and PROD environments using different extension 
 - Quota for application
 - Quota for different service plans. The example use service offering "application-logs", free service plan "lite" and paid service plan "standard". You can try out with different service offering and plan at your convenience.
 
-## Oficial documemtation in Help SAP Portal
-- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/50df803465324d36851c79fd07e8972c.html[Defining MTA Extension Descriptors]
+## Official documentation in SAP Help Portal
+- link:https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/50df803465324d36851c79fd07e8972c.html[Defining MTA Extension Descriptors]
 
 # Try out
 
