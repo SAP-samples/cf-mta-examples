@@ -11,10 +11,8 @@ NOTE: With this scenario, the Deploy Service *will not* check for any ongoing op
 ## Deploy the MTA
 
 ``` bash
-cf deploy https://github.com/SAP-samples/cf-mta-examples/blob/main/deploy-with-url/anatz.zip?raw=true ;
+echo "https://github.com/SAP-samples/cf-mta-examples/blob/main/deploy-with-url/anatz.zip?raw=true" | cf deploy ;
 ```
-
-NOTE: The referenced MTA archive must be publicly accessible without any authentication.
 
 ## Examine the result
 
