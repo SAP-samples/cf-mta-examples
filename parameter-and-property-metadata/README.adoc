@@ -24,7 +24,7 @@ Example 1 - define a property that cannot be modified outside of this descriptor
     properties-metadata:  
       my-property:  
         optional: false		# the property cannot be left without a value in the descriptor (this can be omitted, same as defaut)
-		overwritable: false	# the property cannot be modified by an extension descriptor
+	overwritable: false	# the property cannot be modified by an extension descriptor
 ```
 
 Example 2 - define an empty property that must be set in extension descriptor, otherwise the deployment will fail:
