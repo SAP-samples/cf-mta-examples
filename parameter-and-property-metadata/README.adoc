@@ -12,9 +12,9 @@ There are 3 metadata elements for properties and parameters:
 * `sensitive` - controls if the property/param should be hidden in log files(e.g. ********), default is `false`
 
 You can overwrite the data and metadata for a property/parameter in the descriptor using an extension descriptor. However any property or parameter that were defined as `overwritable: false` cannot be overwritten.
-For more information, check out the [official documentation](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/fca2cedcb79649e7a8f51234faea1142.html?locale=en-US)
+For more information, check out the link:https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/fca2cedcb79649e7a8f51234faea1142.html?locale=en-US[official documentation].
 
-Example 1 - define a property that cannot be modified outside of this descriptor:
+*Example 1* - define a property that cannot be modified outside of this descriptor:
 ```text
   - name: my-app
     type: application
@@ -27,7 +27,7 @@ Example 1 - define a property that cannot be modified outside of this descriptor
 	overwritable: false	# the property cannot be modified by an extension descriptor
 ```
 
-Example 2 - define an empty property that must be set in extension descriptor, otherwise the deployment will fail:
+*Example 2* - define an empty property that must be set in extension descriptor, otherwise the deployment will fail:
 ```text
   - name: my-app
     type: application
