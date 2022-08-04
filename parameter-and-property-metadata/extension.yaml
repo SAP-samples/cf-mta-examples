@@ -1,0 +1,10 @@
+ID: test-null-params.ext
+_schema-version: '3.1'
+extends: test-null-params
+
+modules:
+  - name: my-app
+    parameters:
+      null-parameter: extension-value
+    properties:
+      null-property: extension-value
