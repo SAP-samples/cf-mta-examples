@@ -4,41 +4,80 @@
 
 ## Using metadata
 
-Parameters and properties in a mta descriptor contain implicit metadata that can be altered and declared by the user.
+Parameters and properties in an MTA descriptor contain implicit metadata that can be altered and declared by the user.
 There are 3 metadata elements for properties and parameters:
 
-* `optional` - controls if the property/param can be left with a null value, default is `false`
-* `overwritable` - controls if the property/param can be overwritten by an extension descriptor, default is `true`
-* `sensitive` - controls if the property/param should be hidden in log files(e.g. ********), default is `false`
+* `optional` - controls if the property/parameter can be left with a null value, default is `false`
+* `overwritable` - controls if the property/parameter can be overwritten by an extension descriptor, default is `true`
+* `sensitive` - controls if the property/parameter should be hidden in log files(e.g. ********), default is `false`
 
-You can overwrite the data and metadata for a property/parameter in the descriptor using an extension descriptor. However any property or parameter that were defined as `overwritable: false` cannot be overwritten.
+You can overwrite the data for a property/parameter in the descriptor using an extension descriptor. However, any property or parameter that has been defined as `overwritable: false` cannot be overwritten.
 For more information, check out the link:https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/fca2cedcb79649e7a8f51234faea1142.html?locale=en-US[official documentation].
 
-*Example 1* - define a property that cannot be modified outside of this descriptor:
+*Example 1* - define a property that cannot be modified outside this descriptor.
+
+Deployment Descriptor (mtad.yaml):
 ```text
   - name: my-app
     type: application
-..  
+..
     properties:
       my-property: my-value
-    properties-metadata:  
-      my-property:  
-        optional: false		# the property cannot be left without a value in the descriptor (this can be omitted, same as defaut)
-	overwritable: false	# the property cannot be modified by an extension descriptor
+    properties-metadata:
+      my-property:
+        optional: false     # the property cannot be left without a value in the extension descriptor (this can be omitted, same as default)
+        overwritable: false # the property cannot be modified by an extension descriptor
 ```
 
-*Example 2* - define an empty property that must be set in extension descriptor, otherwise the deployment will fail:
+*Example 2* - define an empty property that must be set in the extension descriptor to any value except null (empty). If you specify an empty value for "my-property" in the extension descriptor the deployment will fail. Also, a valid case is, if you do not specify the value in the extension descriptor at all.
+
+Deployment Descriptor (mtad.yaml):
 ```text
   - name: my-app
     type: application
-..  
+..
     properties:
-      my-property: 
-    properties-metadata:  
-      my-property:  
-        optional: true 		# the property can be left without a value in the descriptor 
-        overwritable: true 	# the property can be overwritten by a value in the extension descriptor (this can be omitted, same as defaut)
+      my-property:
+    properties-metadata:
+      my-property:
+        optional: false     # the property can be left without a value in the deployment descriptor, but must be set in an extension descriptor
+        overwritable: true  # the property can be overwritten by a value in the extension descriptor (this can be omitted, same as default)
 ```
+Extension Descriptor. The value is intentionally left empty (null). (extension.mtaext):
+```text
+  - name: my-app
+..
+    properties:
+      my-property: # the property has null value which leads to an error during deployment
+```
+Deployment Log:
+```text
+Error merging descriptors: The property "my-app#my-property" is not optional and has no value.
+Process failed.
+```
+
+*Example 3* - define a property that will be wiped out in the extension descriptor.
+Deployment Descriptor (mtad.yaml):
+```text
+  - name: my-app
+    type: application
+..
+    properties:
+      my-property:
+    properties-metadata:
+      my-property:
+        optional: true      # the property can be left without a value in the descriptor
+        overwritable: true  # the property can be overwritten by a value in the extension descriptor (this can be omitted, same as default)
+```
+Extension Descriptor. The value is intentionally left empty (null). (extension.mtaext):
+```text
+  - name: my-app
+..
+    properties:
+      my-property: # the property has null value which leads to an error during deployment
+```
+
+*Note:* The same applies for nullable *"parameters"*. If null value is expected in the extension descriptor, it has to be annotated as *"optional"* in *"parameters-metadata"*.
 
 ## Try it out
 
@@ -52,13 +91,13 @@ Deploy the example mta from this repo. The mta has an application `my-app` that 
       null-parameter: 
     parameters-metadata:  
       null-parameter:  
-        optional: true 
+        optional: true / false # If the parameter is not defined in an extension descriptor, the optional value does matter.
         overwritable: true   
     properties:
       null-property: 
     properties-metadata:  
       null-property:  
-        optional: true  
+        optional: true / false # If the property is not defined in an extension descriptor, the optional value does matter.
         overwritable: true  
 ```
 
@@ -66,23 +105,22 @@ Deploy the example mta from this repo. The mta has an application `my-app` that 
 cf deploy ./test.mtar
 ```
 
-Now check the deployed application's environment to see the property value
+Now check the deployed application's environment and you'll find out that the property does not exist. This means that the *"null"* values are not propagated to the Cloud Controller or to Service Brokers.
 
 ``` bash
 $ cf env my-app
-Getting env variables for app my-app in org deploy-service / space i356120 as ivan.kasarov@sap.com...
+Getting env variables for app my-app in org <ORG_NAМE> / space <SPACE_NAME> as <USERNAME>...
 OK
 
 System-Provided:
 ...
 User-Provided:
-null-property: null
 ...
 ```
 
-### Re-deploy the MTA with an extension descriptor
+### Re-deploy the MTA with an extension descriptor where the value is not null
 
-This time the extension descriptor will set values to the empty parameter and property
+This time the extension descriptor will set values to the property
 
 ```text
     parameters:
@@ -99,12 +137,49 @@ Check the re-deployed application's new environment
 
 ``` bash
 $ cf env my-app
-Getting env variables for app my-app in org deploy-service / space i356120 as ivan.kasarov@sap.com...
+Getting env variables for app my-app in org <ORG_NAМE> / space <SPACE_NAME> as <USERNAME>...
 OK
 
 System-Provided:
 ...
 User-Provided:
-null-property: null
+null-property: extension-value
+...
+```
+
+### Deploy MTA with not null property and remove it in the extension descriptor
+
+This time the extension descriptor will wipe out the value from the deployment descriptor
+
+```text
+    properties:
+      not-null-property: some-value
+      another-property: another-value
+    properties-metadata:
+      not-null-property:
+        optional: true / false # If the property is not defined in an extension descriptor, the optional value does matter.
+        overwritable: true
+```
+
+```text
+    properties:
+      not-null-property:
+```
+
+``` bash
+cf deploy ./test.mtar -e extension.yaml
+```
+
+Check the re-deployed application's new environment. You will notice that "not-null-property" is completely missing. This is by design. The value is basically removed from the MTA module.
+
+``` bash
+$ cf env my-app
+Getting env variables for app my-app in org <ORG_NAМE> / space <SPACE_NAME> as <USERNAME>...
+OK
+
+System-Provided:
+...
+User-Provided:
+another-property: another-value
 ...
 ```
