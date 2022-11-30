@@ -22,7 +22,7 @@ The war we're deploying contains two simple servlets - one (the 'backend') retur
 ```yaml
 ...        
   - name: hello-backend
-    type: java.tomee
+    type: java.tomcat
     path: backend.war
     provides:
       - name: backend
@@ -34,7 +34,7 @@ The war we're deploying contains two simple servlets - one (the 'backend') retur
       message: "Hello, from ${app-name}!" #assigning the message we want returned from the backend
 ...
   - name: hello-router
-    type: java.tomee
+    type: java.tomcat
     path: backend.war
     requires:
       - name: backend

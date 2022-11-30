@@ -4,7 +4,7 @@ version: 1.0.0
 
 modules:
   - name: hello-backend
-    type: java.tomee
+    type: java.tomcat
     path: backend.war
     parameters:
       memory: 256M

@@ -5,7 +5,7 @@ version: 1.0.0
 modules:
 
   - name: hello-backend
-    type: java.tomee
+    type: java.tomcat
     path: backend.war
     provides:
       - name: backend
@@ -21,7 +21,7 @@ modules:
       MEMORY_CALCULATOR_V1: true
       
   - name: hello-router
-    type: java.tomee
+    type: java.tomcat
     path: backend.war
     requires:
       - name: backend
