@@ -12,7 +12,7 @@ Before you start with the examples, please make sure that:
 # Requirements
 
 * Access to link:https://sap.com/products/business-technology-platform.html[SAP Business Technology Platform Cloud Foundry environment]. There you need to have link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b328cc89ea14484d9655b8cfb8efb508.html[account]. MTA examples will be deployed in some of the account's organization and space.
-* Installed CloudFoundry CLI - ensure that CloudFoundry CLI is installed and working. For more information about installation of CloudFoundry CLI, please visit the official link:https://docs.cloudfoundry.org/cf-cli/install-go-cli.html[CloudFoundry Documentation]. For the examples, CloudFoundry CLI  v7 beta is not supported. You need to have v6.4x.
+* Installed CloudFoundry CLI - ensure that CloudFoundry CLI is installed and working. For more information about installation of CloudFoundry CLI, please visit the official link:https://docs.cloudfoundry.org/cf-cli/install-go-cli.html[CloudFoundry Documentation]. For the examples, CloudFoundry CLI  v8 is  supported.
 * Installed MultiApps CF CLI Plugin - ensure that MultiApps CF CLI Plugin is installed and working. For more information, please visit the official link:https://github.com/cloudfoundry-incubator/multiapps-cli-plugin#download-and-installation[GitHub Page]
 * [Optional] Installed Cloud MTA Build Tool - the tool is used in some of the listed use cases. For more information please visit the official link:https://sap.github.io/cloud-mta-build-tool/[Cloud MTA Build Tool Documentation]
 
