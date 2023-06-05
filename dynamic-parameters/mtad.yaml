@@ -1,0 +1,27 @@
+_schema-version: "3.0.0"
+ID: dynamic.service.guid
+version: 1.0.0
+
+modules:
+  - name: app
+    type: staticfile
+    path: appBits.zip
+    requires:
+      - name: test-usp
+      - name: test-usp2
+
+resources:
+  - name: test-usp
+    type: org.cloudfoundry.user-provided-service
+    parameters:
+      config:
+        persistence-service-guid: ~{test-usp2/my-db-service-guid}
+    requires:
+      - name: test-usp2
+    processed-after: [test-usp2]
+
+
+  - name: test-usp2
+    type: org.cloudfoundry.user-provided-service
+    properties:
+      my-db-service-guid: ${service-guid}
