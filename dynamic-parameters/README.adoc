@@ -1,0 +1,56 @@
+# Dynamic Parameters
+:toc:
+
+## Overview
+
+Dynamic Parameters feature enables consumption of entities from existing environment in Cloud Foundry inside of mta descriptor. 
+
+[example]
+Currently only supported dynamic parameter is "service guid" of service instances and reference only from other mta resources. Major Schema version of mta project must be 3 or higher
+
+## Official documentation in Help SAP Portal
+- link:https://help.sap.com/docs/btp/sap-business-technology-platform/parameters-and-properties#dynamic-parameters[Dynamic Parameters]
+
+## Execute Deploy
+
+```bash
+$ cf deploy ./
+```
+
+### Examine the result
+Check resolved parameters by inspecting VCAP_SERVICES:
+```text
+cf env app
+...
+VCAP_SERVICES: {
+  "user-provided": [
+    {
+      "binding_guid": "d3483655-4368-4bbb-ba28-095614106faf",
+      "binding_name": null,
+      "credentials": {},
+      "instance_guid": "9932d7b2-8dc6-4448-a05c-42b4fc065317",
+      "instance_name": "test-usp2",
+      "label": "user-provided",
+      "name": "test-usp2",
+      "syslog_drain_url": "",
+      "tags": [],
+      "volume_mounts": []
+    },
+    {
+      "binding_guid": "f8bee8e1-d809-42eb-93bd-6d63d708f3b1",
+      "binding_name": null,
+      "credentials": {
+        "persistence-service-guid": "9932d7b2-8dc6-4448-a05c-42b4fc065317"
+      },
+      "instance_guid": "f6566e2c-186a-492b-8ba8-09268e85fea5",
+      "instance_name": "test-usp",
+      "label": "user-provided",
+      "name": "test-usp",
+      "syslog_drain_url": "",
+      "tags": [],
+      "volume_mounts": []
+    }
+  ]
+}
+...
+```
