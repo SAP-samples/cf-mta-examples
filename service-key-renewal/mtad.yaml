@@ -1,0 +1,28 @@
+_schema-version: 3.0.0
+ID: app-with-rotating-keys
+version: 3.0.0
+
+modules:
+- name: my-app
+  type: staticfile
+  path: appBits.zip
+  requires:
+    - name: rotating-key-1
+      parameters:
+        env-var-name: keycredentials
+
+resources:
+  - name: postgre-test-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: postgresql-db
+      service-plan: development
+      service-name: postgre-test-service
+      service-keys:
+        - name: rotating-key-1-${timestamp}
+
+  - name: rotating-key-1
+    type: org.cloudfoundry.existing-service-key
+    parameters:
+      service-name: postgre-test-service
+      service-key-name: rotating-key-1-${timestamp}
