@@ -6,7 +6,7 @@
 Dynamic Parameters feature enables consumption of entities from existing environment in Cloud Foundry inside of mta descriptor. 
 
 [example]
-Currently only supported dynamic parameter is "service guid" of service instances and reference only from other mta resources. Major Schema version of mta project must be 3 or higher
+Currently only supported dynamic parameter is "service guid" of service instances and reference only from other mta resources or as a link:https://github.com/SAP-samples/cf-mta-examples/tree/main/dynamic-parameters/dynamic-parameters-for-cross-mta-configurations[provided module depedency]. Major Schema version of mta project must be 3 or higher
 
 ## Official documentation in Help SAP Portal
 - link:https://help.sap.com/docs/btp/sap-business-technology-platform/parameters-and-properties#dynamic-parameters[Dynamic Parameters]

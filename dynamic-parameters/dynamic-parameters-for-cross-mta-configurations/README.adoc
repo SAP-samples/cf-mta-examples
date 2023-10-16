@@ -1,0 +1,31 @@
+# Dynamic Parameters for Configuration Entries 
+:toc:
+
+## Overview
+
+Dynamic Parameters can also be referenced under a module's provided dependencies, which allows them to be used in link:https://github.com/SAP-samples/cf-mta-examples/tree/main/cross-mta-configurations[cross mta configurations]
+
+## Deploy provider MTA 
+
+```bash
+$ cf deploy deploy-cross-mta-configuration-provider/
+```
+
+## Deploy consumer MTA 
+
+```bash
+$ cf deploy deploy-cross-mta-configuration-consumer/
+```
+
+### Examine the result
+Check resolved parameters under the user-provided variables for the consumer app:
+```text
+cf env anatz-consumer
+...
+DEPLOY_ATTRIBUTES: {
+  "app-content-digest" : "B0FF19ED574D37E24C1FB7AE57B81806",
+  "no-start" : true
+}
+reference_instance: 26c85b8c-6ad4-4ad2-bdea-d87e3a7692f2
+...
+```
