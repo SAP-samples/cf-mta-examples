@@ -1,0 +1,26 @@
+_schema-version: 3 
+ID: dynamic.service.guid.consumer
+version: 1.0.0 
+
+modules:
+ - name: anatz-consumer
+   type: staticfile
+   path: appBits.zip
+   parameters:
+     memory: 128M
+     no-start: true
+   requires: 
+      - name: ups-config
+        properties: 
+          reference_instance: ~{ups-instanceid} 
+          
+resources: 
+  - name: ups-config
+    type: configuration
+    parameters: 
+      provider-nid: "mta" 
+      provider-id: "dynamic.service.guid.producer:ups-guid"
+      version: ">=1.0.0" 
+      target: 
+        org: ${org}     
+        space: ${space} 
