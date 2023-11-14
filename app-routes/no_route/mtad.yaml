@@ -7,8 +7,8 @@ modules:
   - name: my-mta-managed-app-module
     type: application # value custom would do just as well
     path: "appBits.zip"
-    parameters: #ALL paramters are optional and can be deleted - defaults will be taken/detected if non specified. 
-      app-name: my-routless-cf-app 
-      no-route: true 
+    parameters: #ALL parameters are optional and can be deleted - defaults will be taken/detected if non specified.
+      app-name: my-routless-cf-app
+      no-route: true
 
       

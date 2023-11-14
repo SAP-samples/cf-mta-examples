@@ -1,0 +1,14 @@
+ID: a.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+
+modules:
+  - name: my-app-module
+    type: application
+    path: "appBits.zip"
+    parameters:
+      routes:
+        - route: my-app-route-http1.${default-domain}
+          protocol: http1 # explicitly specified, this is the default value
+        - route: my-app-route-http2.${default-domain}
+          protocol: http2 # default is empty which defaults to http1
