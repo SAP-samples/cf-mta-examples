@@ -3,22 +3,21 @@ _schema-version: 3.3.0
 version: 0.0.0
 
 parameters:
-  #when glboally defined, applies to all cf apps in MTA (unless overriden)
+  #when globally defined, applies to all cf apps in MTA (unless overriden)
   keep-existing-routes: false
-  
 
 modules:
   #A cf app consuming the configuration
   - name: my-cf-app-module
     type: application # value custom would do just as well
     path: "appBits.zip"
-    parameters: #ALL paramters are optional and can be deleted- defaults will be taken/detected if non specified. 
+    parameters: #ALL parameters are optional and can be deleted- defaults will be taken/detected if non specified.
       app-name: my-cf-app 
       keep-existing-routes: true
   - name: my-other-cf-app-module
     type: application # value custom would do just as well
     path: "appBits.zip"
-    parameters: #ALL paramters are optional and can be deleted- defaults will be taken/detected if non specified. 
+    parameters: #ALL parameters are optional and can be deleted- defaults will be taken/detected if non specified.
       app-name: my-other-cf-app 
       keep-existing:
         env: false
