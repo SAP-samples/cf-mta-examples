@@ -31,12 +31,7 @@ modules:
       health-check-type: http #http/port/process
       health-check-http-endpoint: "/index" # the http route pinged
       health-check-timeout: 180 #seconds            
-      stack: cflinuxfs3 
-      enable-ssh: true # allows to `cf ssh <my-app-name>`
-      host:  each-host-is-registered-for-all-specified-domans #consider using `routes:` instead
-      
-      
-      
+      enable-ssh: true # allows to `cf ssh <my-app-name>`      
       ##out of scope for this example:
       #
       #hosts: #registering multitude of hosts

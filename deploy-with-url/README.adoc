@@ -40,7 +40,7 @@ name:              anatz
 requested state:   started
 routes:            <org>-<space>-anatz.cfapps.sap.hana.ondemand.com
 last uploaded:     Wed 03 Feb 11:33:55 EET 2021
-stack:             cflinuxfs3
+stack:             cflinuxfs4
 buildpacks:        staticfile
 
 type:           web

@@ -48,7 +48,7 @@ name:              my-cf-app
 requested state:   started
 routes:            orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com, my-custom-host.at.some.domain
 last uploaded:     Thu 22 Aug 00:46:00 EEST 2019
-stack:             cflinuxfs3
+stack:             cflinuxfs4
 buildpacks:        staticfile
 
 type:           web
