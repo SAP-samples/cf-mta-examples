@@ -1,9 +1,0 @@
-_schema-version: 3.3.0
-ID: my-mta-trial
-extends: my-mta
-version: 1.0.0
-
-resources:
- - name: my-service
-   parameters:
-     service: "hanatrial"
