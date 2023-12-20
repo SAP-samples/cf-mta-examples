@@ -6,7 +6,7 @@ This example shows how to model a simple CF application in an MTA, deploy it set
 
 # Try out
 
-## Deploy an MTA containing an cf app.
+## Deploy an MTA containing a cf app.
 
 The example demostrate 2 different approaches that lead to the same result.
 
