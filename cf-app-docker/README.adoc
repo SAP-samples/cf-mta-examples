@@ -2,7 +2,7 @@
 
 # Deploying docker images as CF apps with an MTA
 
-This example shows how to model a CF application, running a docker image, as an MTA. Cloud Foundry container runtime brings the capability to download docker images from a registry as dockerhub and to spin up containers from such. Those containers are managed just as regular Cloud Foundry apps.
+This example shows how to model a Cloud Foundry application, running a docker image, as an MTA. Cloud Foundry container runtime brings the capability to download docker images from a registry as dockerhub and to spin up containers from such. Those containers are managed just as regular Cloud Foundry apps.
 Documentated in the CF docs: link:https://docs.cloudfoundry.org/devguide/deploy-apps/push-docker.html[Deploying an App with Docker]
 
 The actual image getting deployed is of a cf sample app written in go: https://github.com/cloudfoundry-samples/test-app.git
