@@ -1,6 +1,6 @@
 :toc:
 
-# Managing CF Apps with an MTA
+# Managing CF apps with an MTA
 
 This example shows how to model a simple CF application in an MTA, deploy it set some attributes and configure the deployer behavior
 
