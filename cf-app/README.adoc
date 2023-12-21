@@ -2,7 +2,7 @@
 
 # Managing CF apps with an MTA
 
-This example shows how to model a simple CF application in an MTA, deploy it, set specific attributes and configure the deployer behavior
+This example shows how to model a simple Cloud Foundry application (CF app) in an MTA, deploy it, set specific attributes and configure the deployer behavior.
 
 # Try it out
 
