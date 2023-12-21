@@ -37,7 +37,7 @@ NOTE: See link:mta.yaml[mta.yaml] and link:mtad.yaml[mtad.yaml] as references fo
 
 # Try it out
 ## Deploy
-You can directly deploy the built app of this example from the current directory and the modeled link:mtad.yaml[mtad.yaml deployment descriptor]
+You can directly deploy the built app of this example from the current directory and the modeled link:mtad.yaml[mtad.yaml deployment descriptor]:
 
 ```bash
 $ cf deploy ./
@@ -49,9 +49,9 @@ Deploying in org "deploy-service" and space "********"
 ...
 Process finished.
 ```
-Alternatively, you can build & deploy the mta from mta.yaml. To build and deploy an MTA from a link:mta.yaml[mta.yaml development descriptor], run the following commands:
+Alternatively, you can build & deploy the mta from mta.yaml. To build and deploy an MTA from a link:mta.yaml[mta.yaml development descriptor], run the commands described below.
 
-First build & assemble the MTA archive
+First build & assemble the MTA archive:
 
 ```bash
 $ mbt build
@@ -61,7 +61,7 @@ $ mbt build
 [2020-04-02 23:47:34]  INFO the MTA archive generated at: ...
 ```
 
-Then deploy the assembled package
+Then deploy the assembled package:
 
 ```bash
 $ cf deploy mta_archives/my-mta_0.0.0-SNAPSHOT.mtar
@@ -70,21 +70,21 @@ $ cf deploy mta_archives/my-mta_0.0.0-SNAPSHOT.mtar
 
 ## Verify the result
 
-Check the actual app url
+Check the actual app url:
 
 ```bash
 $ cf app providing-module | grep routes
 routes:            deploy-service-********-providing-module.cfapps.sap.hana.ondemand.com
 ```
 
-Let's see the generated user value
+Let's see the generated user value:
 
 ```bash
 $ cf env providing-module | grep my-generated-user
 my-generated-user: u]rPqDU-70y(-E0c
 ```
 
-Finally, let's see how the second app consumed the provided values
+Finally, let's see how the second app consumed the provided values:
 
 ```bash
 $ cf env consuming-module | grep m1
