@@ -253,6 +253,7 @@ $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ### 6.2 Check out the result
 Note that the app-protocol is http2
 ```bash
+$ cf routes
 Getting routes for org <org> / space <space>
 
 space    host                  domain   port  path  protocol   app-protocol   apps            service instance
