@@ -13,19 +13,19 @@ The example demostrates 2 different approaches that lead to the same result.
 ### Deploy from directory
 This approach uses deployment descritpr `mtad.yaml` and ready application binaries `appBits.zip`:
 ``` bash
-cf deploy ./ -f ;
+$ cf deploy ./ -f ;
 ```
 ### Build and deploy
 This approach uses development descriptor `mta.yaml` and application binaries `appBits.zip` to build an MTAR archive:
 
 ``` bash
-mbt build -p cf -t . ;
+$ mbt build -p cf -t . ;
 ```
 
 The built MTAR is then deployed:
 
 ``` bash
-cf deploy a.cf.app_0.0.0.mtar -f ;
+$ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
 NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
@@ -45,7 +45,7 @@ my-cf-app   started           1/1         1G       1G     orgname-spacename-my-m
 
 ### List app status and attributes 
 ``` bash
-$cf app my-cf-app ;
+$ cf app my-cf-app ;
 Showing health and status for app my-cf-app in org ********** / space ******** as **********...
 
 name:              my-cf-app
@@ -64,14 +64,14 @@ memory usage:   1024M
 
 ### List app env variables and find the defined properties in the User Provided section 
 ``` bash
-$cf env my-cf-app | grep "MY_CF_APP_ENV_VARIABLE" ;
+$ cf env my-cf-app | grep "MY_CF_APP_ENV_VARIABLE" ;
   MY_CF_APP_ENV_VARIABLE: HELLO MTA
-$cf env my-cf-app | grep "A_MORE_COMPLEX_VAR" ;
+$ cf env my-cf-app | grep "A_MORE_COMPLEX_VAR" ;
   A_MORE_COMPLEX_VAR: { "can be an entire":"json object", "with": [ "nested": { "elements": "https://each-host-is-registered-for-all-specified-domans.cfapps.sap.hana.ondemand.com" } ]
 ```
 
 ## Undeploy the MTA
 It is recommended to stop or undeploy your MTAs when they are no longer needed. 
 ``` bash
-$cf undeploy a.cf.app -f --delete-services
+$ cf undeploy a.cf.app -f --delete-services
 ```
