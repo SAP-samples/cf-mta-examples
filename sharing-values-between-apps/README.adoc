@@ -63,7 +63,7 @@ $ mbt build
 
 Then deploy the assembled package
 
-```
+```bash
 $cf deploy mta_archives/my-mta_0.0.0-SNAPSHOT.mtar
 ...
  ```
