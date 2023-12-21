@@ -40,7 +40,7 @@ NOTE: See link:mta.yaml[mta.yaml] and link:mtad.yaml[mtad.yaml] as references fo
 You can directly deploy the built app of this example from the current directory and the modeled link:mtad.yaml[mtad.yaml deployment descriptor]
 
 ```bash
-$cf deploy ./
+$ cf deploy ./
 Deploying multi-target app archive ********/sharing-values-between-apps/my-mta.mtar in org deploy-service / space ******** as ********...
 Uploading 1 files...
   ********/sharing-values-between-apps/my-mta.mtar
