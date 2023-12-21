@@ -16,11 +16,15 @@ This approach uses deployment descritpr `mtad.yaml` and ready application binari
 cf deploy ./ -f ;
 ```
 ### Build and deploy
-This approach uses development descriptor `mta.yaml` and application binaries `appBits.zip` to build an MTAR archive.
-The built MTAR is then deployed.
+This approach uses development descriptor `mta.yaml` and application binaries `appBits.zip` to build an MTAR archive:
 
 ``` bash
 mbt build -p cf -t . ;
+```
+
+The built MTAR is then deployed:
+
+``` bash
 cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
