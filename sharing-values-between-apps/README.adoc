@@ -94,5 +94,3 @@ m1-user: u]rPqDU-70y(-E0c
 ```
 
 Consumed as expected :) 
- 
-```
