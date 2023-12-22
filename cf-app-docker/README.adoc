@@ -41,14 +41,14 @@ Process finished.
 To generate the MTA archive based on the design time MTA decriptor link:mta.yaml[mta.yaml] use the Cloud MTA Build tool link:https://sap.github.io/cloud-mta-build-tool/usage/#one-step-build['build'] command that creates the MTAR from the project sources:
 
 ```bash
-mbt build
+$ mbt build
 
 ```
 
 To generate the MTA archive based on the deployment time MTA decriptor link:mtad.yaml[mtad.yaml] use the Cloud MTA Build tool link:https://sap.github.io/cloud-mta-build-tool/usage/#how-to-build-an-mta-archive-from-the-modules-build-artifacts['assemble'] command that assembles the MTAR from already built binaries:
 
 ```bash
-mbt assemble
+$ mbt assemble
 
 ```
 
@@ -56,7 +56,7 @@ Then use the newly generated MTAR for deployment.
 
 ```bash
 
-cf deploy mta_archives/a.docker.cf.app_0.0.0.mtar ;
+$ cf deploy mta_archives/a.docker.cf.app_0.0.0.mtar ;
 
 ```
 
