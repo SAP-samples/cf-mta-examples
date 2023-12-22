@@ -4,7 +4,7 @@
 
 ## Overview
 
-An MTA archive deployed in SAP Business Technology Platform Cloud Foundry environment may contain multiple types of contnet. The section covers SAP specific types of `application content` that excludes link:../cf-app[standard CF applications].
+An MTA archive deployed in SAP Business Technology Platform Cloud Foundry environment may contain multiple types of content. The section covers SAP specific types of `application content` that excludes link:../cf-app[standard CF applications].
 
 Various types of `application content` are deployed using two different approaches:
 
