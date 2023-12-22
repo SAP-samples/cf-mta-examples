@@ -30,7 +30,7 @@ modules:
 NOTE: See link:mta.yaml[mta.yaml] and link:mtad.yaml[mtad.yaml] as references for working development and deployment descriptors.
 
 ## Requirements
-- Understanding how link:../cf-app/README.adoc[cf applications are modeled in an MTA] 
+- Understanding how link:../cf-app/README.adoc[Cloud Foundry applications are modeled in an MTA] 
 
 ## Official documentation in the Help SAP Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/490c8f71e2b74bc0a59302cada66117c.html[Parameters and Properties]
