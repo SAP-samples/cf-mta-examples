@@ -36,7 +36,10 @@ NOTE: See link:mta.yaml[mta.yaml] and link:mtad.yaml[mtad.yaml] as references fo
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/490c8f71e2b74bc0a59302cada66117c.html[Parameters and Properties]
 
 # Try it out
+
 ## Deploy
+
+### Deploy from directory
 You can directly deploy the built app of this example from the current directory and the modeled link:mtad.yaml[mtad.yaml deployment descriptor]:
 
 ```bash
@@ -49,6 +52,8 @@ Deploying in org "deploy-service" and space "********"
 ...
 Process finished.
 ```
+
+### Build and deploy from mta.yaml file
 Alternatively, you can build & deploy the MTA from mta.yaml. To build and deploy an MTA from a link:mta.yaml[mta.yaml development descriptor], run the commands described below.
 
 First build & assemble the MTA archive:
