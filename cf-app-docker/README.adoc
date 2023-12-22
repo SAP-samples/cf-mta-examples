@@ -100,7 +100,7 @@ echo $?
 ```
 
 ## Undeploy the MTA
-It is recommended to stop or undeploy your MTAs when they are no longer needed. 
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy a.cf.app -f --delete-services
 ```
