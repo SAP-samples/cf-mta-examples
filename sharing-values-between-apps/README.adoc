@@ -98,4 +98,9 @@ m1-url: https://deploy-service-********-providing-module.cfapps.sap.hana.ondeman
 m1-user: u]rPqDU-70y(-E0c
 ```
 
-Consumed as expected :) 
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy a.cf.app -f --delete-services
+```
+
