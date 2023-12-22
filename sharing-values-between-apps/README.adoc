@@ -2,7 +2,7 @@
 
 # Sharing configuration values between apps
 
-The MTA deployment descriptor allows for fixed or dynamically generated values to be shared between the described entities (modules & resources). For one module/resource to consume exposed variables from another, it has to declare it's dependency to it in the `requires` element. As in MTAs apps are defined as modules, this mechanism can be used to share the url of one app in the environment of another:
+The MTA deployment descriptor allows for fixed or dynamically generated values to be shared between the described entities (modules & resources). For one module/resource to consume exposed variables from another, it has to declare its dependency to it in the `requires` element. As in MTAs apps are defined as modules, this mechanism can be used to share the url of one app in the environment of another:
 
 ```yaml
 modules:
