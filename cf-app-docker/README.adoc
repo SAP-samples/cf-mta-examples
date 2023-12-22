@@ -93,7 +93,7 @@ Find the route assigned to the app in the previous output (of `cf deploy`, `cf m
 
 - Or execute a GET request from the command line
 ```bash
-curl https://${org}-${space}-${app-name}.${domain}/index
+$ curl https://${org}-${space}-${app-name}.${domain}/index
 0
 echo $?
 0
