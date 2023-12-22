@@ -49,7 +49,7 @@ Deploying in org "deploy-service" and space "********"
 ...
 Process finished.
 ```
-Alternatively, you can build & deploy the mta from mta.yaml. To build and deploy an MTA from a link:mta.yaml[mta.yaml development descriptor], run the commands described below.
+Alternatively, you can build & deploy the MTA from mta.yaml. To build and deploy an MTA from a link:mta.yaml[mta.yaml development descriptor], run the commands described below.
 
 First build & assemble the MTA archive:
 
