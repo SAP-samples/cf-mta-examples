@@ -45,7 +45,7 @@ Getting routes for org  ...
 
 List the environment variables in your app to see what the routing related paramters were resolved to during deployment
 ```bash
-cf env my-cf-app
+$ cf env my-cf-app
 ...
 default-domain: cfapps.sap.hana.ondemand.com
 default-host: <org-name>-<space-name>-my-app-module
@@ -67,12 +67,12 @@ WARNING: The MTA deployer will attempt to create the subdomain if it doesn't exi
 ### Deploy
 directly from an mtad.yaml
 ```bash
-  $cd no_hostname ;
+  $ cd no_hostname ;
   $ cf deploy -f ;
 ```
 or start from an mta.yaml
 ```bash
-  $cd no_hostname ;
+  $ cd no_hostname ;
   $ mbt build -p cf -t . ;
   $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
@@ -121,7 +121,7 @@ WARNING: When defining both hosts and domains the MTA deployer will generate a r
 ### Deploy
 directly from an mtad.yaml
 ```bash
-  $cd modelled_with_host_and_domain ;
+  $ cd modelled_with_host_and_domain ;
   $ cf deploy -f ;
 ...
 Application "my-app-module" started and available at "my-single-host-value.internal.cfapps.sap.hana.ondemand.com"
@@ -129,7 +129,7 @@ Application "my-app-module" started and available at "my-single-host-value.inter
 ```
 or start from an mta.yaml:
 ```bash
-$cd modelled_with_host_and_domain ;
+$ cd modelled_with_host_and_domain ;
 $ mbt build -p cf -t . ;
 $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ...
@@ -159,13 +159,13 @@ WARNING: When defining both hosts and domains the MTA deployer will generate a r
 ### Deploy
 directly from an mtad.yaml:
 ```bash
-  $cd modelled_with_hosts_and_domains ;
+  $ cd modelled_with_hosts_and_domains ;
   $ cf deploy -f ;
 ```
 or start from an mta.yaml:
 
 ```bash
-  $cd modelled_with_hosts_and_domains ;
+  $ cd modelled_with_hosts_and_domains ;
   $ mbt build -p cf -t . ;
   $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ...
@@ -212,12 +212,12 @@ NOTE: See link:no_route/mta.yaml[no_route/mta.yaml] or link:no_route/mtad.yaml[n
 ### Deploy
 directly from an mtad.yaml
 ```bash
-  $cd no_route ;
+  $ cd no_route ;
   $ cf deploy -f ;
 ```
 or start from an mta.yaml
 ```bash
-  $cd no_route ;
+  $ cd no_route ;
   $ mbt build -p cf -t . ;
   $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
