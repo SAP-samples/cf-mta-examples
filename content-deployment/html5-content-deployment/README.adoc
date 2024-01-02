@@ -5,13 +5,13 @@
 The example will deployment of HTML5 Application  Content via MTA.
 It demonstrates how to deploy content using directly HTML5 Application Repository service
 
-## Oficial documemtation in Help SAP Portal
+## Official documentation in SAP Help Portal
 
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d3e23196166b443db17b3545c912dfc0.html[Content Deployment]
 
 ## Usage
 
-The following MTA modeling in development (mta.yaml) or deployment (mtad.yaml) descriptors utilizes the feature
+The following MTA modeling in development (`mta.yaml`) or deployment (`mtad.yaml`) descriptors utilizes the feature:
 
 ```yaml
 ...
