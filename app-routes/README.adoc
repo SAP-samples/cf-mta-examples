@@ -107,13 +107,14 @@ name                                                                            
 ...
 subdomain.some-domain.com                                                                     owned
 ```
+
 NOTE: Upon undeploying the MTA, the deployer makes no attempt to delete this new domain. This action is left to the end user if desired.
 
 [#host]
 ## Using *host*
 This is *NOT* a recommended way of modeling routes in CF.
 
-NOTE: See link:modelled_with_host_and_domain/mta.yaml[modelled_with_host_and_domain/mta.yaml] or link:modelled_with_host_and_domain/mtad.yaml[modelled_with_host_and_domain/mtad.yaml]. Those examples include the use of single *host*, *domain*, *protocol* parameters
+NOTE: See link:modelled_with_host_and_domain/mta.yaml[modelled_with_host_and_domain/mta.yaml] or link:modelled_with_host_and_domain/mtad.yaml[modelled_with_host_and_domain/mtad.yaml]. Those examples include the use of single *host*, *domain*, *protocol* parameters.
 
 WARNING: When defining both hosts and domains the MTA deployer will generate a route for each host.domain combination. For example *4 hosts* definitions x *4 domain* definitions would result in *16 unique routes being mapped to your application*.
 
@@ -127,6 +128,7 @@ Using an `mtad.yaml` deployment descriptor:
 Application "my-app-module" started and available at "my-single-host-value.internal.cfapps.sap.hana.ondemand.com"
 ...
 ```
+
 Using an `mta.yaml` development descriptor and deploying the built `mtar` archive afterwards:
 ```bash
 $ cd modelled_with_host_and_domain ;
@@ -151,7 +153,7 @@ space          host                         domain                              
 ## Using *hosts*
 This is *NOT* a recommended way of modelling routes in CF.
 
-NOTE: See link:modelled_with_hosts_and_domains/mta.yaml[modelled_with_hosts_and_domains/mta.yaml] or link:modelled_with_hosts_and_domains/mtad.yaml[modelled_with_hosts_and_domains/mtad.yaml]. Those examples include the use of *hosts* and *domains* parameters
+NOTE: See link:modelled_with_hosts_and_domains/mta.yaml[modelled_with_hosts_and_domains/mta.yaml] or link:modelled_with_hosts_and_domains/mtad.yaml[modelled_with_hosts_and_domains/mtad.yaml]. Those examples include the use of *hosts* and *domains* parameters.
 
 WARNING: When defining both hosts and domains the MTA deployer will generate a route for each host.domain combination. E.g. *4 hosts* definitions x *4 domain* definitions would result in *16 unique reoutes being mapped to your application*.
 
@@ -205,7 +207,7 @@ space          host                                                      domain 
 
 [#deploy-apps-with-no-routes]
 ## Deploy apps with no routes
-If you want an app to be scheduled in CF but don't want it reachable via HTTP, you can explicitly use the `no-route` parameter
+If you want an app to be scheduled in CF but don't want it reachable via HTTP, you can explicitly use the `no-route` parameter.
 
 NOTE: See link:no_route/mta.yaml[no_route/mta.yaml] or link:no_route/mtad.yaml[no_route/mtad.yaml].
 
@@ -215,14 +217,16 @@ Using an `mtad.yaml` deployment descriptor:
   $ cd no_route ;
   $ cf deploy -f ;
 ```
-or start from an mta.yaml
+
+Using an `mta.yaml` development descriptor and deploying the built `mtar` archive afterwards:
 ```bash
   $ cd no_route ;
   $ mbt build -p cf -t . ;
   $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
+
 ### Check out the result
-Note that no route(url) was mapped to that app
+Note that no route(url) was mapped to that app:
 ```bash
 $ cf apps
 Getting apps in org <org-name> / space <space-name> as <space-name>...
@@ -234,12 +238,12 @@ my-routless-cf-app   started           1/1         1G       1G
 
 [#http2-routes]
 ## Deploy app with HTTP2 route
-If you want to enable http2 routing traffic to applications you can use `protocol: http2` parameter on route level
+If you want to enable http2 routing traffic to applications you can use `protocol: http2` parameter on route level.
 
 NOTE: See link:http2-routes/mta.yaml[http2-routes/mta.yaml] or link:http2-routes/mtad.yaml[http2-routes/mtad.yaml].
 
 ### Deploy
-directly from an mtad.yaml
+Using an `mtad.yaml` deployment descriptor:
 ```bash
 $ cd http2-routes ;
 $ cf deploy -f ;
