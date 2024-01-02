@@ -88,11 +88,11 @@ $ cf deploy mta_archives/ui5MTA_0.0.1.mtar
 
 ## Build MTA archive via mta.yaml
 
-If you maintain you project's sources in an MTA format and have the mta.yaml descriptor where content module is modeled as described above, you can create an MTA archive for this project using a regular build command of the MTA build tool of your choice.  Since we recommend the new  link:https://github.com/SAP/cloud-mta-build-tool[Cloud MTA Build Tool] for buiding MTA projects, the example command is: `mbt build`.
+If you maintain you project's sources in an MTA format and have the `mta.yaml` descriptor where content module is modeled as described above, you can create an MTA archive for this project using a regular build command of the MTA build tool of your choice.  Since we recommend the new link:https://github.com/SAP/cloud-mta-build-tool[Cloud MTA Build Tool] for buiding MTA projects, the command in our example is `mbt build`.
 
 ### Modeling and building of HTML5 modules
 
-If you have several HTML5 modules in your project and would like to deploy their content into HTML5 repository, you need to adjust the build process as follows:
+If you have several HTML5 modules in your project and would like to deploy their content into a HTML5 repository, you need to adjust the build process as follows:
 
 * The build scripts of each HTML5 module should produce a `zip` archive.
 For example, if you are using a Grunt build based on `@sap/grunt-sapui5-bestpractice-build`:
