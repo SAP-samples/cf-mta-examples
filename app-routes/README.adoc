@@ -255,7 +255,7 @@ $ mbt build -p cf -t . ;
 $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 ### Check out the result
-Note that the app-protocol is http2
+Note that the app-protocol is `http2`:
 ```bash
 $ cf routes
 Getting routes for org <org> / space <space>
@@ -278,7 +278,7 @@ Activated in 3 ways:
 * module level `keep-existing-routes:true` parameter
 * module level `keep-existing: [routes:true]` parameter
 
-keep-existing-routes preservers the app-protocol as well.
+Parameter `keep-existing-routes` preserves the app-protocol as well.
 
 link:../keep-existing-routes[See examples here]
 
