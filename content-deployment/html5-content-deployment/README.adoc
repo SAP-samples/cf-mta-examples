@@ -28,7 +28,7 @@ resources:
 ```
 The module, representing the content, is defined by `type: com.sap.application.content`. The service(s) to which content is deployed are listed in the module's `requires` list and are depicted with a parameter `content-target: true`.
 
-The required resource should be of type coresponding to a Cloud Foundry service instance, be it `org.cloudfoundry.existing-service`, `org.cloudfoundry.managed-service`,  or any type extending managed-service. 
+The required resource should be of type corresponding to a Cloud Foundry service instance, be it `org.cloudfoundry.existing-service`, `org.cloudfoundry.managed-service`,  or any type extending managed-service. 
 
 ### Usage with existing service keys
 
