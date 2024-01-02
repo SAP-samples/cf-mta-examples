@@ -23,7 +23,7 @@ NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current di
 The deployer will read the 'routes' parameter in a way consistent with CF app manifest files. It will interpret everything up to the first '.' as the host, then everything up to the '/' as the domain, and the rest (if present) - as the path.
 
 ### Deploy
-There are two ways of deploying the MTA. The first one is using an `mtad.yaml` deployment descritpr:
+There are two ways of deploying the MTA. The first one is using an `mtad.yaml` deployment descriptor:
 ```bash
   $ cf deploy ./ -f ;
 ```
