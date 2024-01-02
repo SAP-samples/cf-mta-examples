@@ -11,7 +11,7 @@ This example shows how to model a simple Cloud Foundry application (CF app) in a
 The example demostrates 2 different approaches that lead to the same result.
 
 ### Deploy from directory
-This approach uses deployment descritpr `mtad.yaml` and ready application binaries `appBits.zip`:
+This approach uses deployment descriptor `mtad.yaml` and ready application binaries `appBits.zip`:
 ``` bash
 $ cf deploy ./ -f ;
 ```
