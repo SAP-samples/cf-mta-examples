@@ -69,7 +69,7 @@ Process finished.
 ```
 
 ### Assemble MTA archive and deploy
-This approach uses deployment descriptor `mtad.yaml` and Cloud MTA Build Tool uses it to package the ready binaries in MTAR.
+This approach uses deployment descriptor `mtad.yaml` and Cloud MTA Build Tool uses it to package the ready binaries into an MTAR archive.
 The newly generated MTAR is then deployed.
 
 First use `mbt assemble` to create the *.mtar archive and than deploy it with `cf deploy`:
