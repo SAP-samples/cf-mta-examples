@@ -24,7 +24,7 @@ More detailed explanation:
 
 ## Manual Modeling
 
-Since the recreation mechanism works by comparing the keys by name, all implicit service keys will be reused, keeping existing behaviour in place. Any explicitly named service keys in mtad.yaml that were manually renamed in descriptor will be recreated. For explicit service keys, you can either use the `service-key` parameter in the required section or use an `existing-service-key` typed resource. E.g.
+Since the recreation mechanism works by comparing the keys by name, all implicit service keys will be reused, keeping existing behaviour in place. Any explicitly named service keys in the `mtad.yaml` descriptor, that were manually renamed, will be recreated. For explicit service keys, you can either use the `service-key` parameter in the required section or use an `existing-service-key` typed resource. See the example below:
 
 ```yaml
 ...
@@ -51,9 +51,9 @@ resources:
 
 ## Automated Modeling
 
-To use a more automated way of flagging a service key for recreation without the need for manual renaming you can use the system parameter `${timestamp}` as part of its name. This ensures that key will be unique at time of deployment and considered a new key, while the older one will be detected and deleted (the deletion happens after the new one is created and content deplpoyment finished so as not to invalidate any credentials in use). The parameter `${timestamp}` is resolved to the current timestamp when the MTA module is processed in the beginning of the MTA deployment.
+To use a more automated way of flagging a service key for recreation without the need for manual renaming you can use the system parameter `${timestamp}` as part of its name. This ensures that key will be unique at the time of deployment and will be considered a new key, while the older one will be detected and deleted. The deletion happens after the new service key is created and the content deplpoyment is finished. This approach ensures that no currently used credentials become invalidated. The parameter `${timestamp}` is resolved to the current timestamp when the MTA module is processed in the beginning of the MTA deployment.
 
-Example of this modeling (also used in the provided example mtar descriptor)
+Example of this modeling (also used in the provided example mtar descriptor):
 ```yaml
 ...
 modules:
@@ -71,12 +71,14 @@ modules:
 ```
 ## Try it out
 
-Deploy the provided mtar in cf to demo the automated service key rotation
+Deploy the provided `mtar` in Cloud Foundry to demo the automated service key rotation:
+
 ```bash
 cf deploy ./test-destination-gacd-x509.mtar
 ```
 
-Verify the destination service key that was created
+Verify the destination service key that was created:
+
 ```bash
 cf service-keys my_destination_service
 ...
@@ -84,7 +86,8 @@ cf service-key my_destination_service <service-key-name-timestamp1>
 ...
 ```
 
-Do a redeploy of the same mta (observe the messages in the process log), e.g.
+Do a redeploy of the same mta and observe the messages in the process log:
+
 ```bash
 cf deploy ./test-destination-gacd-x509.mtar
 ...
@@ -94,7 +97,8 @@ Deleting old service keys for content deploy "[<service-key-name-timestamp1>]"..
 ...
 ```
 
-Verify the destination service key that was created
+Verify the destination service key that was created:
+
 ```bash
 cf service-keys my_destination_service
 ...
@@ -102,7 +106,7 @@ cf service-key my_destination_service <service-key-name-timestamp2>
 ...
 ```
 
-## Official related documemtation in Help SAP Portal
+## Official related documemtation in SAP Help Portal
 
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d3e23196166b443db17b3545c912dfc0.html[Content Deployment]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_mtaModuleTypes[Modules] -> MTA Module Types 
