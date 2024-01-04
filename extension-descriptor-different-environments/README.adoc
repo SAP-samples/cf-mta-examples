@@ -31,7 +31,7 @@ Error building cloud model: Service "my-service" has missing required parameter:
 ...
 ```
 
-Note that deployment fails expectedly because the MTA defines as required the parameter `service-plan` for resource `my-service`, representing a service instance. This is done with MTA parameter metadata, called `optional`. By default, the `optional` parameter is set to `false`. Setting it to `true` makes the parameter it applies to optional and can be left empty in the descriptor.
+Note that deployment fails expectedly because the MTA defines as required the parameter `service-plan` for resource `my-service`, representing a service instance. This is done with MTA parameter metadata, called `optional`. By default, the `optional` parameter is set to `false`. Setting it to `true` makes the parameter it refers to optional. Thus the field can be left empty in the descriptor.
 
 ```text
 - name: my-service
