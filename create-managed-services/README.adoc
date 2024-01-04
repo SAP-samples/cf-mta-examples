@@ -55,9 +55,9 @@ The service instance can be configured on it's creation or update via the `confi
 
 
 ### Service Bindings
-Service instances are modelled as in the MTA moduels describing the bound apps.
-A binding is created/updated when a resource, describing a service instance is depicted as required by an app module.
-Parameters in the config parameter can be specified to configure the service binding on it's creation or update
+Service instances are modeled as in the MTA modules describing the bound apps.
+A binding is created or updated when a resource, describing a service instance, is required by an app module.
+The service instance can be configured on it's creation or update via the `config` parameter.
 
 ....
 ...
@@ -86,24 +86,24 @@ modules:
 
 # Related examples 
 - service instance and binding parameters(configurations) management with MTAs
-- update of service instances and bindings [updating parameters, changing plans and labels; recreation ]
+- update of service instances and bindings [updating parameters, changing plans and labels; recreation]
 
 ## Requirements
-- access to a CF space with quota for creation of service instances
+- access to a Cloud Foundry space with quota for creation of service instances
 
-## Oficial documemtation in Help SAP Portal
+## Official documentation in SAP Help Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/a36df26b36484129b482ae20c3eb8004.html[Service creation parameters]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/c7b09b79d3bb4d348a720ba27fe9a2d5.html[Service binding parameters]
 
-# Try out
+# Try it out
 ## Deploy the MTA
 The example demostrates 2 different approaches that lead to the same result.
 
 NOTE: you can adjust the service label and plan values to match the available in your environment
 
 ### Deploy with a deployment descriptor (mtad.yaml)
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
 
 ``` bash
 cf deploy ./ -f ;
@@ -121,19 +121,19 @@ cf deploy my-mta_0.0.0.mtar ;
 NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
 
 ### Build and Deploy
-The approach is using development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build MTAR.
-Then the MTAR is deployed.
+This approach uses development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build an MTAR archive.
+The built MTAR is then deployed.
 
 ``` bash
 mbt build -p cf -t . ;
-cf deploy a.cf.app_0.0.0.mtar -f ;
+cf deploy my-mta_0.0.0.mtar -f ;
 ```
 
 NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
 
 ## Examine the result
 
-### List the deployed mta
+### List the deployed MTAs
 
 ``` bash
 $ cf services
@@ -156,3 +156,8 @@ bound apps:
 name                        binding name   status             message
 my-mta-managed-app-module                  create succeeded   
 ```
+
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <app-name> -f --delete-services
