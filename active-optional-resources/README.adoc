@@ -59,10 +59,10 @@ NOTE: The `active` attribute can also be specified for resources of type `org.cl
 
 ## Try it out
 ### Deploy the MTA
-The example can be run with 2 approaches for building an MTA. Both lead to the same result.
+The example demostrates 2 different approaches that lead to the same result.
 
 #### Deploying from a directory 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
 
 ``` bash
 cf deploy ./ -f ;
@@ -70,7 +70,7 @@ cf deploy ./ -f ;
 
 _OR_
 
-First assemble an MTA archive using the link:mtad.yaml[mtad.yaml]` and then deploy the archive:
+You can first assemble an MTA archive using the link:mtad.yaml[mtad.yaml]` and then deploy the archive:
 
 ``` bash
 mbt assemble -t ./ ;
@@ -82,12 +82,16 @@ NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
 NOTE: please adjust the service label and plan values to match the available in your environment
 
 
-#### B. Build and Deploy
-The approach is using development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build MTAR.
-Then the MTAR is deployed.
+#### Build and deploy
+This approach uses development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build an MTAR archive.
 
 ``` bash
 mbt build -p cf -t . ;
+```
+
+The built MTAR archive is then deployed:
+
+``` bash
 cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
