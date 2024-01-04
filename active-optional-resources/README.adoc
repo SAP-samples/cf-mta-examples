@@ -70,10 +70,15 @@ cf deploy ./ -f ;
 
 _OR_
 
-You can first assemble an MTA archive using the link:mtad.yaml[mtad.yaml]` and then deploy the archive:
+You can assemble an MTA archive using the link:mtad.yaml[mtad.yaml]` by running the following command:
 
 ``` bash
 mbt assemble -t ./ ;
+```
+
+Then deploy the assembled archive:
+
+``` bash
 cf deploy my-mta_0.0.0.mtar ;
 ```
 
