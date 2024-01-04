@@ -70,7 +70,7 @@ cf deploy ./ -f ;
 
 _OR_
 
-You can assemble an MTA archive using the link:mtad.yaml[mtad.yaml]` by running the following command:
+You can assemble an MTA archive using the `link:mtad.yaml[mtad.yaml]` by running the following command:
 
 ``` bash
 mbt assemble -t ./ ;
