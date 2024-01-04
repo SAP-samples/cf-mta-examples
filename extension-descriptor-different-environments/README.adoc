@@ -45,7 +45,7 @@ Note that deployment fails expectedly because the MTA defines as required the pa
 
 ```
 
-The idea is to oblige the operator, who deploys the MTA to specify the service plan according to the region, organization and space. For example in DEV env free and small service plan is used where in PROD environment, paid and supported plan is used.
+The goal is to make the operator deploying the MTA match the service plan to the specific region, organization and space. For example, in a development working environment (DEV), it's usually the free and small service plan that is used. In production environment (PROD), on the other hand, the service plans used are paid and supported.
 
 ### Verify the result
 
@@ -53,9 +53,9 @@ Make sure that nothing is created in the space with `cf apps` and `cf services`.
 
 ## Deploy MTAR in DEV environment
 
-This step of the example shows how the MTA is deployed in DEV enviroment where the goal is to use minimal resources for application and use free service plan.
+This step of the example shows how the MTA is deployed in DEV environment where the goal is to use minimal resources for the application and use a free service plan.
 
-### Deploy with a deployment descriptor (mtad.yaml)
+### Deploy with a deployment descriptor (`mtad.yaml`)
 
 That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptor for DEV env `link:dev.mtaext[dev.mtaext]`:
 
@@ -84,7 +84,7 @@ Starting application "my-app"...
 
 ### Verify the result
 
-Check that app and service instance are created, and service has the plan `lite`, defined in the extension descriptor:
+Check that the app and service instance are created, and service has the plan `lite`, defined in the extension descriptor:
 
 ``` bash
 $ cf s
@@ -102,7 +102,7 @@ NOTE: The application has 1 instance, that is defined in the `mtad.yaml`. It use
 
 ## Deploy MTAR in PROD environment
 
-This step of the example shows how the MTA is deployed in PROD enviroment using  `link:prod.mtaext[prod.mtaext]`. The goal is that app and service can handle more load without performance issues. The application is scaled horizontally on 2 instances and the service uses stable paid service plan `standard`:
+This step of the example shows how the MTA is deployed in PROD enviroment using  `link:prod.mtaext[prod.mtaext]`. The goal is that app and service can handle more load without performance issues. The application is scaled horizontally on 2 instances and the service uses the stable paid service plan `standard`:
 
 .prod.mtaext
 ```text
@@ -123,7 +123,7 @@ resources:
 
 ```
 
-NOTE: Extension descriptor extends deployment descriptor id `extends: my-mta`
+NOTE: The extension descriptor extends the deployment descriptor id `extends: my-mta`
 
 ### Deploy with a deployment descriptor (mtad.yaml)
 
