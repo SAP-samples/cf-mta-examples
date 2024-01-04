@@ -7,13 +7,13 @@ This example shows how to create a service instance and a service binding for an
 Orchestration of the following CF features is covered:
 
 - creation of service instances: https://docs.cloudfoundry.org/devguide/services/managing-services.html
-- creation of app bindings to service instances https://docs.cloudfoundry.org/devguide/services/application-binding.html#bind
+- creation of app bindings to service instances: https://docs.cloudfoundry.org/devguide/services/application-binding.html#bind
 
-## Modelling
+## Modeling
 
 ### Service instances
-Service instances are modelled as MTA resources of type `org.cloudfoundry.managed-service`.
-Parameters in the config parameter can be specified to configure the service instance on it's creation or update
+Service instances are modeled as MTA resources of type `org.cloudfoundry.managed-service`.
+The service instance can be configured on it's creation or update via the `config` parameter.
 
 ....
 ...
