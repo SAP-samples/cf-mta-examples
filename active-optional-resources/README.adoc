@@ -43,21 +43,21 @@ Service instance resources can be marked as active or inactive to provide finer 
 
 NOTE: The value of the `active` resource attribute can be changed for each deployment by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/extension-descriptor-different-environments[using an extension descriptor].
 
-NOTE: the `active` attribute can also be specified for resources of type `org.cloudfoundry.existing-service`. In that case it determines if app bindings to the service would be created or not. I.e. if an app module has a reference to an existing-service resource via `requires: ...` and the resource has `active: false`, a service binding between them will not be created during deployment. 
+NOTE: The `active` attribute can also be specified for resources of type `org.cloudfoundry.existing-service`. In that case it determines if app bindings to the service would be created or not. If an app module has a reference to an existing-service resource via `requires: ...` and the resource has `active: false`, a service binding between them will not be created during deployment. 
 
 ## Related examples 
-- service instance and binding creation(configurations) management with MTAs
-- update of service instances and bindings [updating parameters, changing plans and labels; recreation ]
+- service instance and binding creation (configurations) management with MTAs
+- update of service instances and bindings [updating parameters, changing plans and labels; recreation]
 
 ## Requirements
 - access to a Cloud Foundry space with quota for creation of service instances
 
-## Official documemtation in Help SAP Portal
+## Official documentation in SAP Help Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/a36df26b36484129b482ae20c3eb8004.html[Service creation parameters]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/c7b09b79d3bb4d348a720ba27fe9a2d5.html[Service binding parameters]
 
-## Try out
+## Try it out
 ### Deploy the MTA
 The example can be run with 2 approaches for building an MTA. Both lead to the same result.
 
