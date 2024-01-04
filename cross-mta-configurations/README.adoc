@@ -63,7 +63,7 @@ NOTE: those env variable values can as configuraiton
 ## Consume a different configuration value by using an `ext.descriptor`
 ```bash
 $ cd consumer;
-4cf deploy -f -e ci.mtaext ;
+$ cf deploy -f -e ci.mtaext ;
 ```
 NOTE: See how the provided configuration was selected with provider/ci.mtaext. 
 
