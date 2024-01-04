@@ -53,7 +53,8 @@ resources:
 
 To use a more automated way of flagging a service key for recreation without the need for manual renaming you can use the system parameter `${timestamp}` as part of its name. This ensures that key will be unique at the time of deployment and will be considered a new key, while the older one will be detected and deleted. The deletion happens after the new service key is created and the content deplpoyment is finished. This approach ensures that no currently used credentials become invalidated. The parameter `${timestamp}` is resolved to the current timestamp when the MTA module is processed in the beginning of the MTA deployment.
 
-Example of this modeling (also used in the provided example mtar descriptor):
+Example of this modeling also used in the provided example `mtar` descriptor:
+
 ```yaml
 ...
 modules:
@@ -69,6 +70,7 @@ modules:
               <configuration>
 ...
 ```
+
 ## Try it out
 
 Deploy the provided `mtar` in Cloud Foundry to demo the automated service key rotation:
@@ -86,7 +88,7 @@ cf service-key my_destination_service <service-key-name-timestamp1>
 ...
 ```
 
-Do a redeploy of the same mta and observe the messages in the process log:
+Do a redeploy of the same MTA and observe the messages in the process log:
 
 ```bash
 cf deploy ./test-destination-gacd-x509.mtar
