@@ -2,20 +2,21 @@
 
 # Active and Optional Resources
 
-This example shows how to mark service resources as optional/mandatory or active/inactive in order to influence the deployment behaviour
+This example shows how to mark service resources as optional/mandatory or active/inactive in order to influence the deployment behaviour.
 
-Orchestration of the following CF features is covered:
+Orchestration of the following Cloud Foundry features is covered:
 
 - creation of service instances: https://docs.cloudfoundry.org/devguide/services/managing-services.html
 - creation of app bindings to service instances https://docs.cloudfoundry.org/devguide/services/application-binding.html#bind
 
-## Modelling
+## Modeling
 
 ### Service instances
-Service instances are modelled as MTA resources of type `org.cloudfoundry.managed-service`.
+Service instances are modeled as MTA resources of type `org.cloudfoundry.managed-service`.
 
 ### Optional service instances
-In case a service instance is not mandatory for a deployment but should be used if availalble, it can be marked as optional in the mta(d).yaml descriptor
+If a service instance is not mandatory for a deployment but you want it to be used if availalble, it can be marked as `optional` in the `mta(d).yaml` descriptor:
+
 ....
 ...
 - name: my-cf-service-instance-resource
@@ -25,11 +26,12 @@ In case a service instance is not mandatory for a deployment but should be used 
     ...
 ....
 
-NOTE: the value of the `optional` resource attribute can be changed for each deployment by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/extension-descriptor-different-environments[using an extension descriptor]
+NOTE: The value of the `optional` resource attribute can be changed for each deployment by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/extension-descriptor-different-environments[using an extension descriptor].
 
 
 ### Including/excluding services from deployment 
-To give fine control over what get's deployed or not, resources representing service instances can be marked as active or not. This will cause the MTA deployer to process/not-process them at deploy time. 
+Service instance resources can be marked as active or inactive to provide finer control over what is deployed. Depending on their status, the MTA deployer will either process or ignore these resources when deploying.
+
 ....
 ...
 - name: my-cf-service-instance-resource
@@ -39,7 +41,7 @@ To give fine control over what get's deployed or not, resources representing ser
     ...
 ....
 
-NOTE: the value of the `active` resource attribute can be changed for each deployment by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/extension-descriptor-different-environments[using an extension descriptor]
+NOTE: The value of the `active` resource attribute can be changed for each deployment by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/extension-descriptor-different-environments[using an extension descriptor].
 
 NOTE: the `active` attribute can also be specified for resources of type `org.cloudfoundry.existing-service`. In that case it determines if app bindings to the service would be created or not. I.e. if an app module has a reference to an existing-service resource via `requires: ...` and the resource has `active: false`, a service binding between them will not be created during deployment. 
 
@@ -48,18 +50,18 @@ NOTE: the `active` attribute can also be specified for resources of type `org.cl
 - update of service instances and bindings [updating parameters, changing plans and labels; recreation ]
 
 ## Requirements
-- access to a CF space with quota for creation of service instances
+- access to a Cloud Foundry space with quota for creation of service instances
 
-## Oficial documemtation in Help SAP Portal
+## Official documemtation in Help SAP Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/a36df26b36484129b482ae20c3eb8004.html[Service creation parameters]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/c7b09b79d3bb4d348a720ba27fe9a2d5.html[Service binding parameters]
 
 ## Try out
 ### Deploy the MTA
-The example can be run with 2 approaches for building an MTA. Bothj lead to the same result.
+The example can be run with 2 approaches for building an MTA. Both lead to the same result.
 
-#### A. Deeploying from a directory 
+#### Deploying from a directory 
 That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
 
 ``` bash
