@@ -2,27 +2,27 @@
 
 # Configure same MTA for different environments
 
-Configuration of the MTA is done with the standard approach using MTA extension descriptors. Extension descriptors are complementary files to the main deployment descriptor that provide additional data. They have file extension .mtaext and are external for MTA archive .mtar. Extension descriptors can be used to provide deployment specific information, for example credentials to external services.
+Configuration of the MTA is done with the standard approach using MTA extension descriptors. Extension descriptors are complementary files to the main deployment descriptor that provide additional data. They have file extension `.mtaext` and are external for MTA archive `.mtar`. Extension descriptors can be used to provide deployment specific information, for example credentials to external services.
 
-For the test purpose of the example, we will use a MTA containing a simple application, simple service and binding between them.
-The MTA will be deployed in DEV and PROD environments using different extension descriptors, that result in different set-ups.
+For the test purpose of the example, we will use an MTA containing a simple application, simple service and binding between them.
+The MTA will be deployed in DEV and PROD environments using different extension descriptors resulting in different set-ups.
 
 ## [Optional] Requirements
 - Quota for application
-- Quota for different service plans. The example use service offering "application-logs", free service plan "lite" and paid service plan "standard". You can try out with different service offering and plan at your convenience.
+- Quota for different service plans. The example uses service offering "application-logs", free service plan "lite" and paid service plan "standard". You can try it out with a different service offering and plan at your convenience.
 
 ## Official documentation in SAP Help Portal
 - link:https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/50df803465324d36851c79fd07e8972c.html[Defining MTA Extension Descriptors]
 
-# Try out
+# Try it out
 
 ## Deploy MTAR without extension descriptors
 
-The first step of the example, shows unsuccessful attempt to deploy the MTA without extension descriptor.
+The first step of the example shows unsuccessful attempt to deploy the MTA without extension descriptor.
 
-### Deploy with a deployment descriptor (mtad.yaml)
+### Deploy with a deployment descriptor (`mtad.yaml`)
 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
 
 ``` bash
 $ cf deploy -f
@@ -31,7 +31,7 @@ Error building cloud model: Service "my-service" has missing required parameter:
 ...
 ```
 
-Note that deployment fails expectedly because MTA defines required parameter `service-plan` for resource `my-service`, that represents service instance. This is done with MTA parameter metadata, called `optional`. By default, `optional` is `false` and setting it to `true`, make certain parameter optional and can be declared empty in the descriptor.
+Note that deployment fails expectedly because the MTA defines as required the parameter `service-plan` for resource `my-service`, representing a service instance. This is done with MTA parameter metadata, called `optional`. By default, the `optional` parameter is set to `false`. Setting it to `true` makes the parameter it applies to optional and can be left empty in the descriptor.
 
 ```text
 - name: my-service
