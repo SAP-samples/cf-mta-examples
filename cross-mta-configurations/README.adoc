@@ -1,44 +1,47 @@
 # Cross MTA configurations
 
-Cross MTA configurations is a feature, allowing for consumption of external string values in the mta(d).yaml during deploy time.
-The values are usually provided by other MTAs during their deployments and most-often contain alocated routes mapped to apps in those mtas. Thus a 'service discovery' is achieved at deploy-time.
+Cross MTA configurations is a feature, allowing for consumption of external string values in the `mta(d).yaml` during deployment time.
+The values are usually provided by other MTAs during their deployments and most often contain alocated routes mapped to apps in those MTAs. Thus a 'service discovery' is achieved at deployment time.
 
-Since the SAP Cloud Deployment service persists those configurations until the providing MTA is undeployed, they can be used to also hold arbitrary configuration data - e.g. org/space speciffic settings which don't fit an extension descriptor.
+Since the SAP Cloud Deployment service persists those configurations until the providing MTA is undeployed, they can be used to also hold arbitrary configuration data like org/space specific settings which don't fit an extension descriptor.
 
-## Oficial documemtation
+## Official documentation
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b8e1953a618e47e1bd3c3a60c213226e.html[Cross-MTA Dependencies]
 
-# Try out
+# Try it out
 
 ## Deploy provider MTA
-To deploy the MTA providing the configurations, from the current directory run:
+To deploy the MTA providing the configurations, run the following command from the current directory:
+
 ``` bash
-    cf deploy provider/ -f ;
+$ cf deploy provider/ -f ;
 ```
 
 NOTE: See provider/mtad.yaml for details on the provided configuration values/names/scopes.
 
 ## Deploy consumer MTA
-To consume the config values, from the current directory:
+To consume the config values, run the following command from the current directory:
+
 ```bash 
-cd consumer ;
-cf deploy -f ;
+$ cd consumer ;
+$ cf deploy -f ;
 ```
 
-NOTE: See how configurations are applied in mtad.yaml in the current directory.
+NOTE: See how configurations are applied in `mtad.yaml` in the current directory.
 
 ### Examine the result
 Check how the configuration value was consumed:
-```text
-cf services:
+
+```bash
+$ cf services:
 name                        service            plan       bound apps   last operation     broker            upgrade available
 myDevService                application-logs   lite       staticapp    create succeeded   sleeve-broker
 ```
 
-NOTE: the service name came as configuration
+NOTE: The service name came as configuration.
 
-```text
-cf env staticapp
+```bash
+$ cf env staticapp
 ...
 System-Provided:
 { "VCAP_SERVICES": {"application-logs": [{
@@ -57,15 +60,15 @@ via-param-in-requires: myDevService.inRequiresParam.inRequiresProperty
 
 NOTE: those env variable values can as configuraiton
 
-## Consume a different configuration value by using an ext.descriptor
+## Consume a different configuration value by using an `ext.descriptor`
 ```bash
-    cd consumer;
-    cf deploy -f -e ci.mtaext ;
+$ cd consumer;
+4cf deploy -f -e ci.mtaext ;
 ```
-NOTE: see how the provided configuration was selected with provider/ci.mtaext 
+NOTE: See how the provided configuration was selected with provider/ci.mtaext. 
 
 Result:
-```text
+```bash
 name                        service            plan       bound apps   last operation     broker            upgrade available
 myCIService                 application-logs   lite       staticapp    create succeeded   sleeve-broker     
 ...
@@ -80,4 +83,4 @@ via-param-in-requires: myCIService.inRequiresParam.inRequiresProperty
 
 ```
 
-NOTE: Provided configurations can also target a cpeciffic org & space, which could avoid the need of using an extension descriptor if the configurations are space speciffic and apply to all mtas consuming them in that space.
+NOTE: Provided configurations can also target a specific org & space. This could avoid the need of using an extension descriptor if the configurations are space specific and apply to all MTAs consuming them in that space.
