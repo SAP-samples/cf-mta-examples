@@ -97,10 +97,10 @@ mbt build -p cf -t . ;
 The built MTAR archive is then deployed:
 
 ``` bash
-cf deploy a.cf.app_0.0.0.mtar -f ;
+cf deploy my-mta_0.0.0.mtar -f ;
 ```
 
-NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
+NOTE: See link:mta.yaml[mta.yaml] for the specific modeling
 
 
 ## Deploy with an inactive resource
@@ -117,7 +117,7 @@ Deployed MTA version: "0.0.0"
 Service "my-cf-service-instance-resource" is inactive and will not be processed
 ...
 ```
-The cf application get's created. Since the service's resource is inactive, the service is not created and not bound to the app
+The Cloud Foundry application gets created. Since the service's resource is inactive, the service is not created and not bound to the app.
 
 ## Deploy with an active optional & misconfigured service resource
 
