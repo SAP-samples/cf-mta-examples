@@ -65,7 +65,7 @@ The example demostrates 2 different approaches that lead to the same result.
 This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
 
 ``` bash
-cf deploy ./ -f ;
+$ cf deploy ./ -f ;
 ```
 
 _OR_
@@ -73,13 +73,13 @@ _OR_
 You can assemble an MTA archive using the `link:mtad.yaml[mtad.yaml]` by running the following command:
 
 ``` bash
-mbt assemble -t ./ ;
+$ mbt assemble -t ./ ;
 ```
 
 Then deploy the assembled archive:
 
 ``` bash
-cf deploy my-mta_0.0.0.mtar ;
+$ cf deploy my-mta_0.0.0.mtar ;
 ```
 
 NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
@@ -91,13 +91,13 @@ NOTE: please adjust the service label and plan values to match the available in 
 This approach uses development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build an MTAR archive.
 
 ``` bash
-mbt build -p cf -t . ;
+$ mbt build -p cf -t . ;
 ```
 
 The built MTAR archive is then deployed:
 
 ``` bash
-cf deploy my-mta_0.0.0.mtar -f ;
+$ cf deploy my-mta_0.0.0.mtar -f ;
 ```
 
 NOTE: See link:mta.yaml[mta.yaml] for the specific modeling
@@ -106,7 +106,7 @@ NOTE: See link:mta.yaml[mta.yaml] for the specific modeling
 ## Deploy with an inactive resource
 
 ```bash
-cf deploy ./
+$ cf deploy ./
 ...
 Operation ID: 7c8d9c49-badf-11ea-9455-eeee0a9e129b
 Deploying in org "deploy-service" and space "********"
@@ -125,7 +125,7 @@ Let's enable the resource and mark it optional, but make sure to make the servic
 See how this is done in link:active_optional.mtaext[active_optional.mtaext]
 
 ```bash
-cf deploy ./ -f -e active_optional.mtaext                                                                                                                               6895
+$ cf deploy ./ -f -e active_optional.mtaext                                                                                                                               6895
 Deploying multi-target app archive /Users/********/dev/repos/ds/cf-mta-examples/active-optional-resources/my-mta.mtar in org deploy-service / space ******** as ********...
 
 Uploading 1 files...
@@ -152,7 +152,7 @@ Let's enable the resource with an extension descriptor
 See how this is done in link:active_mandatory.mtaext[active_mandatory.mtaext]
 
 ```bash
-cf deploy ./ -f -e active_mandatory.mtaext
+$ cf deploy ./ -f -e active_mandatory.mtaext
 ...
 Operation ID: 6cc12802-bae0-11ea-9455-eeee0a9e129b
 Deploying in org "deploy-service" and space "********"
@@ -170,7 +170,7 @@ The service instance & app get created and bound as expected.
 At any step you can check the created deployment with the following:
 
 ``` bash
-$cf mta my-mta 
+$ cf mta my-mta 
 Showing health and status for multi-target app my-mta in org deploy-service / space ******** as ********...
 OK
 Version: 0.0.0
@@ -182,4 +182,10 @@ my-mta-managed-app-module   started           1/1         1G       1G     deploy
 Services:
 name                              service            plan   bound apps                  last operation   
 my-cf-service-instance-resource   application-logs   lite   my-mta-managed-app-module   create succeeded 
+```
+
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <app-name> -f --delete-services
 ```
