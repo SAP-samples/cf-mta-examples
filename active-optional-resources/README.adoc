@@ -125,7 +125,7 @@ Let's enable the resource and mark it optional, but make sure to make the servic
 See how this is done in link:active_optional.mtaext[active_optional.mtaext]
 
 ```bash
-cf deploy ./ -f -e active_mandatory.mtaext                                                                                                                               6895
+cf deploy ./ -f -e active_optional.mtaext                                                                                                                               6895
 Deploying multi-target app archive /Users/********/dev/repos/ds/cf-mta-examples/active-optional-resources/my-mta.mtar in org deploy-service / space ******** as ********...
 
 Uploading 1 files...
