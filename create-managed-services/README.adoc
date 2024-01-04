@@ -111,7 +111,7 @@ cf deploy ./ -f ;
 
 _OR_
 
-First assemble an MTA archive using the `mtad.yaml` and then deploy the archive:
+First assemble an MTA archive using the `mtad.yaml` deployment descriptor and then deploy the archive:
 
 ``` bash
 mbt assemble -t ./ ;
@@ -122,7 +122,7 @@ NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
 
 ### Build and Deploy
 This approach uses development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build an MTAR archive.
-The built MTAR is then deployed.
+The built MTAR is then deployed:
 
 ``` bash
 mbt build -p cf -t . ;
