@@ -232,3 +232,9 @@ $ cf a
 name             requested state   instances   memory   disk   urls
 my-app           started           2/2         2G       1G     ...
 ```
+
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <app-name> -f --delete-services
+```
