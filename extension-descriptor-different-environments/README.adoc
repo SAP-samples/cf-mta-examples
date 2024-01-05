@@ -127,7 +127,7 @@ NOTE: The extension descriptor extends the deployment descriptor id `extends: my
 
 ### Deploy with a deployment descriptor (mtad.yaml)
 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptor for PROD env `link:prod.mtaext[prod.mtaext]`:
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptor for PROD environment `link:prod.mtaext[prod.mtaext]`:
 
 ``` bash
 $ cf deploy -f -e prod.mtaext
@@ -154,7 +154,7 @@ Starting application "my-app"...
 
 ### Verify the result
 
-Check that app and service instance are created, and service has the plan `standard`, defined in the extension descriptor:
+Check that app and service instance are created and service has the plan `standard` defined in the extension descriptor:
 
 ``` bash
 $ cf s
@@ -170,7 +170,7 @@ my-app           started           2/2         1G       1G     ...
 
 ## Deploy MTAR in PROD environment, scale vertically
 
-This step of the example shows how the MTA is deployed in PROD enviroment using 2 extension descriptors `link:prod.mtaext[prod.mtaext]` and `link:prod-scale-vertically.mtaext[prod-scale-vertically.mtaext]`. The goal is that app and service can handle more load without performance issues. The application is scaled horizontally on 2 instances and vertically using 2G memory:
+To handle an increased workload without compromising performance, the application and service will be deployed to the PROD environment using two extension descriptors: `link:prod.mtaext[prod.mtaext]` and `link:prod-scale-vertically.mtaext[prod-scale-vertically.mtaext]`. The application is scaled horizontally on 2 instances and vertically using 2G of memory:
 
 .prod-scale-vertically.mtaext
 ```text
@@ -185,13 +185,13 @@ modules:
     memory: 2G
 ```
 
-NOTE: `prod-scale-vertically.mtaext` extends `prod.mtaext` that extends deployment descriptor `mtad.yaml`. It makes extension descriptor chain.
+NOTE: `prod-scale-vertically.mtaext` extends `prod.mtaext` that extends deployment descriptor `mtad.yaml`. It makes an extension descriptor chain.
 
 NOTE: `memory` parameter is not defined in the deployment descriptor, however it is considered during deployment.
 
-### Deploy with a deployment descriptor (mtad.yaml)
+### Deploy with a deployment descriptor (`mtad.yaml`)
 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptors for PROD env `link:prod.mtaext[prod.mtaext]` and `link:prod-scale-vertically.mtaext[prod-scale-vertically.mtaext]`:
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and 2 extension descriptors for PROD environment: `link:prod.mtaext[prod.mtaext]` and `link:prod-scale-vertically.mtaext[prod-scale-vertically.mtaext]`:
 
 ``` bash
 $ cf deploy -f -e prod.mtaext,prod-scale-vertically.mtaext
