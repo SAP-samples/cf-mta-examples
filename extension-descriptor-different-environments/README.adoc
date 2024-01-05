@@ -18,7 +18,7 @@ The MTA will be deployed in DEV and PROD environments using different extension 
 
 ## Deploy MTAR without extension descriptors
 
-The first step of the example shows unsuccessful attempt to deploy the MTA without extension descriptor.
+The first step of the example shows an unsuccessful attempt to deploy the MTA without an extension descriptor.
 
 ### Deploy with a deployment descriptor (`mtad.yaml`)
 
