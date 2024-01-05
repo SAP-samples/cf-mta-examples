@@ -88,5 +88,5 @@ NOTE: Provided configurations can also target a specific org & space. This could
 ## Undeploy the MTA
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
-$ cf undeploy <app-name> -f --delete-services
+$ cf undeploy <mta-id> -f --delete-services
 ```
