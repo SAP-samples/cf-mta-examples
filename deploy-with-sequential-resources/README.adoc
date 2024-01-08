@@ -122,7 +122,7 @@ $ mbt assemble -t ./ ;
 And then deploy the assembled MTAR archive:
 
 ``` bash
-$ cf deploy multiple-anatz_0.0.0.mtar ;
+$ cf deploy multiple-anatz_3.0.0.mtar ;
 ```
 
 NOTE: See link:mtad.yaml[mtad.yaml] for the modeling.
@@ -139,7 +139,7 @@ $ mbt build -p cf -t . ;
 The built MTAR archive is then deployed:
 
 ``` bash
-$ cf deploy a.cf.app_0.0.0.mtar -f ;
+$ cf deploy multiple-anatz_3.0.0.mtar -f ;
 ```
 
 NOTE: See link:mta.yaml[mta.yaml] for the specific modeling.
