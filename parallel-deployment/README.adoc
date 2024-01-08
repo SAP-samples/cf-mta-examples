@@ -121,6 +121,7 @@ $ mbt build
 
 Then deploy the built MTAR archive:
 
+```bash
 $ cf deploy mta_archives/hello-world_1.0.0.mtar
   Deploying multi-target app archive mta_archives/hello-world_1.0.0.mtar in org ***** / space ****** as ******...
   Uploading 1 files...
