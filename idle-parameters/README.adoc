@@ -37,17 +37,17 @@ NOTE: *If you are using custom idle domain, make sure it is already created and 
 ## Requirements
 * Awareness of link:../blue-green-deploy-strategy[MTA blue-green deployment]
 
-## Official documemtation
-* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_moduleSpecificParameters[Modules] -> Table Module-Specific Parameters 
+## Official documentation
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_moduleSpecificParameters[Module-Specific Parameters]
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/772ab72204f04946b79ce2d962e64970.html[Blue-Green Deployment of Multitarget Applications]
 
-# Try out
+# Try it out
 
-The examples below will demonstrate different combinations of idle parameters and their result. As input for all deployments, the same MTAR will be used but with different extension descriptors. Extension descriptors define idle parameters, so you can examine them.
+The examples below will demonstrate different combinations of idle parameters and their result. As input for all deployments, the same MTAR will be used but with different extension descriptors. Extension descriptors define idle parameters so you can examine them.
 
 ## Using `idle-routes`
 
-NOTE: *This is the reccomended way to create idle route(s)! You can ignore other optioins in most of the cases.*
+NOTE: *This is the reccomended way to create idle route(s)! You can ignore other options in most of the cases.*
 
 When `idle-routes` is defined, the new app version will be mapped to one or many temporary routes depending on the count of `idle-routes`:
 ```text
