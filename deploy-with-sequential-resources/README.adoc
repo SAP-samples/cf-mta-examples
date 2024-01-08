@@ -142,7 +142,7 @@ The built MTAR archive is then deployed:
 $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
-NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
+NOTE: See link:mta.yaml[mta.yaml] for the specific modeling.
 
 ## Print the MTA details to confirm the deployment
 At any step you can check the created deployment with the following command:
