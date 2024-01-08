@@ -1,19 +1,21 @@
 :toc:
 
-# Deploy an MTAR using sequential Resource processing
+# Deploy an MTAR using sequential resource processing
 
-This example shows how to make use of the resource parameter 'processed-after' in order to influence the order of resource processing.
+This example shows how to make use of the resource parameter `processed-after` in order to influence the order of resource processing.
 
-- creation of service instances: https://docs.cloudfoundry.org/devguide/services/managing-services.html
-- creation of app bindings to service instances https://docs.cloudfoundry.org/devguide/services/application-binding.html#bind
+- Creation of service instances: https://docs.cloudfoundry.org/devguide/services/managing-services.html
+- Creation of app bindings to service instances: https://docs.cloudfoundry.org/devguide/services/application-binding.html#bind
 
-## Modelling
+## Modeling
 
 ### Service instances having processed-after parameter
 Whenever order of service processing is necessary, the 'processed-after' parameter comes handy. By using the parameter, we create a sequence of services (an order) in which the services should be processed. 
+
 For example let's say service 'A' requires service 'B' and service 'C' to be processed first. On the other hand both service 'B' and service 'C' require service 'D' to be pocessed first. Service 'D' does not require any other service. So the order for processing should be:
  D -> B, C -> A.
-We can achieve this with the following mtad.yaml:
+
+We can achieve this with the following `mtad.yaml`:
 
 ....
 ...
@@ -155,4 +157,10 @@ serviceA   auditlog   standard                create succeeded
 serviceB   auditlog   standard                create succeeded   
 serviceC   auditlog   standard                create succeeded   
 serviceD   auditlog   standard                create succeeded   
+```
+
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
 ```
