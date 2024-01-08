@@ -2,11 +2,11 @@
 
 # Parallel deployment
 
-Parallel deployment is a feature that allows to speed-up the deploy proces by processing multiple MTA modules in parallel. The feature is applicable either for standard and blue-green deployment scenarios.
+Parallel deployment is a feature that allows to speed-up the deployment proces by processing multiple MTA modules in parallel. The feature is applicable for standard and blue-green deployment scenarios.
 
-Parallel deployment feature concerns SAP Business Technology Platform entities that are represented by MTA modules - applications and application contents.
+Parallel deployment feature relates to SAP Business Technology Platform entities that are represented by MTA modules - applications and application contents.
 
-The feature does not relate to entities represented by MTA resources, for instance Cloud Foundry services. By default Cloud Foundry servicecs are processed in parallel without need of any additional configuration.
+The feature does not relate to entities represented by MTA resources, for instance Cloud Foundry services. By default Cloud Foundry servicecs are processed in parallel without the need of any additional configuration.
 
 ## Official Documentation
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html[Modules]
@@ -28,11 +28,11 @@ parameters:
   enable-parallel-deployments: true
 ...
 ```
-NOTE: Setting up the value of `enable-parallel-deployments` can be done in the mta.yaml, mtad.yaml or via an additional extension descriptor (*.mtaext) passed during deployment
+NOTE: Setting up the value of `enable-parallel-deployments` can be done in the `mta.yaml`, `mtad.yaml` or via an additional extension descriptor (`*.mtaext`) passed during deployment
 
 ## Deployment order
 
-When parallel deployment is activated, all modules are deployed simultaineously. There are cases when a module has a dependency to another - e.g. the module initializing the database should be deployed before the others consuming that same database.
+When parallel deployment is activated, all modules are deployed simultaneously. There are cases when a module is dependent on another - for example the module initializing the database should be deployed before the others consuming that same database.
 
 The module element `deployed-after` should be used to declare that dependency and influence the order of behavior:
 
@@ -50,7 +50,7 @@ modules:
 ```
 
 # Try it out
-In the current directory you'll find example cf app payload modelled to be deployed in parallel in both
+In the current directory you'll find an example cf app payload modeled to be deployed in parallel in both:
 
 * development descriptor: link:mta.yaml[mta.yaml]
 * deployment descriptor: link:mtad.yaml[mtad.yaml]
@@ -58,13 +58,14 @@ In the current directory you'll find example cf app payload modelled to be deplo
 ** enabling parallelization: link:hello-world-parallel.mtaext[hello-world-parallel.mtaext]
 ** disabling parallelization: link:hello-world-no-parallel.mtaext[hello-world-no-parallel.mtaext]
 
-The example MTA contains 4 modules `hello-world`, `hello-world-first`, `hello-world-second` and `hello-world-third` where 3 of them does not have any dependency order and will be processed in parallel accordingly. Only `hello-world-third` depends on `hello-world`, so it will be processed after `hello-world` is completed.
+The example MTA contains 4 modules: `hello-world`, `hello-world-first`, `hello-world-second` and `hello-world-third`. 3 of them do not have any dependency order and will be processed in parallel accordingly. Only `hello-world-third` depends on `hello-world`, so it will be processed after the deployment of `hello-world` is completed.
 
 ## Deploy directly from directory
 
-In the current directory of the repository, run `cf deploy` that will use `mtad.yaml`. This will automatically assemble an MTA archive and deploy it 
+In the current directory of the repository, run the command `cf deploy`. It will use the existing `mtad.yaml` file to automatically assemble an MTA archive and deploy it.
+
 ```bash
-$cf deploy
+$ cf deploy
 Deploying multi-target app archive ~/mta-examples/hello-world.mtar in org ****** / space ****** as ******...
 ...
 Updating application "hello-world-second"...
@@ -73,8 +74,8 @@ Uploading application "hello-world-second"...
 ...
 ```
 
-## Assemble MTA archive via mtad.yaml and deploy
-First use `mbt assemble` to create the *.mtar from development descritpror `mta.yaml` and than deploy it with `cf deploy`.
+## Assemble an MTA archive via `mta.yaml` and deploy
+First run the command `mbt assemble` to create the MTAR archive from development descriptor `mta.yaml`:
 
 ```bash
 $ mbt assemble
@@ -84,14 +85,19 @@ $ mbt assemble
   INFO generating the MTA archive...
   INFO the MTA archive generated at: /mta_examples/parallel-deployment/mta_archives/hello-world_1.0.0.mtar
   INFO cleaning temporary files...
-  
+```
+
+Then deploy the assembled MTAR archive:
+
+```bash
 $ cf deploy mta_archives/hello-world_1.0.0.mtar
   Deploying multi-target app archive mta_archives/hello-world_1.0.0.mtar in org ****** / space ****** as ******...
   Uploading 1 files...
 ```
 
-## Build MTA archive via mta.yaml and deploy
-First use `mbt build` to create the *.mtar and than deploy it with `cf deploy`.
+## Build an MTA archive via `mta.yaml` and deploy
+First run the command `mbt build` to create the MTAR archive:
+
 ```bash
 $ mbt build
   INFO generating the "Makefile_20191029153016.mta" file...
@@ -111,18 +117,28 @@ $ mbt build
   INFO generating the MTA archive...
   INFO the MTA archive generated at: /mta_examples/parallel-deployment/mta_archives/hello-world_1.0.0.mtar
   INFO cleaning temporary files...
-  
+```
+
+Then deploy the built MTAR archive:
+
 $ cf deploy mta_archives/hello-world_1.0.0.mtar
   Deploying multi-target app archive mta_archives/hello-world_1.0.0.mtar in org ***** / space ****** as ******...
   Uploading 1 files...
   ...
 ```
 
-## Enable/disable parallel deployments with extension descriptors using created *.mtar file
+## Enable/disable parallel deployments with extension descriptors using created MTAR file
+
 ```bash
-cf deploy mta_archives/hello-world_1.0.0.mtar -e hello-world-parallel.mtaext
+$ cf deploy mta_archives/hello-world_1.0.0.mtar -e hello-world-parallel.mtaext
 ```
 ```bash
-cf deploy mta_archives/hello-world_1.0.0.mtar -e hello-world-no-parallel.mtaext
+$ cf deploy mta_archives/hello-world_1.0.0.mtar -e hello-world-no-parallel.mtaext
 ```
 Note the processing of the MTA in the command output of both commands.
+
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
+```
