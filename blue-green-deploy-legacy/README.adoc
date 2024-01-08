@@ -9,20 +9,21 @@ As you prepare a new version of your software, the deployment and final stage of
 
 This technique can eliminate downtime due to app deployment. In addition, blue-green deployment reduces risk: if something unexpected happens with your new version on **Green**, you can immediately roll back to the last version by switching back to **Blue**.
 
-The example will demonstrate how to acomplish blue-green deployment using MTA.
+The example will demonstrate how to accomplish blue-green deployment using an MTA.
 
-MTA blue-green deployment is separeted in two phases. 
-First phase, so called validation is phase setup the next color environment, in order to be tested. The new environment version, in this case GREEN, is not accessible on the production routes but on temporary `-idle` routes. The validation phase is used to verify that new version of environment is operational.
+MTA blue-green deployment is separeted in two phases:
 
-During second phase all new applications are assigned to production routes and the new MTA color become productive.
+The first phase, known as validation, involves setting up the new color environment, in this case **Green**, for testing. This new version, **Green**, is not accessible via the production routes but rather via temporary `-idle` routes. The purpose of the validation phase is to ensure the new version of the environment is fully operational.
+
+During the second phase all new applications are assigned to production routes and the new MTA color, in this case **Green**, becomes productive.
 
 ## Requirements
-* Awarenes of blue green deploy in Cloud Foundry: link:https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html[Using Blue-Green Deployment to Reduce Downtime and Risk]
+* Awarenes of blue-green deployment in Cloud Foundry: link:https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html[Using Blue-Green Deployment to Reduce Downtime and Risk]
 
 ## Official documemtation
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/764308c52e68488dac848bae93e9137b.html[Legacy Blue-Green Deployment]
 
-# Try out
+# Try it out
 
 The example will demonstrate blue-green deployment of one MTA comprised of two applications. The first applcation, called "hello-backend", serves as backend and the second one, called "hello-router", serves as front end. 
 
