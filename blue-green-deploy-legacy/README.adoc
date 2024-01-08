@@ -13,7 +13,7 @@ The example will demonstrate how to accomplish blue-green deployment using an MT
 
 MTA blue-green deployment is separeted in two phases:
 
-The first phase, known as validation, involves setting up the new color environment, in this case **Green**, for testing. This new version, **Green**, is not accessible via the production routes but rather via temporary `-idle` routes. The purpose of the validation phase is to ensure the new version of the environment is fully operational.
+The first phase, known as validation, involves setting up the new color environment, in this case **Green**, for testing. **Green** is not accessible via the production routes but rather via temporary `-idle` routes. The purpose of the validation phase is to ensure the new version of the environment is fully operational.
 
 During the second phase all new applications are assigned to production routes and the new MTA color, in this case **Green**, becomes productive.
 
