@@ -76,7 +76,7 @@ Application "hello-router-blue" started and available at "<org>-<space>-hello-ro
 ```
 
 #### Using deploy from directory with .mtad
-The approach uses deployment descriptor `hello-blue/mtad.yaml` and already built application bineries `hello-blue/router.war` and `hello-blue/backend.war`:
+The approach uses deployment descriptor `hello-blue/mtad.yaml` and already built application binaries `hello-blue/router.war` and `hello-blue/backend.war`:
 
 ```bash
 $ cf bg-deploy hello-blue/ -f
