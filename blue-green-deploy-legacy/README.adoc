@@ -25,9 +25,9 @@ During the second phase all new applications are assigned to production routes a
 
 # Try it out
 
-The example will demonstrate blue-green deployment of one MTA comprised of two applications. The first applcation, called "hello-backend", serves as backend and the second one, called "hello-router", serves as front end. 
+The example will demonstrate blue-green deployment of one MTA comprised of two applications. The first application, called `hello-backend`, serves as back end and the second one, called `hello-router`, serves as front end. 
 
-The idea is to have sample MTA which seems very similar to standard business applications that are comprised of frontend, backend and backing services. In the example "hello-backend" will play the combined role between backend and backing services, where the customer data is stored.
+The idea is to have sample MTA which seems very similar to standard business applications that are comprised of front end, back end and backing services. In the example "hello-backend" will play the combined role of back end and backing services, where the customer data is stored.
 
 In terms of the example, we are using Java applications which communicate using REST interface. Both applications are simple web projects containing only one servlet. 
 
