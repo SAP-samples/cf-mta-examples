@@ -5,9 +5,9 @@ Blue-green deployment is a technique that reduces downtime and risk by running t
 
 At any time, only one of the environments is live, with the live environment serving all production traffic. In this example **Blue** is live and **Green** is idle.
 
-As you prepare a new version of your software, the deployment and final stage of testing take place in a non-live environment: in this example, **Green**. Once you have deployed and fully tested the software in **Green**, you switch the router so all incoming requests now go to **Green** instead of **Blue**. **Green** is now live, and *Blue** is idle.
+As you prepare a new version of your software, the deployment and final stage of testing take place in a non-live environment: in this example, **Green**. This way, your regular operations on **Blue**, containing the current version, stay uninterrupted. Once you have deployed and fully tested the software in **Green**, you switch the router so all incoming requests now go to **Green** instead of **Blue**. In other words - **Green** is now live, and **Blue** is idle.
 
-This technique can eliminate downtime due to app deployment. In addition, blue-green deployment reduces risk: if something unexpected happens with your new version on Green, you can immediately roll back to the last version by switching back to Blue.
+This technique can eliminate downtime due to app deployment. In addition, blue-green deployment reduces risk: if something unexpected happens with your new version on **Green**, you can immediately roll back to the last version by switching back to **Blue**.
 
 The example will demonstrate how to acomplish blue-green deployment using MTA.
 
