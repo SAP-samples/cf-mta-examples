@@ -11,8 +11,8 @@ The content of those files gets merged with the additional configurations define
 ### Service instances
 Service instances are modeled as MTA resources of type `org.cloudfoundry.managed-service`. The parameters used for their creation and update can be specified in two places:
 
-- in the `config` parameter of the resource
-- in an external .json file, referenced in the `path` parameter of the resource
+- In the `config` parameter of the resource
+- In an external `.json` file, referenced in the `path` parameter of the resource
 
 ```yaml
 resources:
@@ -32,7 +32,7 @@ NOTE: The content from the external file and `config` parameter are merged. In c
 - link:../create-managed-services/README.adoc[Service instance and binding creation with MTAs]
 
 ## Requirements
-- access to a Cloud Foundry space with quota for creation of service instances
+- Access to a Cloud Foundry space with quota for creation of service instances
 
 ## Official documentation in SAP Help Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
@@ -45,7 +45,7 @@ The example demostrates 2 different approaches that lead to the same result.
 NOTE: Please adjust the service label, plan and parameter values to match the ones available in your environment
 
 ### Deploy with a deployment descriptor (`mtad.yaml`)
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
 
 ``` bash
 $ cf deploy ./ -f ;
