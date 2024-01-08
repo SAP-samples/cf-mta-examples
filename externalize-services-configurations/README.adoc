@@ -2,14 +2,14 @@
 
 # Externalize service parameters to file
 
-This example shows how to maintain service instance configuration in dedicated json files, apart the development/deployment yaml.
-The content of those files gets merged with the additional configurations defined in the mta(d).yaml and gets used as service instance creation/update parameters
+This example shows how to maintain service instance configuration in dedicated json files, apart from the development/deployment yaml.
+The content of those files gets merged with the additional configurations defined in the `mta(d).yaml` and gets used as service instance creation/update parameters.
 
 
-## Modelling
+## Modeling
 
 ### Service instances
-Service instances are modelled as MTA resources of type `org.cloudfoundry.managed-service`. The parameters used for their creation and update can be specified in two places:
+Service instances are modeled as MTA resources of type `org.cloudfoundry.managed-service`. The parameters used for their creation and update can be specified in two places:
 
 - in the `config` parameter of the resource
 - in an external .json file, referenced in the `path` parameter of the resource
@@ -25,48 +25,57 @@ resources:
   #...
 ```
 
-NOTE: The content from the external file and the config parametr's are merged. In case of conflict during merging,  the `config` parameter content is overwriting the other.
+NOTE: The content from the external file and `config` parameter are merged. In case of conflict during merging,  the `config` parameter content will overwrite the other.
 
 
 # Related examples 
 - link:../create-managed-services/README.adoc[Service instance and binding creation with MTAs]
 
 ## Requirements
-- access to a CF space with quota for creation of service instances
+- access to a Cloud Foundry space with quota for creation of service instances
 
-## Oficial documemtation in Help SAP Portal
+## Official documentation in SAP Help Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/a36df26b36484129b482ae20c3eb8004.html[Service creation parameters]
 
 
-# Try out
+# Try it out
 ## Deploy the MTA
-The example demostrate 2 different approaches that lead to the same result.
-NOTE: please adjust the service label, plan and parameter values to match the available in your environment
+The example demostrates 2 different approaches that lead to the same result.
+NOTE: Please adjust the service label, plan and parameter values to match the ones available in your environment
 
-### Deploy with a deployment descriptor (mtad.yaml)
+### Deploy with a deployment descriptor (`mtad.yaml`)
 That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
 
 ``` bash
-cf deploy ./ -f ;
+$ cf deploy ./ -f ;
 ```
 
-Alternatively first assemble an MTA archive using the `mtad.yaml` and then deploy the archive:
+Alternatively, you can assemble an MTA archive, using the `mtad.yaml` file first:
 
 ``` bash
-mbt assemble -t ./ ;
-cf deploy my-mta_0.0.0.mtar ;
+$ mbt assemble -t ./ ;
 ```
 
-NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
+And then deploy the assembled archive:
+
+``` bash
+$ cf deploy my-mta_0.0.0.mtar ;
+```
+
+NOTE: See link:mtad.yaml[mtad.yaml] for the modeling
 
 ### Build and Deploy
-The approach is using development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build MTAR.
-Then the MTAR is deployed.
+This approach uses development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build an MTAR archive:
 
 ``` bash
-mbt build -p cf -t . ;
-cf deploy a.cf.app_0.0.0.mtar -f ;
+$ mbt build -p cf -t . ;
+```
+
+The MTAR archive is then deployed:
+
+``` bash
+$ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
 NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
@@ -99,3 +108,9 @@ $ cf curl /v2/user_provided_service_instances/$(cf service my-user-provided-serv
 ```
 
 Notice that the user provided service has the properly merged content in the credentials field.
+
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
+```
