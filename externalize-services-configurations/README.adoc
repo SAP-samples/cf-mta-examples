@@ -88,8 +88,8 @@ NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
 $ cf services
 Getting services in org deploy-service / space ****** as ******...
 name                                        service            plan
-my-service-instance                            xsuaa              application
-my-user-provided-service-instance              user-provided
+my-service-instance                         xsuaa              application
+my-user-provided-service-instance           user-provided
 ```
 
 ### List the user provided service instance credentials 
