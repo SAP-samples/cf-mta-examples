@@ -48,7 +48,7 @@ In terms of the example, we are using Java applications which communicate using 
 
 Initial blue green deployment is very similar to standard deployment because there are no previously existing applications. One difference is that temporary routes will be added during the deployment. Finally, the standard routes are assigned to the applications.
 
-In the end of this part, you wil have a similar environment:
+In the end of this part, you will have a similar environment:
 
 image::diagrams/initial-bg-deploy-blue.png[]
 ### Deploy
