@@ -10,7 +10,7 @@ This example shows how to make use of the resource parameter `processed-after` i
 ## Modeling
 
 ### Service instances having processed-after parameter
-Whenever order of service processing is necessary, the 'processed-after' parameter comes handy. By using the parameter, we create a sequence of services (an order) in which the services should be processed. 
+Whenever order of service processing is necessary, the `processed-after` parameter comes handy. By using the parameter, we create a sequence of services (an order) in which the services should be processed. 
 
 For example let's say service 'A' requires service 'B' and service 'C' to be processed first. On the other hand both service 'B' and service 'C' require service 'D' to be pocessed first. Service 'D' does not require any other service. So the order for processing should be:
  D -> B, C -> A.
