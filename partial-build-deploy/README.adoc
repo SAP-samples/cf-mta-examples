@@ -31,7 +31,7 @@ Only selected modules would be built and included in the MTA archive. This optim
 
 If you only maintain a design time descriptor for your project or module - the `mta.yaml` file, it needs to be built first before you can deploy it using partial deployment commands. In order to prepare the required artifacts, which include the build results for the modules and the deployment descriptor, or the `mtad.yaml` file, you can use link:https://sap.github.io/cloud-mta-build-tool/usage/#auxiliary-commands[the auxiliary commands of the Cloud MTA archive builder].
 
-You can find a few tips about usage of the Cloud MTA Builder commands for the partial build in the link:https://github.com/SAP-samples/cf-mta-examples/tree/main/partial-build-deploy#build-only-specific-mta-modules-defined-in-the-mtayaml-file-and-deploy-them[Build only specific MTA modules defined in the `mta.yaml` file and deploy them] section below.   
+You can find a few tips about usage of the Cloud MTA Builder commands for the partial build in the [Build only specific MTA modules defined in the `mta.yaml` file and deploy them](#build-only-specific-mta-modules-defined-in-the-mtayaml-file-and-deploy-them) section below.   
 
 ### Partial assembly
 If staring from mtad.yaml, the cf deploy command is capable of assembling an MTA archive just before deployment. The list of modules passed to the (bg-)deploy command is used to select which would be included in the assembled archive.
@@ -91,7 +91,7 @@ $$ mbt assemble
 $ cf deploy mta_archives/hello-world_1.0.0.mtar -m module-c -r service-3
   ...
 ```
-## Build only specific MTA modules defined in the mta.yaml file and deploy them
+## Build only specific MTA modules defined in the `mta.yaml` file and deploy them
 
 NOTE: Since partial deploymnet requires that all the modules' and resources' dependencies are resolved, we recommend you first build and deploy the complete MTA project (using the `mbt build` command to create the MTA archive (`mtar`) file and the `cf deploy` command to deploy it) and then build and deploy only the changing modules.
 
