@@ -4,7 +4,7 @@
 ## Overview
 This example shows how to preserve manual mappings of app routes during MTA deployment. This feature tends to be useful, for instance, when tenant onboarding for multitenant apps generates a separate route for each tenant and that route is not maintained in an *.mtaext extension descriptor given to the MTA deployer. 
 
-Activated in 3 ways:
+It can be activated in 3 ways:
 
 * global parameter `keep-existing-routes: true` 
 * module level parameter `keep-existing-routes: true`
@@ -18,24 +18,36 @@ Activated in 3 ways:
 ```
 NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current directory.
 
-### 1 Deploy 
-directly from an mtad.yaml
+### Deploy 
+
+You can deploy it directly from an `mtad.yaml` file:
+
 ```bash
-  $ cf deploy ./ -f ;
+$ cf deploy ./ -f ;
 ```
-or start from an mta.yaml:
+
+Alternatively, you can build an MTAR archive from an `mta.yaml` file:
+
 ```bash
-  $ mbt build -p cf -t . ;
-  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+$ mbt build -p cf -t . ;
 ```
-### 2 Manually map routes to the cf apps
+
+And then deploy the built MTAR archive:
+
 ```bash
-  $ cf map-route cf-app-unmapping-routes apps.internal --hostname "custom-host"
-  $ cf map-route cf-app-keeping-complex-param apps.internal --hostname "custom-host"
-  $ cf map-route cf-app-keeping-simple-param apps.internal --hostname "custom-host"
+$ cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
+### Manually map routes to the Cloud Foundry apps
+
+```bash
+$ cf map-route cf-app-unmapping-routes apps.internal --hostname "custom-host"
+$ cf map-route cf-app-keeping-complex-param apps.internal --hostname "custom-host"
+$ cf map-route cf-app-keeping-simple-param apps.internal --hostname "custom-host"
   
 ```
-### 3 Examine the new routing
+### Examine the new routing
+
 ```bash
 $ cf apps
 Getting apps in org ...
@@ -44,14 +56,20 @@ cf-app-keeping-complex-param   started           1/1         1G       1G     cus
 cf-app-keeping-simple-param    started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-simple-param.<default-domain>
 cf-app-unmapping-routes        started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-unmapping-routes.<default-domain>
 ```
-### 3 Re-deply to simulate update
+
+### Re-deply to simulate update
+
 ```bash
-  $ cf deploy -f ;
-  # or 
-  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+$ cf deploy -f ;
+```
+or:
+
+```bash
+$ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
-### 4 Check out the result
+### Check out the result
+
 ```bash
 $ cf apps
 Getting apps in org ...
@@ -60,4 +78,11 @@ cf-app-keeping-complex-param   started           1/1         1G       1G     cus
 cf-app-keeping-simple-param    started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-simple-param.<default-domain>
 cf-app-unmapping-routes        started           1/1         1G       1G     <org>-<space>-cf-app-unmapping-routes.<default-domain>
 ```
-Note that apps having 'keep-existing..' parameters activate, have the url `custom-host.apps.internal`. App `cf-app-unmapping-routes` has it unmapped.
+Note that apps that have their 'keep-existing..' parameters activated have the url `custom-host.apps.internal`. However, in the app `cf-app-unmapping-routes` has the url unmapped.
+
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
+```
+
