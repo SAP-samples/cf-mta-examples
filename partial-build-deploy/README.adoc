@@ -2,7 +2,7 @@
 
 # Partial deployment
 
-Partial deployment is a feature allowing fine control over which parts of the MTA will get processed by the SAP Cloud Deployment service and which will not.
+Partial deployment is a feature allowing fine control over which parts of the MTA will get processed by the SAP Cloud Deployment service.
 With this feature you can choose to deploy only certain module(s) and/or resource(s). The SAP Cloud Deployment service then orchestrates the deployment only for the selected parts while ignoring the rest.
 
 WARNING: All descriptor validations and dependency checks on the processed modules are always executed. If the MTA archive is invalid or, for example, a module has a missing dependency (i.e. service instance which it should be bound to but does not exist), the deployment fails. 
