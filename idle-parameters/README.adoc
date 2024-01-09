@@ -9,7 +9,7 @@ All idle parameters are applicable only for modules that represent Cloud Foundry
 
 Idle parameters are used in the validation phase of blue-green deployment where new application versions are mapped to temporary routes, also called idle routes. Idle parameters are used to define explicitly temporary routes. 
 
-NOTE: *The reccomended way to create idle route(s) is by using `idle-routes` parameter! All other combinations are possible but should be avoided and used carefully if needed!*
+NOTE: *The recommended way to create idle route(s) is by using `idle-routes` parameter! All other combinations are possible but should be avoided and used carefully if needed!*
 
 When idle parameter are not defined the SAP Cloud Deployment service will use default behavior to calculate the temporary idle routes:
 ```text
@@ -47,9 +47,10 @@ The examples below will demonstrate different combinations of idle parameters an
 
 ## Using `idle-routes`
 
-NOTE: *This is the reccomended way to create idle route(s)! You can ignore other options in most of the cases.*
+NOTE: *This is the recommended way to create idle route(s)! You can ignore the other options in most of the cases.*
 
-When `idle-routes` is defined, the new app version will be mapped to one or many temporary routes depending on the count of `idle-routes`:
+When `idle-routes` is defined, the new app version will be mapped to one or many temporary routes depending on the number of `idle-routes`:
+
 ```text
 parameters:
   idle-routes: 
@@ -65,7 +66,8 @@ parameters:
 | your.second.idle.domain
 |===
 
-### Execute Deploy
+### Execute deploy
+
 ```bash 
 $ cf bg-deploy ./ -e idle-routes.mtaext -f
 ...
@@ -74,7 +76,9 @@ Application "app-blue" started and available at "your-first-idle-hostname.your.f
 ```
 
 ### Examine the result
-Check what are the created routes and which apps are mapped to them
+
+Check what are the created routes and which apps are mapped to them:
+
 ```bash 
 $ cf r
 Getting routes for org xxxx / space xxxx as xxx ...
@@ -86,9 +90,10 @@ xxxx      your-second-idle-hostname        our.second.idle.domain               
 
 ## Using `idle-host`
 
-NOTE: *This is NOT the reccomended way to create idle route(s)! See <<Using `idle-routes`>> .*
+NOTE: *This is NOT the recommended way to create idle route(s)! See <<Using `idle-routes`>> .*
 
 When `idle-host` is defined, the new app version will be mapped only to one temporary route using the `${default-domain}` as domain:
+
 ```text
 parameters:
   idle-host: "your-idle-hostname"
@@ -100,7 +105,8 @@ parameters:
 | ${default-domain}
 |===
 
-### Execute Deploy
+### Execute deploy
+
 ```bash 
 $ cf bg-deploy ./ -e idle-host.mtaext -f
 ...
@@ -109,7 +115,8 @@ Application "app-blue" started and available at "your-idle-hostname.<DEFAULT_DOM
 ```
 
 ### Examine the result
-Check what are the created routes and which apps are mapped to them
+
+Check what are the created routes and which apps are mapped to them:
 ```bash 
 $ cf r
 Getting routes for org xxxx / space xxxx as xxx ...
@@ -120,7 +127,7 @@ xxxx    your-idle-hostname      <DEFAULT_DOMAIN>                            app-
 
 ## Using `idle-hosts`
 
-NOTE: *This is NOT the reccomended way to create idle route(s)! See <<Using `idle-routes`>> .*
+NOTE: *This is NOT the recommended way to create idle route(s)! See <<Using `idle-routes`>> .*
 
 When `idle-hosts` is defined, the new app version will be mapped to one or many temporary routes using the `${default-domain}` as domain:
 
@@ -137,7 +144,8 @@ parameters:
 | ${default-domain}
 |===
 
-### Execute Deploy
+### Execute deploy
+
 ```bash 
 $ cf bg-deploy ./ -e idle-hosts.mtaext -f
 ...
@@ -146,7 +154,9 @@ Application "app-blue" started and available at "your-first-idle-hostname.<DEFAU
 ```
 
 ### Examine the result
-Check what are the created routes and which apps are mapped to them
+
+Check what are the created routes and which apps are mapped to them:
+
 ```bash 
 $ cf r
 Getting routes for org xxxx / space xxxx as xxx ...
@@ -158,9 +168,10 @@ xxxx      your-second-idle-hostname   <DEFAULT_DOMAIN>                         a
 
 ## Using `idle-domain`
 
-NOTE: *This is NOT the reccomended way to create idle route(s)! See <<Using `idle-routes`>>.*
+NOTE: *This is NOT the recommended way to create idle route(s)! See <<Using `idle-routes`>>.*
 
 When `idle-domain` is defined, the new app version will be mapped only to one temporary route using the `${default-host}-idle` as host:
+
 ```text
 parameters:
   idle-domain: "your.idle.domain"
@@ -172,7 +183,8 @@ parameters:
 | your.idle.domain
 |===
 
-### Execute Deploy
+### Execute deploy
+
 ```bash 
 $ cf bg-deploy ./ -e idle-domain.mtaext -f
 ...
@@ -181,7 +193,9 @@ Application "app-blue" started and available at "<org>-<space>-app-idle.your.idl
 ```
 
 ### Examine the result
-Check what are the created routes and which apps are mapped to them
+
+Check what are the created routes and which apps are mapped to them:
+
 ```bash 
 $ cf r
 Getting routes for org xxxx / space xxxx as xxx ...
@@ -192,9 +206,10 @@ xxxx     <org>-<space>-app-idle     your.idle.domain                        app-
 
 ## Using `idle-domains`
 
-NOTE: *This is NOT the reccomended way to create idle route(s)! See <<Using `idle-routes`>>.*
+NOTE: *This is NOT the recommended way to create idle route(s)! See <<Using `idle-routes`>>.*
 
 When `idle-domains` is defined, the new app version will be mapped only to one or many temporary routes using the ${default-host}-idle` as host:
+
 ```text
 parameters:
   idle-domains: ["your.first.idle.domain", "your.second.idle.domain"]
@@ -208,7 +223,8 @@ parameters:
 | your.second.idle.domain
 |===
 
-### Execute Deploy
+### Execute deploy
+
 ```bash 
 $ cf bg-deploy ./ -e idle-domains.mtaext -f
 ...
@@ -217,7 +233,9 @@ Application "app-blue" started and available at "<org>-<space>-app-idle.your.idl
 ```
 
 ### Examine the result
-Check what are the created routes and which apps are mapped to them
+
+Check what are the created routes and which apps are mapped to them:
+
 ```bash 
 $ cf r
 Getting routes for org xxxx / space xxxx as xxx ...
@@ -227,11 +245,12 @@ xxxx     <org>-<space>-app-idle   your.idle.domain                              
 xxxx     <org>-<space>-app-idle   your.second.idle.domain                       app-blue
 ```
 
-## Using combination of `idle-host` and `idle-domain`
+## Using a combination of `idle-host` and `idle-domain`
 
-NOTE: *This is NOT the reccomended way to create idle route(s)! See <<Using `idle-routes`>>.*
+NOTE: *This is NOT the recommended way to create idle route(s)! See <<Using `idle-routes`>>.*
 
 When both `idle-host` and `idle-domain` are defined, the new app version will be mapped only to one temporary route:
+
 ```text
 parameters:
   idle-host: "your-idle-hostname"
@@ -244,7 +263,8 @@ parameters:
 | your.idle.domain
 |===
 
-### Execute Deploy
+### Execute deploy
+
 ```bash 
 $ cf bg-deploy ./ -e idle-host-idle-domain.mtaext -f
 ...
@@ -253,7 +273,9 @@ Application "app-blue" started and available at "your-idle-hostname.your.idle.do
 ```
 
 ### Examine the result
-Check what are the created routes and which apps are mapped to them
+
+Check what are the created routes and which apps are mapped to them:
+
 ```bash 
 $ cf r
 Getting routes for org xxxx / space xxxx as xxx ...
@@ -262,11 +284,12 @@ space  host                 domain            port   path   type    apps       s
 xxxx   your-idle-hostname   your.idle.domain                        app-blue
 ```
 
-## Using combination of `idle-host` and `idle-domains`
+## Using a combination of `idle-host` and `idle-domains`
 
-NOTE: *This is NOT the reccomended way to create idle route(s)! See <<Using `idle-routes`>>.*
+NOTE: *This is NOT the recommended way to create idle route(s)! See <<Using `idle-routes`>>.*
 
-When both `idle-host` and `idle-domains` are defined, the new app version will be mapped to one or more temporary routes depending on th number of `idle-domains`:
+When both `idle-host` and `idle-domains` are defined, the new app version will be mapped to one or more temporary routes depending on the number of `idle-domains`:
+
 ```text
 parameters:
   idle-host: "your-idle-hostname"
@@ -281,7 +304,8 @@ parameters:
 | your.second.idle.domain
 |===
 
-### Execute Deploy
+### Execute deploy
+
 ```bash 
 $ cf bg-deploy ./ -e idle-host-idle-domains.mtaext -f
 ...
@@ -290,7 +314,9 @@ Application "app-blue" started and available at "your-idle-hostname.your.first.i
 ```
 
 ### Examine the result
-Check what are the created routes and which apps are mapped to them
+
+Check what are the created routes and which apps are mapped to them:
+
 ```bash 
 $ cf r
 Getting routes for org xxxx / space xxxx as xxx ...
@@ -300,9 +326,9 @@ xxxx    your-idle-hostname    your.first.idle.domain                        app-
 xxxx    your-idle-hostname    your.second.idle.domain                       app-blue
 ```
 
-## Using combination of `idle-hosts` and `idle-domain`
+## Using a combination of `idle-hosts` and `idle-domain`
 
-NOTE: *This is NOT the reccomended way to create idle route(s)! See <<Using `idle-routes`>>.*
+NOTE: *This is NOT the recommended way to create idle route(s)! See <<Using `idle-routes`>>.*
 
 When both `idle-hosts` and `idle-domain` are defined, the new app version will be mapped to one or more temporary routes depending on the number of `idle-hosts`:
 
@@ -320,7 +346,8 @@ parameters:
 | your.idle.domain
 |===
 
-### Execute Deploy
+### Execute deploy
+
 ```bash 
 $ cf bg-deploy ./ -e idle-hosts-idle-domain.mtaext -f
 ...
@@ -329,7 +356,9 @@ Application "app-blue" started and available at "your-first-idle-hostname.your.i
 ```
 
 ### Examine the result
-Check what are the created routes and which apps are mapped to them
+
+Check what are the created routes and which apps are mapped to them:
+
 ```bash 
 $ cf r
 Getting routes for org xxxx / space xxxx as xxx ...
@@ -339,19 +368,20 @@ xxxx    your-idle-hostname         your.idle.domain                        app-b
 xxxx    your-second-idle-hostname  your.idle.domain                        app-blue
 
 ### Examine the result
-Check what are the created routes and which apps are mapped to them
+
+Check what are the created routes and which apps are mapped to them:
 ```bash 
 $ cf r
 Getting routes for org xxxx / space xxxx as xxx ...
 
 space         host                        domain            port   path   type    apps       services
-xxxx    your-idle-hostname         your.first.idle.domain                        app-blue
-xxxx    your-idle-hostname        your.second.idle.domain                        app-blue
+xxxx          your-idle-hostname          your.first.idle.domain                  app-blue
+xxxx          your-idle-hostname          your.second.idle.domain                 app-blue
 ```
 
 ## Using combination of `idle-hosts` and `idle-domains`
 
-NOTE: *This is NOT the reccomended way to create idle route(s)! See <<Using `idle-routes`>>.*
+NOTE: *This is NOT the recommended way to create idle route(s)! See <<Using `idle-routes`>>.*
 
 When both `idle-hosts` and `idle-domains` are defined, the new app version will be mapped to one or more temporary routes depending on the number of `idle-hosts` and `idle-domains`:
 
@@ -373,7 +403,8 @@ parameters:
 | your.second.idle.domain
 |===
 
-### Execute Deploy
+### Execute deploy
+
 ```bash 
 $ cf bg-deploy ./ -e idle-hosts-idle-domains.mtaext -f
 ...
@@ -382,7 +413,9 @@ Application "app-blue" started and available at "your-first-idle-hostname.your.f
 ```
 
 ### Examine the result
-Check what are the created routes and which apps are mapped to them
+
+Check what are the created routes and which apps are mapped to them:
+
 ```bash 
 $ cf r
 Getting routes for org xxxx / space xxxx as xxx ...
@@ -392,4 +425,10 @@ xxxx    your-first-idle-hostname     your.first.idle.domain                     
 xxxx    your-first-idle-hostname     your.second.idle.domain                       app-blue
 xxxx    your-second-idle-hostname    your.first.idle.domain                        app-blue
 xxxx    your-second-idle-hostname    your.second.idle.domain                       app-blue
+```
+
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
 ```
