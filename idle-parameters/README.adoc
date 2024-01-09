@@ -15,24 +15,24 @@ When idle parameter are not defined the SAP Cloud Deployment service will use de
 ```text
 ${org}-${space}-${app-name}-idle.${default-domain}
 ```
-All these parameters `org`, `space`, `app-name` and `default-domain` are read-only and their values depends on the Cloud Foundry region, org and space.
+All these parameters `org`, `space`, `app-name` and `default-domain` are read-only and their values depend on the Cloud Foundry region, org and space.
 
-In Cloud Foundry application routes include a domain, an optional hostname, and an optional context path. In MTA blue-green deployment, idle routes consists of domain, so-called `idle-domain`, and hostname, so-called `idle-host`. Specifying any of the idle parameters influences the idle route(s). 
+In Cloud Foundry the application routes include a domain, an optional hostname, and an optional context path. In MTA blue-green deployment, idle routes consist of a domain, called `idle-domain`, and hostname, called `idle-host`. Specifying any of the idle parameters influences the idle route(s). 
 
 Basically, the formula is:
 ```text
 idle-route = idle-host.idle-domain
 ```
-It is possible to define combinations of that parameters. However, if you specify `idle-routes` and one or more of the following parameters: `idle-host`,`idle-hosts`,`idle-domain`,`idle-domains`, only `idle-routes` will be used for blue-green deployment. The rest of specified parameters will be ignored during deployment.
+It is possible to use combinations of these parameters. However, if you specify `idle-routes` and one or more of the following parameters: `idle-host`,`idle-hosts`,`idle-domain`,`idle-domains`, only `idle-routes` will be used for blue-green deployment. The rest of the specified parameters will be ignored during deployment.
 
-It is possible to define multiple idle routes:
-* Using parameter `idle-routes` and define multiple values
-* Using "plural" idle parameters `idle-hosts` and/or `idle-domains`, where all idle routes are cartesian product of all idle hosts and all idle domains:
+It is also possible to define multiple idle routes:
+* Using parameter `idle-routes` and defining multiple values.
+* Using "plural" idle parameters `idle-hosts` and/or `idle-domains`, where all idle routes are a cartesian product of all idle hosts and idle domains:
 ```text
 idle-routes = idle-hosts X idle-domains
 ```
 
-NOTE: *If you are using custom idle domain, make sure it is already created and existing in the org! The SAP Cloud Deployment service does not create idle domains. The point is applicable when you define any of parameters `idle-routes`, `idle-domain` or `idle-domains`.*
+NOTE: *If you are using a custom idle domain, make sure it has already been created and is currently present in the org! The SAP Cloud Deployment service does not create idle domains. This is particularly important to remember when defining any of these parameters: `idle-routes`, `idle-domain` or `idle-domains`.*
 
 ## Requirements
 * Awareness of link:../blue-green-deploy-strategy[MTA blue-green deployment]
