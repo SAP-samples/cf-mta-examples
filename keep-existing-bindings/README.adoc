@@ -46,10 +46,15 @@ name           service       ... bound apps                                     
 dummy-service  user-provided     cf-app-keeping-bindings, cf-app-resetting-bindings                                    
 ```
 ### Re-deply to simulate update
+
 ```bash
-  $ cf deploy -f ;
-  # or 
-  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+$ cf deploy -f ;
+```
+
+or
+
+```bash
+$ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
 #### Examine the result
