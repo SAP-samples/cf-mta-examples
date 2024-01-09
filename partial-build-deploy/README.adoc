@@ -2,13 +2,13 @@
 
 # Partial deployment
 
-Partial deployment is a feature allowing fine control over which parts of the MTA are getting processed by the SAP Cloud Deployment service and which not.
-One is able to select only certain module(s) and/or resource(s) for deployment. The SAP Cloud Deployment service takes care to orchestrate the deployment only for the selected parts and skips the rest.
+Partial deployment is a feature allowing fine control over which parts of the MTA will get processed by the SAP Cloud Deployment service and which will not.
+With this feature you can choose to deploy only certain module(s) and/or resource(s). The SAP Cloud Deployment service then orchestrates the deployment only for the selected parts while ignoring the rest.
 
-WARNING: All descriptor validations and dependency cheks on the processed modules are always executed. If the MTA archive is invalid or e.g. an module has a missing dependency (i.e. service instance which should be bound to but does not exist), deployment fails. 
+WARNING: All descriptor validations and dependency checks on the processed modules are always executed. If the MTA archive is invalid or, for example, a module has a missing dependency (i.e. service instance which it should be bound to but does not exist), the deployment fails. 
 
 ## Usage
-To use feature, pass one of the following environment variablest to the `cf deploy` or `cf bg-deploy commands`
+To use this feature, pass one of the following environment variablest to the `cf deploy` or `cf bg-deploy commands`:
 
 |===
 |-m <module name>|
@@ -24,11 +24,12 @@ Deploy all resources.ß
 |===
 
 ## Partial build & assembly
-Only selected moduels would be built and included in the MTA archive. This optimizes built & assembly time, the archive size and respectfully upload & processing time in the SAP Cloud Deployment service. 
+
+Only selected modules would be built and included in the MTA archive. This optimizes built & assembly time, the archive size and respectively upload & processing time in the SAP Cloud Deployment service. 
 
 ### Partial build
 
-If you only maintain a design time descriptor, the mta.yaml file, for your project or your module should be built before it can be deployed using the partial deployment commands, you can use link:https://sap.github.io/cloud-mta-build-tool/usage/#auxiliary-commands[the auxiliary commands of the Cloud MTA archive builder] to prepare the required artifacts: the modules build results and the deployment descriptor, the mtad.yaml file.
+If you only maintain a design time descriptor for your project or module - the `mta.yaml` file, it needs to be built first before you can deploy it using partial deployment commands. In order to prepare the required artifacts, which include the build results for the modules and the deployment descriptor, or the `mtad.yaml` file, you can use link:https://sap.github.io/cloud-mta-build-tool/usage/#auxiliary-commands[the auxiliary commands of the Cloud MTA archive builder].
 
 You can find a few tips about usage of the Cloud MTA Builder commands for the partial build in the "Build only specific MTA modules defined in the mta.yaml file and deploy them" section below.   
 
