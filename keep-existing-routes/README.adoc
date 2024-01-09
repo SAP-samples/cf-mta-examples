@@ -2,7 +2,7 @@
 :toc:
 
 ## Overview
-This example shows how to preserve manual mappings of app routes during MTA deployment. The feature is usually used e.g. when tenant onboarding of multitenant apps creates a route for each tenant, and that route is not maintained e.g. in an *.mtaext - extension descriptor given to the MTA deployer. 
+This example shows how to preserve manual mappings of app routes during MTA deployment. This feature tends to be useful, for instance, when tenant onboarding for multi-tenant apps generates a separate route for each tenant.  The feature is usually used e.g. when tenant onboarding of multitenant apps creates a route for each tenant, and that route is not maintained in an *.mtaext extension descriptor given to the MTA deployer. 
 
 Activated in 3 ways:
 
