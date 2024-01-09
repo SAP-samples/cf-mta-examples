@@ -77,7 +77,7 @@ Application "module-b" started and available at "******-*-module-b.cfapps.sap.ha
 Skipping deletion of services, because the command line option "--delete-services" is not specified.
 Process finished.
 ```
-## Assemble an MTA archive via mtad.yaml and deploy it
+## Assemble an MTA archive via `mtad.yaml` and deploy it
 
 First run the command `mbt assemble` to create the MTAR archive:
 
@@ -107,7 +107,7 @@ NOTE: Since partial deployment requires all the modules' and resources' dependen
 The command for building specific modules using the Cloud MTA Builder Tool is: 
 
 ```bash
-`mbt module-build -m=<list of modules to build> [options]`
+$ mbt module-build -m=<list of modules to build> [options]`
 ```
 
 NOTE: We recommend that you always apply the `-g` option that also generates the deployment descriptor - the `mtad.yaml` file. The `path` property for the selected deployable modules in this `mtad.yaml` will point to the build results of these modules, so you will be able to immediately run the partial deployment command as described in the "Deploy directly from directory via mtad.yaml" section. 
