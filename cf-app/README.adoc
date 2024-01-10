@@ -70,7 +70,7 @@ $ cf env my-cf-app | grep "A_MORE_COMPLEX_VAR" ;
   A_MORE_COMPLEX_VAR: { "can be an entire":"json object", "with": [ "nested": { "elements": "https://each-host-is-registered-for-all-specified-domans.cfapps.sap.hana.ondemand.com" } ]
 ```
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy a.cf.app -f --delete-services
