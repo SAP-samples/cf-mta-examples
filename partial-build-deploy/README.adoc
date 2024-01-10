@@ -187,7 +187,7 @@ Process finished.
 ```
 NOTE: If you expect to redeploy MTA modules/resources multiple times e.g. when doing minor adjustments to them - it may make sense to do a full deployment once and later only update the modules/resources you want. 
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy <mta-id> -f --delete-services
