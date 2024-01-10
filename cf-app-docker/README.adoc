@@ -99,7 +99,7 @@ echo $?
 0
 ```
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy a.cf.app -f --delete-services
