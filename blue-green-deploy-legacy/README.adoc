@@ -298,3 +298,9 @@ Verify that BLUE environent is the production one and serves on the production r
 $ curl https://<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com/router
   BLUE
 ```
+
+## Clean up resources
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
+```
