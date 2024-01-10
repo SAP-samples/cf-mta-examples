@@ -282,7 +282,7 @@ Parameter `keep-existing-routes` preserves the app-protocol as well.
 
 link:../keep-existing-routes[See examples here]
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy <mta-id> -f --delete-services
