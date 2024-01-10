@@ -4,12 +4,12 @@
 
 ## Overview
 
-An MTA archive deployed in SAP Business Technology Platform Cloud Foundry environment may contain multiple types of contnet. The section covers SAP specific types of `application content` that excludes link:../cf-app[standard CF applications].
+An MTA archive deployed in SAP Business Technology Platform Cloud Foundry environment may contain multiple types of content. The section covers SAP specific types of `application content` that excludes link:../cf-app[standard CF applications].
 
 Various types of `application content` are deployed using two different approaches:
 
-* Using temprary deployer application which will receive the content and deploy it to the final backing service.
-* Using service instance and directly deploy content in the final destination
+* Using temprary deployer application which will receive the content and deploy it to the final backing service
+* Using service instance and directly deploying content in the final destination
 
 The following types are supported:
 
@@ -19,7 +19,7 @@ The following types are supported:
 * HDI content -  using deployer application
 * Business Loggging content - using deployer application
 
-## Official documemtation in Help SAP Portal
+## Official documentation in SAP Help Portal
 
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d3e23196166b443db17b3545c912dfc0.html[Content Deployment]
-- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_mtaModuleTypes[Modules] -> MTA Module Types 
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_mtaModuleTypes[MTA Module Types] 

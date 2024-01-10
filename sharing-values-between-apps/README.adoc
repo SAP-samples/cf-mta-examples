@@ -2,7 +2,7 @@
 
 # Sharing configuration values between apps
 
-The MTA deployment descriptor allows for fixed or dynamically generated values to be shared between the described entities (modules & resources). For one module/resource to consume exposed variables from another, it has to declare it's dependency to ti in the `requires` element. As in MTAs apps are defined as modules, this mechanism can be used to e.g. share the url of one app in the environment of another:
+The MTA deployment descriptor allows for fixed or dynamically generated values to be shared between the described entities (modules & resources). For one module/resource to consume exposed variables from another, it has to declare its dependency to it in the `requires` element. As in MTAs apps are defined as modules, this mechanism can be used to share the url of one app in the environment of another:
 
 ```yaml
 modules:
@@ -30,17 +30,20 @@ modules:
 NOTE: See link:mta.yaml[mta.yaml] and link:mtad.yaml[mtad.yaml] as references for working development and deployment descriptors.
 
 ## Requirements
-- understanding of how link:../cf-app/README.adoc[cf applications are modelled in an MTA] 
+- Understanding how link:../cf-app/README.adoc[Cloud Foundry applications are modeled in an MTA] 
 
-## Oficial documemtation in Help SAP Portal
-- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/490c8f71e2b74bc0a59302cada66117c.html[Parameters and Properties page]
+## Official documentation in the Help SAP Portal
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/490c8f71e2b74bc0a59302cada66117c.html[Parameters and Properties]
 
-# Try out
+# Try it out
+
 ## Deploy
-You can directly deploy the built app of this example from the current directory and the modelled link:mtad.yaml[mtad.yaml deployment descriptor]
+
+### Deploy from directory
+You can directly deploy the built app of this example from the current directory and the modeled link:mtad.yaml[mtad.yaml deployment descriptor]:
 
 ```bash
-$cf deploy ./
+$ cf deploy ./
 Deploying multi-target app archive ********/sharing-values-between-apps/my-mta.mtar in org deploy-service / space ******** as ********...
 Uploading 1 files...
   ********/sharing-values-between-apps/my-mta.mtar
@@ -49,38 +52,55 @@ Deploying in org "deploy-service" and space "********"
 ...
 Process finished.
 ```
-### Alternatively build & deploy the mta from mta.yaml
- To build and deploy an MTA from a link:mta.yaml[mta.yaml development descriptor], instead of `cf deploy ./` run the following commands
+
+### Build and deploy from mta.yaml file
+Alternatively, you can build & deploy the MTA from mta.yaml. To build and deploy an MTA from a link:mta.yaml[mta.yaml development descriptor], run the commands described below.
+
+First build & assemble the MTA archive:
+
 ```bash
-#first build & assemble the mta archive
 $ mbt build
 [2020-04-02 23:47:34]  INFO Cloud MTA Build Tool version 1.0.8
 [2020-04-02 23:47:34]  INFO generating the "Makefile_20200402234734.mta" file...
 ...
 [2020-04-02 23:47:34]  INFO the MTA archive generated at: ...
-#then deploy the assembled package
-$cf deploy mta_archives/my-mta_0.0.0-SNAPSHOT.mtar
+```
+
+Then deploy the assembled package:
+
+```bash
+$ cf deploy mta_archives/my-mta_0.0.0-SNAPSHOT.mtar
 ...
- ```
+```
 
 ## Verify the result
 
-```bash
-#let's see the actuall app url
-cf app providing-module | grep routes
-routes:            deploy-service-********-providing-module.cfapps.sap.hana.ondemand.com
+Check the actual app url:
 
-#let's see the generated user value
+```bash
+$ cf app providing-module | grep routes
+routes:            deploy-service-********-providing-module.cfapps.sap.hana.ondemand.com
+```
+
+Let's see the generated user value:
+
+```bash
 $ cf env providing-module | grep my-generated-user
 my-generated-user: u]rPqDU-70y(-E0c
+```
 
-# and let's see how the second app consumed the provided values
+Finally, let's see how the second app consumed the provided values:
 
+```bash
 $ cf env consuming-module | grep m1
 m1-config: static-string-with-suffix
 m1-url: https://deploy-service-********-providing-module.cfapps.sap.hana.ondemand.com
 m1-user: u]rPqDU-70y(-E0c
-
-#consumed as expected :) 
- 
 ```
+
+## Clean up resources
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
+```
+

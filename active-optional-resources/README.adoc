@@ -2,20 +2,21 @@
 
 # Active and Optional Resources
 
-This example shows how to mark service resources as optional/mandatory or active/inactive in order to influence the deployment behaviour
+This example shows how to mark service resources as optional/mandatory or active/inactive in order to influence the deployment behaviour.
 
-Orchestration of the following CF features is covered:
+Orchestration of the following Cloud Foundry features is covered:
 
 - creation of service instances: https://docs.cloudfoundry.org/devguide/services/managing-services.html
 - creation of app bindings to service instances https://docs.cloudfoundry.org/devguide/services/application-binding.html#bind
 
-## Modelling
+## Modeling
 
 ### Service instances
-Service instances are modelled as MTA resources of type `org.cloudfoundry.managed-service`.
+Service instances are modeled as MTA resources of type `org.cloudfoundry.managed-service`.
 
 ### Optional service instances
-In case a service instance is not mandatory for a deployment but should be used if availalble, it can be marked as optional in the mta(d).yaml descriptor
+If a service instance is not mandatory for a deployment but you want it to be used if availalble, it can be marked as `optional` in the `mta(d).yaml` descriptor:
+
 ....
 ...
 - name: my-cf-service-instance-resource
@@ -25,11 +26,12 @@ In case a service instance is not mandatory for a deployment but should be used 
     ...
 ....
 
-NOTE: the value of the `optional` resource attribute can be changed for each deployment by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/extension-descriptor-different-environments[using an extension descriptor]
+NOTE: The value of the `optional` resource attribute can be changed for each deployment by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/extension-descriptor-different-environments[using an extension descriptor].
 
 
 ### Including/excluding services from deployment 
-To give fine control over what get's deployed or not, resources representing service instances can be marked as active or not. This will cause the MTA deployer to process/not-process them at deploy time. 
+Service instance resources can be marked as active or inactive to provide finer control over what is deployed. Depending on their status, the MTA deployer will either process or ignore these resources when deploying.
+
 ....
 ...
 - name: my-cf-service-instance-resource
@@ -39,40 +41,45 @@ To give fine control over what get's deployed or not, resources representing ser
     ...
 ....
 
-NOTE: the value of the `active` resource attribute can be changed for each deployment by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/extension-descriptor-different-environments[using an extension descriptor]
+NOTE: The value of the `active` resource attribute can be changed for each deployment by link:https://github.com/SAP-samples/cf-mta-examples/tree/main/extension-descriptor-different-environments[using an extension descriptor].
 
-NOTE: the `active` attribute can also be specified for resources of type `org.cloudfoundry.existing-service`. In that case it determines if app bindings to the service would be created or not. I.e. if an app module has a reference to an existing-service resource via `requires: ...` and the resource has `active: false`, a service binding between them will not be created during deployment. 
+NOTE: The `active` attribute can also be specified for resources of type `org.cloudfoundry.existing-service`. In that case it determines if app bindings to the service would be created or not. If an app module has a reference to an existing-service resource via `requires: ...` and the resource has `active: false`, a service binding between them will not be created during deployment. 
 
 ## Related examples 
-- service instance and binding creation(configurations) management with MTAs
-- update of service instances and bindings [updating parameters, changing plans and labels; recreation ]
+- service instance and binding creation (configurations) management with MTAs
+- update of service instances and bindings [updating parameters, changing plans and labels; recreation]
 
 ## Requirements
-- access to a CF space with quota for creation of service instances
+- access to a Cloud Foundry space with quota for creation of service instances
 
-## Oficial documemtation in Help SAP Portal
+## Official documentation in SAP Help Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/a36df26b36484129b482ae20c3eb8004.html[Service creation parameters]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/c7b09b79d3bb4d348a720ba27fe9a2d5.html[Service binding parameters]
 
-## Try out
+## Try it out
 ### Deploy the MTA
-The example can be run with 2 approaches for building an MTA. Bothj lead to the same result.
+The example demostrates 2 different approaches that lead to the same result.
 
-#### A. Deeploying from a directory 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+#### Deploying from a directory 
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
 
 ``` bash
-cf deploy ./ -f ;
+$ cf deploy ./ -f ;
 ```
 
 _OR_
 
-First assemble an MTA archive using the link:mtad.yaml[mtad.yaml]` and then deploy the archive:
+You can assemble an MTA archive using the `link:mtad.yaml[mtad.yaml]` by running the following command:
 
 ``` bash
-mbt assemble -t ./ ;
-cf deploy my-mta_0.0.0.mtar ;
+$ mbt assemble -t ./ ;
+```
+
+Then deploy the assembled archive:
+
+``` bash
+$ cf deploy my-mta_0.0.0.mtar ;
 ```
 
 NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
@@ -80,22 +87,26 @@ NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
 NOTE: please adjust the service label and plan values to match the available in your environment
 
 
-#### B. Build and Deploy
-The approach is using development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build MTAR.
-Then the MTAR is deployed.
+#### Build and deploy
+This approach uses development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build an MTAR archive.
 
 ``` bash
-mbt build -p cf -t . ;
-cf deploy a.cf.app_0.0.0.mtar -f ;
+$ mbt build -p cf -t . ;
 ```
 
-NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
+The built MTAR archive is then deployed:
+
+``` bash
+$ cf deploy my-mta_0.0.0.mtar -f ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] for the specific modeling
 
 
 ## Deploy with an inactive resource
 
 ```bash
-cf deploy ./
+$ cf deploy ./
 ...
 Operation ID: 7c8d9c49-badf-11ea-9455-eeee0a9e129b
 Deploying in org "deploy-service" and space "********"
@@ -106,7 +117,7 @@ Deployed MTA version: "0.0.0"
 Service "my-cf-service-instance-resource" is inactive and will not be processed
 ...
 ```
-The cf application get's created. Since the service's resource is inactive, the service is not created and not bound to the app
+The Cloud Foundry application gets created. Since the service's resource is inactive, the service is not created and not bound to the app.
 
 ## Deploy with an active optional & misconfigured service resource
 
@@ -114,7 +125,7 @@ Let's enable the resource and mark it optional, but make sure to make the servic
 See how this is done in link:active_optional.mtaext[active_optional.mtaext]
 
 ```bash
-cf deploy ./ -f -e active_mandatory.mtaext                                                                                                                               6895
+$ cf deploy ./ -f -e active_optional.mtaext                                                                                                                               6895
 Deploying multi-target app archive /Users/********/dev/repos/ds/cf-mta-examples/active-optional-resources/my-mta.mtar in org deploy-service / space ******** as ********...
 
 Uploading 1 files...
@@ -133,7 +144,7 @@ Processing service "my-cf-service-instance-resource"...
 Updating application "my-mta-managed-app-module"...
 ...
 ```
-The cf application get's created. Since the service's resource is inactive, the service is not created and not bound to the app
+The Cloud Foundry application gets created. Since the service's resource is inactive, the service is not created and not bound to the app.
 
 ## Deploy with an active properly configured service resource
 
@@ -141,7 +152,7 @@ Let's enable the resource with an extension descriptor
 See how this is done in link:active_mandatory.mtaext[active_mandatory.mtaext]
 
 ```bash
-cf deploy ./ -f -e active_mandatory.mtaext
+$ cf deploy ./ -f -e active_mandatory.mtaext
 ...
 Operation ID: 6cc12802-bae0-11ea-9455-eeee0a9e129b
 Deploying in org "deploy-service" and space "********"
@@ -153,13 +164,13 @@ Processing service "my-cf-service-instance-resource"...
 Updating application "my-mta-managed-app-module"...
 ...
 ```
-The service instance & app get created and bound as expected
+The service instance & app get created and bound as expected.
 
 ## Print the MTA details to confirm the deployment
 At any step you can check the created deployment with the following:
 
 ``` bash
-$cf mta my-mta 
+$ cf mta my-mta 
 Showing health and status for multi-target app my-mta in org deploy-service / space ******** as ********...
 OK
 Version: 0.0.0
@@ -171,4 +182,10 @@ my-mta-managed-app-module   started           1/1         1G       1G     deploy
 Services:
 name                              service            plan   bound apps                  last operation   
 my-cf-service-instance-resource   application-logs   lite   my-mta-managed-app-module   create succeeded 
+```
+
+## Clean up resources
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
 ```

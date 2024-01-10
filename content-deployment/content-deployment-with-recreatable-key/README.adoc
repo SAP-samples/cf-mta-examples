@@ -14,17 +14,17 @@ image::service_keys_rotation.png[]
 
 More detailed explanation:
 
-1. A user starts the deploy process, passing a mtad.yaml descriptor containing a module of type `com.sap.application.content` indicating content dpeloy (for example - a single content module, and multiple required services, only one of which is marked as the content service with parameter `content-target: true`)
-2. Deploy Service detects the services and service keys part of the MTA that already exist in the target space and org via names and metadata (this includes the content service and any other services required for the deployment)
-3. Deploy Service calculate the required service keys for the deployment from the mtad.yaml modelling (both explicitly defined service keys and implicit ones following the `${moduleName}-${resourceName}-credentials` naming convention). Then compares the calculated keys to the existing ones detected in the previous step - any required keys that are not existing will be created during deploy, any non-required keys that are existing will be deleted after the successful deploy
-4. Deploy Service creates the content service if necessary (in the case of first deploy)
-5. Deploy Service creates all missing service keys and fetches existing keys' credentials (as part of the content service's credentials there is a `content_endpoint` parameter, used for the content deploy)
-6. Deploy Service performs the content deploy - making calls to the content_endpoint and passing service keys' credentials as configuration
-7. After successful content deploy, Deploy Service deletes the existing service keys that weren't part of the MTA model in mtad.yaml (assuming keys were part of old deployment)
+1. A user starts the deploy process, passing a `mtad.yaml` descriptor containing a module of type `com.sap.application.content` indicating content deploy. For example - a single content module and multiple required services, only one of which is marked as the content service with parameter `content-target: true`.
+2. Deploy Service detects the services and service keys part of the MTA that already exist in the target space and org via names and metadata. This includes the content service and any other services required for the deployment.
+3. Deploy Service calculates the service keys that are required for the deployment from the `mtad.yaml` modeling. This includes service keys that are explicitly defined and ones that are implied, following the `${moduleName}-${resourceName}-credentials` naming convention. It then compares the calculated keys to the existing ones detected in the previous step. Any required keys that do not exist will be created during deployment. The existing non-required keys will be deleted after the successful deployment.
+4. If the MTA is deployed for the first time, Deploy Service creates the content service.
+5. Deploy Service creates all missing service keys and fetches existing keys' credentials. As part of the content service's credentials there is a `content_endpoint` parameter, used for the content deployment.
+6. Deploy Service performs the content deployment - making calls to the `content_endpoint` and passing service keys' credentials as configuration.
+7. After successful content deployment, Deploy Service deletes the existing service keys that weren't part of the MTA model in the `mtad.yaml` file, assuming keys were part of an old deployment.
 
 ## Manual Modeling
 
-Since the recreation mechanism works by comparing the keys by name, all implicit service keys will be reused, keeping existing behaviour in place. Any explicitly named service keys in mtad.yaml that were manually renamed in descriptor will be recreated. For explicit service keys, you can either use the `service-key` parameter in the required section or use an `existing-service-key` typed resource. E.g.
+Since the recreation mechanism works by comparing the keys by name, all implicit service keys will be reused, keeping existing behaviour in place. Any explicitly named service keys in the `mtad.yaml` descriptor, that were manually renamed, will be recreated. For explicit service keys, you can either use the `service-key` parameter in the required section or use an `existing-service-key` typed resource. See the example below:
 
 ```yaml
 ...
@@ -51,9 +51,10 @@ resources:
 
 ## Automated Modeling
 
-To use a more automated way of flagging a service key for recreation without the need for manual renaming you can use the system parameter `${timestamp}` as part of its name. This ensures that key will be unique at time of deployment and considered a new key, while the older one will be detected and deleted (the deletion happens after the new one is created and content deplpoyment finished so as not to invalidate any credentials in use). The parameter `${timestamp}` is resolved to the current timestamp when the MTA module is processed in the beginning of the MTA deployment.
+To use a more automated way of flagging a service key for recreation without the need for manual renaming you can use the system parameter `${timestamp}` as part of its name. This ensures that key will be unique at the time of deployment and will be considered a new key, while the older one will be detected and deleted. The deletion happens after the new service key is created and the content deplpoyment is finished. This approach ensures that no currently used credentials become invalidated. The parameter `${timestamp}` is resolved to the current timestamp when the MTA module is processed in the beginning of the MTA deployment.
 
-Example of this modeling (also used in the provided example mtar descriptor)
+Example of this modeling also used in the provided example `mtar` descriptor:
+
 ```yaml
 ...
 modules:
@@ -69,14 +70,17 @@ modules:
               <configuration>
 ...
 ```
+
 ## Try it out
 
-Deploy the provided mtar in cf to demo the automated service key rotation
+Deploy the provided `mtar` in Cloud Foundry to demo the automated service key rotation:
+
 ```bash
 cf deploy ./test-destination-gacd-x509.mtar
 ```
 
-Verify the destination service key that was created
+Verify the destination service key that was created:
+
 ```bash
 cf service-keys my_destination_service
 ...
@@ -84,7 +88,8 @@ cf service-key my_destination_service <service-key-name-timestamp1>
 ...
 ```
 
-Do a redeploy of the same mta (observe the messages in the process log), e.g.
+Do a redeploy of the same MTA and observe the messages in the process log:
+
 ```bash
 cf deploy ./test-destination-gacd-x509.mtar
 ...
@@ -94,7 +99,8 @@ Deleting old service keys for content deploy "[<service-key-name-timestamp1>]"..
 ...
 ```
 
-Verify the destination service key that was created
+Verify the destination service key that was created:
+
 ```bash
 cf service-keys my_destination_service
 ...
@@ -102,7 +108,13 @@ cf service-key my_destination_service <service-key-name-timestamp2>
 ...
 ```
 
-## Official related documemtation in Help SAP Portal
+## Clean up resources
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
+```
+
+## Official related documentation in SAP Help Portal
 
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d3e23196166b443db17b3545c912dfc0.html[Content Deployment]
-- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_mtaModuleTypes[Modules] -> MTA Module Types 
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_mtaModuleTypes[MTA Module Types] 

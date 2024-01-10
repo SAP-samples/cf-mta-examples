@@ -1,34 +1,38 @@
 :toc:
 
-# Managing CF Apps with an MTA
+# Managing CF apps with an MTA
 
-This example shows how to model a simple CF application in an MTA, deploy it set some attributes and configure the deployer behavior
+This example shows how to model a simple Cloud Foundry application (CF app) in an MTA, deploy it, set specific attributes and configure the deployer behavior.
 
-# Try out
+# Try it out
 
-## Deploy an MTA containing an cf app.
+## Deploy an MTA containing a CF app
 
-The example demostrate 2 different approaches that lead to the same result.
+The example demostrates 2 different approaches that lead to the same result.
 
 ### Deploy from directory
-That approach uses deployment descritpr `mtad.yaml` and ready application binaries `appBits.zip`:
+This approach uses deployment descriptor `mtad.yaml` and ready application binaries `appBits.zip`:
 ``` bash
-cf deploy ./ -f ;
+$ cf deploy ./ -f ;
 ```
-### Build and Deploy
-The approach is using development descriptor `mta.yaml`and application binaries `appBits.zip` to build MTAR.
-Then the MTAR is deployed.
+### Build and deploy
+This approach uses development descriptor `mta.yaml` and application binaries `appBits.zip` to build an MTAR archive:
 
 ``` bash
-mbt build -p cf -t . ;
-cf deploy a.cf.app_0.0.0.mtar -f ;
+$ mbt build -p cf -t . ;
+```
+
+The built MTAR is then deployed:
+
+``` bash
+$ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
 NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
 
 ## Examine the result
 
-### List the deployed mta
+### List the deployed MTA
 ```bash
 $ cf mta a.cf.app ;
 Showing health and status ...
@@ -41,7 +45,7 @@ my-cf-app   started           1/1         1G       1G     orgname-spacename-my-m
 
 ### List app status and attributes 
 ``` bash
-$cf app my-cf-app ;
+$ cf app my-cf-app ;
 Showing health and status for app my-cf-app in org ********** / space ******** as **********...
 
 name:              my-cf-app
@@ -60,8 +64,14 @@ memory usage:   1024M
 
 ### List app env variables and find the defined properties in the User Provided section 
 ``` bash
-$cf env my-cf-app | grep "MY_CF_APP_ENV_VARIABLE" ;
+$ cf env my-cf-app | grep "MY_CF_APP_ENV_VARIABLE" ;
   MY_CF_APP_ENV_VARIABLE: HELLO MTA
-$cf env my-cf-app | grep "A_MORE_COMPLEX_VAR" ;
+$ cf env my-cf-app | grep "A_MORE_COMPLEX_VAR" ;
   A_MORE_COMPLEX_VAR: { "can be an entire":"json object", "with": [ "nested": { "elements": "https://each-host-is-registered-for-all-specified-domans.cfapps.sap.hana.ondemand.com" } ]
+```
+
+## Clean up resources
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy a.cf.app -f --delete-services
 ```

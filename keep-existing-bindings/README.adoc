@@ -15,48 +15,78 @@ modules:
 
 ## Official Documentation
 
-* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_moduleSpecificParameters[Modules] -> Table Module-Specific Parameters
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_moduleSpecificParameters[Module-Specific Parameters]
 
 NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current directory.
 
-## Try out
+## Try it out
 
 ### Initial deployment
-In that part the MTA will be initially deployed when two applications are deployed and one service instance. There is not binding between them.
+In this part the MTA will initially be deployed with two applications and one service instance. However, there is no binding between them.
 
-directly from an mtad.yaml
+You can deploy it directly from an `mtad.yaml` file:
+
 ```bash
-  $ cf deploy ./ -f ;
+$ cf deploy ./ -f ;
 ```
-or start from an mta.yaml:
+
+Alternatively, you can build an MTAR archive from the `mta.yaml` file:
+
 ```bash
-  $ mbt build -p cf -t . ;
-  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+$ mbt build -p cf -t . ;
 ```
+
+And then deploy the built MTAR archive:
+
+```bash
+$ cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
 ### Manually bind service instance
+
+Run the following commands:
+
 ```bash
-  $ cf bind-service cf-app-keeping-bindings dummy-service
-  $ cf bind-service cf-app-resetting-bindings dummy-service
+$ cf bind-service cf-app-keeping-bindings dummy-service
+$ cf bind-service cf-app-resetting-bindings dummy-service
 ```
+
 #### Examine the result
+
+To examine the result, run the following command:
+
 ```bash
-  $ cf services
+$ cf services
 Getting services in org ...
 name           service       ... bound apps                                         ...  
 dummy-service  user-provided     cf-app-keeping-bindings, cf-app-resetting-bindings                                    
 ```
+
 ### Re-deply to simulate update
+
 ```bash
-  $ cf deploy -f ;
-  # or 
-  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+$ cf deploy -f ;
+```
+
+or
+
+```bash
+$ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
 #### Examine the result
+
 Verify that  app `cf-app-keeping-bindings` has the binding preserved and app `cf-app-keeping-bindings` has lost the binding.
+
 ```bash
-  $ cf services
+$ cf services
 Getting services in org ...
 name           service       ... bound apps                                         ...  
 dummy-service  user-provided     cf-app-keeping-bindings                                     
+```
+
+## Clean up resources
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
 ```

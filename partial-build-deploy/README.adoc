@@ -2,13 +2,13 @@
 
 # Partial deployment
 
-Partial deployment is a feature allowing fine control over which parts of the MTA are getting processed by the SAP Cloud Deployment service and which not.
-One is able to select only certain module(s) and/or resource(s) for deployment. The SAP Cloud Deployment service takes care to orchestrate the deployment only for the selected parts and skips the rest.
+Partial deployment is a feature allowing fine control over which parts of the MTA will get processed by the SAP Cloud Deployment service.
+With this feature you can choose to deploy only certain module(s) and/or resource(s). The SAP Cloud Deployment service then orchestrates the deployment only for the selected parts while ignoring the rest.
 
-WARNING: All descriptor validations and dependency cheks on the processed modules are always executed. If the MTA archive is invalid or e.g. an module has a missing dependency (i.e. service instance which should be bound to but does not exist), deployment fails. 
+WARNING: All descriptor validations and dependency checks on the processed modules are always executed. If the MTA archive is invalid or, for example, a module has a missing dependency (i.e. service instance which it should be bound to but does not exist), the deployment fails. 
 
 ## Usage
-To use feature, pass one of the following environment variablest to the `cf deploy` or `cf bg-deploy commands`
+To use this feature, pass one of the following environment variablest to the `cf deploy` or `cf bg-deploy commands`:
 
 |===
 |-m <module name>|
@@ -24,22 +24,23 @@ Deploy all resources.ß
 |===
 
 ## Partial build & assembly
-Only selected moduels would be built and included in the MTA archive. This optimizes built & assembly time, the archive size and respectfully upload & processing time in the SAP Cloud Deployment service. 
+
+Only selected modules would be built and included in the MTA archive. This optimizes built & assembly time, the archive size and respectively the upload & processing time in the SAP Cloud Deployment service. 
 
 ### Partial build
 
-If you only maintain a design time descriptor, the mta.yaml file, for your project or your module should be built before it can be deployed using the partial deployment commands, you can use link:https://sap.github.io/cloud-mta-build-tool/usage/#auxiliary-commands[the auxiliary commands of the Cloud MTA archive builder] to prepare the required artifacts: the modules build results and the deployment descriptor, the mtad.yaml file.
+If you only maintain a design time descriptor for your project or module - the `mta.yaml` file, it needs to be built before you can deploy it using partial deployment commands. In order to prepare the required artifacts, which include the build results for the modules and the deployment descriptor, or the `mtad.yaml` file, you can use link:https://sap.github.io/cloud-mta-build-tool/usage/#auxiliary-commands[the auxiliary commands of the Cloud MTA archive builder].
 
-You can find a few tips about usage of the Cloud MTA Builder commands for the partial build in the "Build only specific MTA modules defined in the mta.yaml file and deploy them" section below.   
+You can find a few tips about usage of the Cloud MTA Builder commands for the partial build in the "Build only specific MTA modules defined in the `mta.yaml` file and deploy them" section below.   
 
 ### Partial assembly
-If staring from mtad.yaml, the cf deploy command is capable of assembling an MTA archive just before deployment. The list of modules passed to the (bg-)deploy command is used to select which would be included in the assembled archive.
+If initiated from a `mtad.yaml`, the `cf deploy` command is capable of assembling an MTA archive just before deployment. The list of modules passed to the `(bg-)deploy` command is used to determine which would be included in the assembled archive.
 
-NOTE: the modules `path` argument has to be maintained for assembly to work. All selected modules should have such pointing to properly build module bits.
+NOTE: For the assembly to work properly, it's necessary to maintain the `path` argument in the modules. All selected modules should have this `path` argument pointing to the appropriate module bits.
 
 ## Partial deploy
 
-In the current directory you'll find example cf app payload with the following structure:
+In the current directory you'll find an example Cloud Foundry app payload with the following structure:
 
 image::MTAstructure.png[mta structure diagram]
 
@@ -50,10 +51,12 @@ image::MTAstructure.png[mta structure diagram]
 ## Official Documentation
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/65ddb1b51a0642148c6b468a759a8a2e.html[Multitarget Application Commands for the Cloud Foundry Environment]
 
-# Try out
+# Try it out
 
-## Deploy directly from directory, via mtad.yaml 
-In the current directory, run `cf deploy -m module-b -r service-2`. This will automatically assemble an MTA archive and deploy it 
+## Deploy directly from directory, via `mtad.yaml` 
+
+In the current directory, run the command `cf deploy -m module-b -r service-2`. This will automatically assemble an MTA archive and deploy it:
+
 ```bash
 $ cf deploy -m module-b -r service-2
 Deploying multi-target app archive */mta-examples/hello-world.mtar in org ******** / space ******** as **** ...
@@ -74,50 +77,58 @@ Application "module-b" started and available at "******-*-module-b.cfapps.sap.ha
 Skipping deletion of services, because the command line option "--delete-services" is not specified.
 Process finished.
 ```
-## Assemble MTA archive via mtad.yaml and deploy
-First use `mbt assemble` to create the *.mtar and than deploy it with `cf deploy`.
+## Assemble an MTA archive via `mtad.yaml` and deploy it
 
-NOTE: This approach is less efficient, as all modules are included in the MTA archive and uploaded to the SAP Cloud Deployment service. Regardless that only the selected ones are processed. 
+First run the command `mbt assemble` to create the MTAR archive:
+
 ```bash
-$$ mbt assemble
+$ mbt assemble
   INFO assembling the MTA project...
   INFO copying the MTA content...
   INFO generating the metadata...
   INFO generating the MTA archive...
   INFO the MTA archive generated at: /Users/i076083/git/mta_examples/partial-build-deploy/mta_archives/hello-world_1.0.0.mtar
   INFO cleaning temporary files...
+```
+
+Then deploy the assembled MTAR archive:
+
+```bash
 $ cf deploy mta_archives/hello-world_1.0.0.mtar -m module-c -r service-3
   ...
 ```
-## Build only specific MTA modules defined in the mta.yaml file and deploy them
 
-NOTE: Since partial deploymnet requires that all the modules' and resources' dependencies are resolved, we recommend you first build and deploy the complete MTA project (using the `mbt build` command to create the MTA archive (`mtar`) file and the `cf deploy` command to deploy it) and then build and deploy only the changing modules.
+NOTE: This approach is less efficient, as all modules are included in the MTA archive and uploaded to the SAP Cloud Deployment service, while only the selected ones are processed. 
+
+## Build only specific MTA modules defined in the `mta.yaml` file and deploy them
+
+NOTE: Since partial deployment requires all the modules' and resources' dependencies to be resolved, we recommend that you first build and deploy the complete MTA project (using the `mbt build` command to create the MTA archive (`mtar`) file and the `cf deploy` command to deploy it) and then build and deploy only the changing modules.
 
 The command for building specific modules using the Cloud MTA Builder Tool is: 
+
 ```bash
-`mbt module-build -m=<list of modules to build> [options]`
+$ mbt module-build -m=<list of modules to build> [options]`
 ```
 
+NOTE: We recommend that you always apply the `-g` option that also generates the deployment descriptor - the `mtad.yaml` file. The `path` property for the selected deployable modules in this `mtad.yaml` will point to the build results of these modules, so you will be able to immediately run the partial deployment command as described in the "Deploy directly from directory via mtad.yaml" section. 
 
-NOTE: We recommend you to always apply `-g` option that generates also the deployment descriptor, the `mtad.yaml` file. The `path` property for the selected deployable modules in this `mtad.yaml` will point to the build results of these modules, so you will be able to immediately run the partial deployment command as described in the "Deploy directly from directory, via mtad.yaml" section. 
-
-
-In the examples below we demonstrate how to use the partial build command in different use cases. These examples are based on the project straucture described above and this link:mta.yaml[mta.yaml] file.
-
+In the examples below we demonstrate how to use the partial build command in different use cases. These examples are based on the project structure described above and this link:mta.yaml[mta.yaml] file.
 
 ### Building a single independent module
+
 ```bash
 $ mbt module-build -m module-b -g
 ```
 
 ### Buiding several independent modules
+
 ```bash
 $ mbt module-build -m module-b,module-c -g
-
 ```
+
 ### Buiding a module with build dependencies
 
-Build dependencies are defined via the `requires` property of the `build-parameters` section in the `mta.yaml` file. For more information, read link:https://sap.github.io/cloud-mta-build-tool/configuration/#configuring-build-order[here].
+Build dependencies are defined via the `requires` property of the `build-parameters` section in the `mta.yaml` file. You can find more information link:https://sap.github.io/cloud-mta-build-tool/configuration/#configuring-build-order[here].
 
 In the sample project, `module-a` depends on modules `module-b` and `module-c`.
 
@@ -126,26 +137,28 @@ You can build the `module-a` module with all its dependencies using the followin
 ```bash
 $ mbt module-build -m module-a -a -g
 ```
+
 The `module-b` and `module-c` modules will be built before the tool builds the `module-a` module.
 
-If you change now the `module-b` module and would like to re-build and re-deploy the `module-a` module, use the following command:
+If you now change the `module-b` module and would like to re-build and re-deploy the `module-a` module, use the following command:
 
 ```bash
 $ mbt module-build -m module-a,module-b -g
 ```
+
 The tool will build the specified modules only in the correct order.
 
-For the complete information about the Cloud MTA Build Tools partial build options, read link:https://sap.github.io/cloud-mta-build-tool/usage/#auxiliary-commands[here]
+You can find the complete information about the Cloud MTA Build Tools partial build options link:https://sap.github.io/cloud-mta-build-tool/usage/#auxiliary-commands[here].
 
-Once you have your modules built and the mtad.yaml file generated, you can use the partial deployment command as described in the "Deploy directly from directory, via mtad.yaml" section. 
+Once you have your modules built and the `mtad.yaml` file generated, you can use the partial deployment command as described in the "Deploy directly from directory via mtad.yaml" section. 
 
 
 
 ## Dependency validations
 
-WARNING: When selecting an MTA module/resource for processing, make sure it's dependencies are also selected or are already existing.
+WARNING: When selecting an MTA module/resource for processing, make sure its dependencies are also selected or are already existing.
  
-E.g. If in a clean environment, only a module is selected, without the services it depends on - deployment would fail
+If in a clean environment, for example, a module is selected without the services it depends on, the deployment would fail.
 
 ```bash
 $ cf undeploy hello-world --delete-services -f
@@ -173,3 +186,10 @@ Application "module-b" started and available at "******-*-module-b.cfapps.sap.ha
 Process finished.
 ```
 NOTE: If you expect to redeploy MTA modules/resources multiple times e.g. when doing minor adjustments to them - it may make sense to do a full deployment once and later only update the modules/resources you want. 
+
+## Clean up resources
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
+```
+

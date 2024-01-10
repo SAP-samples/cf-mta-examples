@@ -5,13 +5,13 @@
 The example will deployment of HTML5 Application  Content via MTA.
 It demonstrates how to deploy content using directly HTML5 Application Repository service
 
-## Oficial documemtation in Help SAP Portal
+## Official documentation in SAP Help Portal
 
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d3e23196166b443db17b3545c912dfc0.html[Content Deployment]
 
 ## Usage
 
-The following MTA modeling in development (mta.yaml) or deployment (mtad.yaml) descriptors utilizes the feature
+The following MTA modeling in development (`mta.yaml`) or deployment (`mtad.yaml`) descriptors utilizes the feature:
 
 ```yaml
 ...
@@ -26,28 +26,28 @@ resources:
  - name: content-consuming-service-instance
    type: org.cloudfoundry.existing-service 
 ```
-The module, representing the content, is defined of `type: com.sap.application.content`. The service(s) to which content is deployed are listed in the module's `requires` list and are depicted with a parameter `content-target: true`
+The module, representing the content, is defined by `type: com.sap.application.content`. The service(s) to which content is deployed are listed in the module's `requires` list and are depicted with a parameter `content-target: true`.
 
-The required resource should be of type coresponding to a CF service instance, be it `org.cloudfoundry.existing-service`, `org.cloudfoundry.managed-service`,  or any type extending managed-service. 
+The required resource should be of type corresponding to a Cloud Foundry service instance, be it `org.cloudfoundry.existing-service`, `org.cloudfoundry.managed-service`,  or any type extending managed-service. 
 
 ### Usage with existing service keys
 
-While the above example would create a service key in order to take the service credentials needed to deploy the content to the target service, it is also possible to model the MTA to use an already existing service key as shown in link:with-existing-key[Generic Application Content Deployment With Existing Key]
+While the example above would create a service key in order to take the service credentials needed to deploy the content to the target service, it is also possible to model the MTA to use an already existing service key as shown in link:with-existing-key[Generic Application Content Deployment With Existing Key].
 
 ## Example of content deployment
-In the current directory you'll find example MTA. It contains a single zip archive, which in term containing three other archives of HTML5 Application content. 
+In the current directory you'll find example MTA. The zip archive contains three other archives of HTML5 Application content. 
 
 * deployment descriptor: link:mtad.yaml[mtad.yaml]
 
-NOTE: Though the example showcases HTML5 Application content, this generic modelling and mechanism works with a variaty of SCP service contents
+NOTE: Though the example showcases HTML5 Application content, this generic modeling and mechanism works with a variety of SCP service contents.
 
 ## Try it out
 The example demonstrates 2 different approaches, leading to the same result.
 
 ### Deploy directly from directory
-The approach uses deployment descriptor `mtad.yaml` and existing app binary.
+This approach uses deployment descriptor `mtad.yaml` and existing app binary.
 
-In the current directory, run `cf deploy`. This will automatically assemble an MTA archive and deploy it 
+In the current directory, run `cf deploy`. This will automatically assemble an MTA archive and deploy it:
 ```bash
 $ cf deploy ./
 Deploying multi-target app archive */mta-examples/ui5MTA.mtar in org ******** / space ******** as ********...
@@ -67,11 +67,12 @@ Deploying content module "ui5module" in target service "ui5-repo-service-instanc
 Skipping deletion of services, because the command line option "--delete-services" is not specified.
 Process finished.
 ```
-### Assemble MTA archive and deploy
-The approach uses deployment descriptor `mtad.yaml` and Cloud MTA Build Tool uses it to package the ready binaries in MTAR.
-Then the newly generated MTAR is used for deployment.
 
-First use `mbt assemble` to create the *.mtar and than deploy it with `cf deploy`.
+### Assemble MTA archive and deploy
+This approach uses deployment descriptor `mtad.yaml` and Cloud MTA Build Tool uses it to package the ready binaries into an MTAR archive.
+The newly generated MTAR is then deployed.
+
+First use `mbt assemble` to create the *.mtar archive and than deploy it with `cf deploy`:
  
 ```bash
 $ mbt assemble 
@@ -87,11 +88,11 @@ $ cf deploy mta_archives/ui5MTA_0.0.1.mtar
 
 ## Build MTA archive via mta.yaml
 
-If you maintain you project's sources in an MTA format and have the mta.yaml descriptor where content module is modeled as described above, you can create an MTA archive for this project using a regular build command of the MTA build tool of your choice.  Since we recommend the new  link:https://github.com/SAP/cloud-mta-build-tool[Cloud MTA Build tool] for buiding MTA projects, here is the example of such command: `mbt build`.
+If you maintain you project's sources in an MTA format and have the `mta.yaml` descriptor where content module is modeled as described above, you can create an MTA archive for this project using a regular build command of the MTA build tool of your choice.  Since we recommend the new link:https://github.com/SAP/cloud-mta-build-tool[Cloud MTA Build Tool] for buiding MTA projects, the command in our example is `mbt build`.
 
 ### Modeling and building of HTML5 modules
 
-If you have several HTML5 modules in your project and would like to deploy their content into HTML5 repository, you need to adjust the build process as follows:
+If you have several HTML5 modules in your project and would like to deploy their content into a HTML5 repository, you need to adjust the build process as follows:
 
 * The build scripts of each HTML5 module should produce a `zip` archive.
 For example, if you are using a Grunt build based on `@sap/grunt-sapui5-bestpractice-build`:

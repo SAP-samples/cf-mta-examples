@@ -2,27 +2,27 @@
 
 # Configure same MTA for different environments
 
-Configuration of the MTA is done with the standard approach using MTA extension descriptors. Extension descriptors are complementary files to the main deployment descriptor that provide additional data. They have file extension .mtaext and are external for MTA archive .mtar. Extension descriptors can be used to provide deployment specific information, for example credentials to external services.
+Configuration of the MTA is done with the standard approach using MTA extension descriptors. Extension descriptors are complementary files to the main deployment descriptor that provide additional data. They have file extension `.mtaext` and are external for MTA archive `.mtar`. Extension descriptors can be used to provide deployment specific information, for example credentials to external services.
 
-For the test purpose of the example, we will use a MTA containing a simple application, simple service and binding between them.
-The MTA will be deployed in DEV and PROD environments using different extension descriptors, that result in different set-ups.
+For the test purpose of the example, we will use an MTA containing a simple application, simple service and binding between them.
+The MTA will be deployed in DEV and PROD environments using different extension descriptors resulting in different set-ups.
 
 ## [Optional] Requirements
 - Quota for application
-- Quota for different service plans. The example use service offering "application-logs", free service plan "lite" and paid service plan "standard". You can try out with different service offering and plan at your convenience.
+- Quota for different service plans. The example uses service offering "application-logs", free service plan "lite" and paid service plan "standard". You can try it out with a different service offering and plan at your convenience.
 
 ## Official documentation in SAP Help Portal
 - link:https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/50df803465324d36851c79fd07e8972c.html[Defining MTA Extension Descriptors]
 
-# Try out
+# Try it out
 
 ## Deploy MTAR without extension descriptors
 
-The first step of the example, shows unsuccessful attempt to deploy the MTA without extension descriptor.
+The first step of the example shows an unsuccessful attempt to deploy the MTA without an extension descriptor.
 
-### Deploy with a deployment descriptor (mtad.yaml)
+### Deploy with a deployment descriptor (`mtad.yaml`)
 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
 
 ``` bash
 $ cf deploy -f
@@ -31,7 +31,7 @@ Error building cloud model: Service "my-service" has missing required parameter:
 ...
 ```
 
-Note that deployment fails expectedly because MTA defines required parameter `service-plan` for resource `my-service`, that represents service instance. This is done with MTA parameter metadata, called `optional`. By default, `optional` is `false` and setting it to `true`, make certain parameter optional and can be declared empty in the descriptor.
+Note that deployment fails expectedly because the MTA defines as required the parameter `service-plan` for resource `my-service`, which represents a service instance. This is done with the MTA parameter metadata called `optional`. By default, the `optional` parameter is set to `false`. Setting it to `true` makes the parameter it refers to optional. Thus the field `service-plan` can be left empty in the descriptor.
 
 ```text
 - name: my-service
@@ -45,7 +45,7 @@ Note that deployment fails expectedly because MTA defines required parameter `se
 
 ```
 
-The idea is to oblige the operator, who deploys the MTA to specify the service plan according to the region, organization and space. For example in DEV env free and small service plan is used where in PROD environment, paid and supported plan is used.
+The goal is to make the operator deploying the MTA match the service plan to the specific region, organization and space. For example, in a development working environment (DEV), it's usually the free and small service plan that is used. In production environment (PROD), on the other hand, the service plans used are paid and supported.
 
 ### Verify the result
 
@@ -53,9 +53,9 @@ Make sure that nothing is created in the space with `cf apps` and `cf services`.
 
 ## Deploy MTAR in DEV environment
 
-This step of the example shows how the MTA is deployed in DEV enviroment where the goal is to use minimal resources for application and use free service plan.
+This step of the example shows how the MTA is deployed in DEV environment where the goal is to use minimal resources for the application and use a free service plan.
 
-### Deploy with a deployment descriptor (mtad.yaml)
+### Deploy with a deployment descriptor (`mtad.yaml`)
 
 That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptor for DEV env `link:dev.mtaext[dev.mtaext]`:
 
@@ -84,25 +84,25 @@ Starting application "my-app"...
 
 ### Verify the result
 
-Check that app and service instance are created, and service has the plan `lite`, defined in the extension descriptor:
+Check that the app and service instance are created, and service plan is `lite`, defined in the extension descriptor:
 
 ``` bash
 $ cf s
 ...
-name              service            plan             bound apps       last operation     ...
-my-service        application-logs   lite             my-app           create succeeded   ...
+name             offering             plan           bound apps       last operation     ...
+my-service       application-logs     lite           my-app           create succeeded   ...
 
 $ cf a
 ...
-name             requested state   instances   memory   disk   urls
-my-app           started           1/1         1G       1G     ...
+name             requested state      processes      routes
+my-app           started              web:1/1        ...
 ```
 
 NOTE: The application has 1 instance, that is defined in the `mtad.yaml`. It uses 1G memory and 1G disk that is default for the platform.
 
 ## Deploy MTAR in PROD environment
 
-This step of the example shows how the MTA is deployed in PROD enviroment using  `link:prod.mtaext[prod.mtaext]`. The goal is that app and service can handle more load without performance issues. The application is scaled horizontally on 2 instances and the service uses stable paid service plan `standard`:
+This step of the example shows how the MTA is deployed in PROD enviroment using  `link:prod.mtaext[prod.mtaext]`. The goal is that app and service can handle more load without performance issues. The application is scaled horizontally on 2 instances and the service uses the stable paid service plan `standard`:
 
 .prod.mtaext
 ```text
@@ -123,11 +123,11 @@ resources:
 
 ```
 
-NOTE: Extension descriptor extends deployment descriptor id `extends: my-mta`
+NOTE: The extension descriptor extends the deployment descriptor id `extends: my-mta`
 
 ### Deploy with a deployment descriptor (mtad.yaml)
 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptor for PROD env `link:prod.mtaext[prod.mtaext]`:
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptor for PROD environment `link:prod.mtaext[prod.mtaext]`:
 
 ``` bash
 $ cf deploy -f -e prod.mtaext
@@ -154,23 +154,23 @@ Starting application "my-app"...
 
 ### Verify the result
 
-Check that app and service instance are created, and service has the plan `standard`, defined in the extension descriptor:
+Check that app and service instance are created and service has the plan `lite` defined in the extension descriptor:
 
 ``` bash
 $ cf s
 ...
-name              service            plan             bound apps       last operation     ...
-my-service        application-logs   standard         my-app           create succeeded   ...
+name             offering             plan           bound apps       last operation     ...
+my-service       application-logs     lite           my-app           create succeeded   ...
 
 $ cf a
 ...
-name             requested state   instances   memory   disk   urls
-my-app           started           2/2         1G       1G     ...
+name             requested state      processes      routes
+my-app           started              web:2/2        ...
 ```
 
 ## Deploy MTAR in PROD environment, scale vertically
 
-This step of the example shows how the MTA is deployed in PROD enviroment using 2 extension descriptors `link:prod.mtaext[prod.mtaext]` and `link:prod-scale-vertically.mtaext[prod-scale-vertically.mtaext]`. The goal is that app and service can handle more load without performance issues. The application is scaled horizontally on 2 instances and vertically using 2G memory:
+To handle an increased workload without compromising performance, the application and service will be deployed to the PROD environment using two extension descriptors: `link:prod.mtaext[prod.mtaext]` and `link:prod-scale-vertically.mtaext[prod-scale-vertically.mtaext]`. The application is scaled horizontally on 2 instances and vertically using 2G of memory:
 
 .prod-scale-vertically.mtaext
 ```text
@@ -185,13 +185,13 @@ modules:
     memory: 2G
 ```
 
-NOTE: `prod-scale-vertically.mtaext` extends `prod.mtaext` that extends deployment descriptor `mtad.yaml`. It makes extension descriptor chain.
+NOTE: `prod-scale-vertically.mtaext` extends `prod.mtaext` that extends deployment descriptor `mtad.yaml`. It makes an extension descriptor chain.
 
 NOTE: `memory` parameter is not defined in the deployment descriptor, however it is considered during deployment.
 
-### Deploy with a deployment descriptor (mtad.yaml)
+### Deploy with a deployment descriptor (`mtad.yaml`)
 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptors for PROD env `link:prod.mtaext[prod.mtaext]` and `link:prod-scale-vertically.mtaext[prod-scale-vertically.mtaext]`:
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and 2 extension descriptors for PROD environment: `link:prod.mtaext[prod.mtaext]` and `link:prod-scale-vertically.mtaext[prod-scale-vertically.mtaext]`:
 
 ``` bash
 $ cf deploy -f -e prod.mtaext,prod-scale-vertically.mtaext
@@ -224,11 +224,17 @@ Check that app and service instance are created, and app has values defined in b
 ``` bash
 $ cf s
 ...
-name              service            plan             bound apps       last operation     ...
-my-service        application-logs   standard         my-app           create succeeded   ...
+name             offering             plan           bound apps       last operation     ...
+my-service       application-logs     lite           my-app           create succeeded   ...
 
 $ cf a
 ...
-name             requested state   instances   memory   disk   urls
-my-app           started           2/2         2G       1G     ...
+name             requested state      processes      routes
+my-app           started              web:2/2        ...
+```
+
+## Clean up resources
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
 ```

@@ -31,7 +31,7 @@ Clone the repository, following the link:https://help.github.com/en/github/creat
 ## SAP Content Deployment
 * link:/content-deployment/[SAP Content Deployment]
 ** link:/content-deployment/html5-content-deployment/[HTML5 Application Content Deployment]
-** link:/content-deployment/html5-content-deployment/with-existing-key[Content Deployment to an Existing Service Key]
+** link:/content-deployment/html5-content-deployment/with-existing-key[Content Deployment with an Existing Service Key]
 ** link:/content-deployment/html5-content-deployment/with-user-provided-service[Content Deployment to a User-Provided Service]
 
 ## Manage CF Services
