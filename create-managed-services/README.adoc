@@ -157,7 +157,7 @@ name                        binding name   status             message
 my-mta-managed-app-module                  create succeeded   
 ```
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy <mta-id> -f --delete-services
