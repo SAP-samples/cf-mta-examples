@@ -2,9 +2,9 @@
 :toc:
 
 ## Overview
-This example shows how to preserve manually set app environment variables during MTA deployment. The may be used used e.g. when an operator changes an app configuration, which should not be reverted, in case that configuration is not maintained in an *.mtaext extension descriptor given during deployment. 
+This example shows how to preserve manually set app environment variables during MTA deployment. This strategy may be useful, for instance, when an operator modifies an app configuration. The modifications should remain even if the configuration isn't maintained in a particular `*.mtaext` extension descriptor, which is provided during deployment.
 
-Modelled via a module level parameter `keep-existing:...`
+It is modeled via a module level parameter `keep-existing:...`
 
 ```bash 
 modules:
@@ -17,46 +17,58 @@ NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current di
 
 ## Official Documentation
 
-* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_moduleSpecificParameters[Modules] -> Table Module-Specific Parameters
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_moduleSpecificParameters[Module-Specific Parameters]
 
-## Try out
+## Try it out
 
 ### Initial deployment  
-directly from an mtad.yaml
+You can deploy it directly from an `mtad.yaml` file:
+
 ```bash
-  $ cf deploy ./ -f ;
+$ cf deploy ./ -f ;
 ```
-or start from an mta.yaml:
+
+Or build an MTAR archive from an `mta.yaml`:
+
 ```bash
-  $ mbt build -p cf -t . ;
-  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+$ mbt build -p cf -t . ;
 ```
+
+And then deploy the built MTAR archive:
+
+```bash
+$ cf deploy a.cf.app_0.0.0.mtar -f ;
+```
+
 ### Examine the initial state
+
 ```bash
-  $ cf env cf-app-keeping-env-changes
+$ cf env cf-app-keeping-env-changes
 ...
 User-Provided:
 ...
 managed-env-variable: original-env-var-val
 ```
 ```bash
-  $ cf env cf-app-resetting-env
+$ cf env cf-app-resetting-env
 ...
 User-Provided:
 ...
 managed-env-variable: original-env-var-val
 ```
 ### Manually set a new env variable
+
 ```bash
-  $ cf set-env cf-app-keeping-env-changes new-env-variable new-env-var-val
-  $ cf set-env cf-app-keeping-env-changes managed-env-variable changed-env-var-val
-  $ cf set-env cf-app-resetting-env new-env-variable new-env-var-val
-  $ cf set-env cf-app-resetting-env managed-env-variable changed-env-var-val
-  
+$ cf set-env cf-app-keeping-env-changes new-env-variable new-env-var-val
+$ cf set-env cf-app-keeping-env-changes managed-env-variable changed-env-var-val
+$ cf set-env cf-app-resetting-env new-env-variable new-env-var-val
+$ cf set-env cf-app-resetting-env managed-env-variable changed-env-var-val  
 ```
+
 ### Examine the change
+
 ```bash
-  $ cf env cf-app-keeping-env-changes
+$ cf env cf-app-keeping-env-changes
 ...
 User-Provided:
 ...
@@ -64,23 +76,30 @@ managed-env-variable: changed-env-var-val
 new-env-variable: new-env-var-val
 ```
 ```bash
-  $ cf env cf-app-resetting-env
+$ cf env cf-app-resetting-env
 ...
 User-Provided:
 ...
 managed-env-variable: changed-env-var-val
 new-env-variable: new-env-var-val
 ```
+
 ### Re-deply to simulate update
+
 ```bash
-  $ cf deploy -f ;
-  # or 
-  $ cf deploy a.cf.app_0.0.0.mtar -f ;
+$ cf deploy -f ;
+```
+
+Or
+
+```bash
+$ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
 ### Check out the result
+
 ```bash
-  $ cf env cf-app-keeping-env-changes
+$ cf env cf-app-keeping-env-changes
 ...
 User-Provided:
 ...
@@ -88,12 +107,19 @@ managed-env-variable: original-env-var-val
 new-env-variable: new-env-var-val
 ```
 ```bash
-  $ cf env cf-app-resetting-env
+$ cf env cf-app-resetting-env
 ...
 User-Provided:
 ...
 managed-env-variable: original-env-var-val
 ```
-Note that app `cf-app-keeping-env-changes` has the `new-env-variable` var kept, but has the `managed-env-variable` value's reset as defined in the mtad.yaml.
+Note that app `cf-app-keeping-env-changes` has the `new-env-variable` var kept, but has the value of `managed-env-variable` reset as defined in the `mtad.yaml`.
 
 App `cf-app-resetting-env` has lost the custom env variable and also has the `managed-env-variable` value reset.
+
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
+```
+
