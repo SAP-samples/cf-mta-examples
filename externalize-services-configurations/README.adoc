@@ -109,7 +109,7 @@ $ cf curl /v2/user_provided_service_instances/$(cf service my-user-provided-serv
 
 Notice that the user provided service has the properly merged content in the credentials field.
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy <mta-id> -f --delete-services
