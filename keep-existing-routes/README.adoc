@@ -80,7 +80,7 @@ cf-app-unmapping-routes        started           1/1         1G       1G     <or
 ```
 Note that apps that have their 'keep-existing..' parameters activated have the url `custom-host.apps.internal`. However, in the app `cf-app-unmapping-routes` has the url unmapped.
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy <mta-id> -f --delete-services
