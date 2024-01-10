@@ -233,7 +233,7 @@ name             requested state      processes      routes
 my-app           started              web:2/2        ...
 ```
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy <mta-id> -f --delete-services
