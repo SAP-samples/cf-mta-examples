@@ -50,7 +50,7 @@ memory usage:   64M
 #0   running   2021-02-03T09:34:39Z   0.5%   13.8M of 64M   6M of 1G
 ```
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy <mta-id> -f --delete-services
