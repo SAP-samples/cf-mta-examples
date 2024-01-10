@@ -108,7 +108,13 @@ cf service-key my_destination_service <service-key-name-timestamp2>
 ...
 ```
 
-## Official related documemtation in SAP Help Portal
+## Clean up resources
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
+```
+
+## Official related documentation in SAP Help Portal
 
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d3e23196166b443db17b3545c912dfc0.html[Content Deployment]
-- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_mtaModuleTypes[Modules] -> MTA Module Types 
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_mtaModuleTypes[MTA Module Types] 
