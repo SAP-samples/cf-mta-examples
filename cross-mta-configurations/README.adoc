@@ -85,7 +85,7 @@ via-param-in-requires: myCIService.inRequiresParam.inRequiresProperty
 
 NOTE: Provided configurations can also target a specific org & space. This could avoid the need of using an extension descriptor if the configurations are space specific and apply to all MTAs consuming them in that space.
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy <mta-id> -f --delete-services
