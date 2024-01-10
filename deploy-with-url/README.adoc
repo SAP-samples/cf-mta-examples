@@ -2,21 +2,21 @@
 
 # Deploy an MTAR referenced by a remote URL
 
-This example shows how to deploy an mtar that isn't present on your local system.
+This example shows how to deploy an MTAR that isn't present on your local system.
 
 NOTE: With this scenario, the Deploy Service *will not* check for any ongoing operations with the current MTA.
 
-# Try out
+# Try it out
 
 ## Deploy the MTA
 
 ``` bash
-echo "https://github.com/SAP-samples/cf-mta-examples/blob/main/deploy-with-url/anatz.zip?raw=true" | cf deploy ;
+$ echo "https://github.com/SAP-samples/cf-mta-examples/blob/main/deploy-with-url/anatz.zip?raw=true" | cf deploy ;
 ```
 
 ## Examine the result
 
-### List the deployed mta
+### List the deployed MTA
 
 ``` bash
 $ cf mta anatz ;
@@ -49,3 +49,10 @@ memory usage:   64M
      state     since                  cpu    memory         disk       details
 #0   running   2021-02-03T09:34:39Z   0.5%   13.8M of 64M   6M of 1G
 ```
+
+## Undeploy the MTA
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services
+```
+
