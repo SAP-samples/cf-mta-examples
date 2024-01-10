@@ -138,7 +138,7 @@ $ cf deploy mta_archives/hello-world_1.0.0.mtar -e hello-world-no-parallel.mtaex
 ```
 Note the processing of the MTA in the command output of both commands.
 
-## Undeploy the MTA
+## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy <mta-id> -f --delete-services
