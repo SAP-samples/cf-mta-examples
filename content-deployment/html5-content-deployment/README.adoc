@@ -90,6 +90,8 @@ $ cf deploy mta_archives/ui5MTA_0.0.1.mtar
 
 If you maintain you project's sources in an MTA format and have the `mta.yaml` descriptor where content module is modeled as described above, you can create an MTA archive for this project using a regular build command of the MTA build tool of your choice.  Since we recommend the new link:https://github.com/SAP/cloud-mta-build-tool[Cloud MTA Build Tool] for buiding MTA projects, the command in our example is `mbt build`.
 
+NOTE: The example is incomplete. For more information check the link:https://help.sap.com/docs/btp/sap-business-technology-platform/deploy-content-using-generic-application-content-deployer[official documentation]
+
 ### Modeling and building of HTML5 modules
 
 If you have several HTML5 modules in your project and would like to deploy their content into a HTML5 repository, you need to adjust the build process as follows:

@@ -6,5 +6,5 @@ modules:
 - name: app
   parameters:
     idle-routes: 
-     - idle-route: "your-first-idle-hostname.your.first.idle.domain" 
-     - idle-route: "your-second-idle-hostname.your.second.idle.domain"
+     - idle-route: "your-first-idle-hostname.your.first.${default-domain}"
+     - idle-route: "your-second-idle-hostname.your.second.${default-domain}"

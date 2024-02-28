@@ -4,12 +4,12 @@ version: 0.0.0
 
 modules:
   - name: my-app-module
-    type: application 
+    type: application
     path: "appBits.zip"
-    parameters: 
+    parameters:
       routes: # if not defined, a default route would be auto assigned unless no-route is specified
-        - route: host1.some-domain.com
-        - route: host2.some-domain.com
+        - route: host1.${default-domain}
+        - route: host2.${default-domain}
           no-hostname: false # same as the above, 'false' is the default
-        - route: subdomain.some-domain.com
+        - route: subdomain.${default-domain}
           no-hostname: true # this tells the deployer that 'subdomain' is not a separate host, the whole route will be used as a cf domain

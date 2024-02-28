@@ -21,7 +21,8 @@ During third phase all new applications are assigned to productive routes and th
 ## Requirements
 * Awarenes of blue green deploy in Cloud Foundry: link:https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html[Using Blue-Green Deployment to Reduce Downtime and Risk]
 * Installed MultiApps CF CLI Plugin v2.3.0 and above
-
+* Installed Maven
+* Installed Cloud MTA Build Tool
 ## Official documemtation
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/7c83810c31d842938cbc39c135a2d99f.html[Blue-Green Deployment Strategy]
 

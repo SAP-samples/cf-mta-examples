@@ -366,17 +366,6 @@ Getting routes for org xxxx / space xxxx as xxx ...
 space   host                       domain            port   path   type    apps       services
 xxxx    your-idle-hostname         your.idle.domain                        app-blue
 xxxx    your-second-idle-hostname  your.idle.domain                        app-blue
-
-### Examine the result
-
-Check what are the created routes and which apps are mapped to them:
-```bash 
-$ cf r
-Getting routes for org xxxx / space xxxx as xxx ...
-
-space         host                        domain            port   path   type    apps       services
-xxxx          your-idle-hostname          your.first.idle.domain                  app-blue
-xxxx          your-idle-hostname          your.second.idle.domain                 app-blue
 ```
 
 ## Using combination of `idle-hosts` and `idle-domains`

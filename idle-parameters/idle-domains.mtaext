@@ -5,5 +5,5 @@ extends: idle.parameters.example
 modules:
 - name: app
   parameters:
-    idle-domains: ["your.first.idle.domain", "your.second.idle.domain"]
+    idle-domains: ["your.first.${default-domain}", "your.second.${default-domain}"]
     
