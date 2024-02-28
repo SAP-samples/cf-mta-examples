@@ -4,22 +4,18 @@ version: 0.0.0
 
 modules:
   - name: my-app-module
-    type: application 
+    type: application
     path: "appBits.zip"
-    parameters: 
+    parameters:
       #defines a single host to be set to the app route
       host: my-single-host-value
       #defines the domain for which the app route would be set
-      domain: internal.cfapps.sap.hana.ondemand.com
-    
+      domain: ${default-domain}
+
     #Setting env variables to showcase the default/generated values provided by the mta deployer
-    properties: 
+    properties:
       default-host: ${default-host} #usually generated using the <org-name>-<space-name>-<module-name>
       default-domain: ${default-domain} #the default shared domain of the landscape
       default-uri: ${default-uri} #composed by ${host}.${domain}
       protocol: ${protocol} #usually defaults to "http"
       default-url: ${default-url} # composed of ${protocol}://${default-uri}
-    
-      
-      
-     

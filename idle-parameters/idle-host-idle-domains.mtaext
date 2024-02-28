@@ -6,4 +6,4 @@ modules:
 - name: app
   parameters:
     idle-host: "your-idle-hostname"
-    idle-domains: ["your.first.idle.domain", "your.second.idle.domain"]
+    idle-domains: ["your.first.${default-domain}", "your.second.${default-domain}"]

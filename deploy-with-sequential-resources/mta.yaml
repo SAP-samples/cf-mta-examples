@@ -3,30 +3,30 @@ ID: multiple-anatz
 version: 3.0.0
 
 modules:
-- name: multiple-anatz
-  type: staticfile
-  path: appBits.zip
+  - name: multiple-anatz
+    type: staticfile
+    path: appBits.zip
 resources:
   - name: serviceA
     type: org.cloudfoundry.managed-service
     parameters:
-      service: auditlog
-      service-plan: standard
+      service: application-logs
+      service-plan: lite
     processed-after: [serviceB, serviceC]
   - name: serviceB
     type: org.cloudfoundry.managed-service
     parameters:
-      service: auditlog
-      service-plan: standard
+      service: application-logs
+      service-plan: lite
     processed-after: [serviceD]
   - name: serviceC
     type: org.cloudfoundry.managed-service
     parameters:
-      service: auditlog
-      service-plan: standard
+      service: application-logs
+      service-plan: lite
     processed-after: [serviceD]
   - name: serviceD
     type: org.cloudfoundry.managed-service
     parameters:
-      service: auditlog
-      service-plan: standard
+      service: application-logs
+      service-plan: lite
