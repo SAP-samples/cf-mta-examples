@@ -1,0 +1,69 @@
+## Execute blue-green deployment using live routes parameter
+During the testing phase of blue-green deploy,
+the routes are swapped with idle route just for testing.
+However, while this is useful for resolving those routes during
+the testing phase and connecting the deployed applications with each other,
+this could be an issue if the idle route cannot be updated
+after the testing phase (for example - service creation parameters).
+Since the idle routes are deleted
+because after the testing is done, they are changed back to the normal
+routes. If you want to provide the specified
+in the descriptor routes and the idle one, you use the provided parameter:
+use-live-routes. Here is an example:
+
+``` yaml
+...
+modules:
+  - name: hello-backend
+    type: java.tomcat
+    path: backend.war
+    provides:
+      - name: backend-idle-route
+        properties:
+          provided-idle-route: ${routes/0/route}
+        parameters:
+          # this is the default so this parameter can be omitted
+          use-live-routes: false
+      - name: backend-live-route
+        properties:
+          provided-live-route: ${routes/0/route}
+        parameters:
+          use-live-routes: true
+    parameters:
+      routes:
+        - route: ${default-live-uri}
+  - name: hello-router
+    type: java.tomcat
+    path: router.war
+    requires:
+      - name: backend-idle-route
+    parameters:
+      backend-required-route: ~{backend-idle-route/provided-idle-route}
+resources:
+  - name: example-resource
+    type: org.cloudfoundry.managed-service
+    requires:
+      - name: backend-live-route
+    parameters:
+      service-plan: "lite"
+      service: application-logs
+      config:
+        backend-live-route: ~{backend-live-route/provided-live-route}
+```
+The route from the first provided section (backend-idle-route/provided-idle-route) will work as default - meaning the route will be resolved to the idle version during testing and then to the live one after continuing.
+The route from the second provided section (backend-live-route/provided-live-route) will always be resolved to the live version due to the 'use-live-routes' parameter
+
+### Try it out
+
+The example will demonstrate blue-green deployment of one MTA comprised of two applications and one service. The first application, called "hello-backend", is used to provide its route. The second application, called "hello-router", requires the idle route. The service requires the live route.
+```
+cf deploy ./blue-green-deploy-with-live-routes --strategy blue-green --skip-testing-phase
+```
+In the testing phase the route in the resource will be resolved this way:
+```
+"backend-live-route" : "<org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com"
+```
+In the testing phase the route in the module will be resolved this way:
+```
+"backend-required-route" : "<org>-<space>-hello-backend-idle.cfapps.sap.hana.ondemand.com"
+```
