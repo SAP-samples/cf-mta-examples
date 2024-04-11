@@ -1,0 +1,42 @@
+_schema-version: "3.0.0"
+ID: hello
+version: 0.1.0
+
+modules:
+  - name: hello-backend
+    type: java.tomcat
+    path: backend.war
+    provides:
+      - name: backend-idle-route
+        properties:
+          provided-idle-route: ${routes/0/route}
+        parameters:
+          #this is the default
+          use-live-routes: false
+      - name: backend-live-route
+        properties:
+          provided-live-route: ${routes/0/route}
+        parameters:
+          use-live-routes: true
+    parameters:
+      routes:
+        - route: ${default-live-uri}
+
+  - name: hello-router
+    type: java.tomcat
+    path: router.war
+    requires:
+      - name: backend-idle-route
+    parameters:
+      backend-required-route: ~{backend-idle-route/provided-idle-route}
+
+resources:
+  - name: example-resource
+    type: org.cloudfoundry.managed-service
+    requires:
+      - name: backend-live-route
+    parameters:
+      service-plan: "lite"
+      service: application-logs
+      config:
+        backend-live-route: ~{backend-live-route/provided-live-route}

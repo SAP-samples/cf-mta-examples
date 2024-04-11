@@ -1,0 +1,44 @@
+## Execute blue-green deployment using live parameters
+During the testing phase of blue-green deploy, ${default-host},
+${default-url} and ${default-uri} receive "idle" suffix. However, while this is useful for resolving those urls during the testing phase and connecting the deployed applications with each other, this could be an issue if the idle version of that parameter cannot be updated after the testing phase (for example - service creation parameters). Since the idle URLs are deleted at the end of blue-green deployments and
+services are not updated with productive URLs like applications are. Here is an example:
+
+```yaml
+...
+    provides:
+      - name: provided-router
+        properties:
+          provided-default-live-url: ${default-live-url}
+          provided-default-live-uri: ${default-live-uri}
+          provided-default-live-host: ${default-live-host}
+          provided-default-live-app-name: ${default-live-app-name}
+
+resources:
+  - name: example-resource
+    type: org.cloudfoundry.managed-service
+    requires:
+      - name: provided-router
+    parameters:
+      service-plan: "lite"
+      service: application-logs
+      config:
+        router-provided-default-live-url: ~{provided-router/provided-default-live-url}
+        router-provided-default-live-uri: ~{provided-router/provided-default-live-uri}
+        router-provided-default-live-host: ~{provided-router/provided-default-live-host}
+        router-provided-default-live-ap-name: ~{provided-router/provided-default-live-app-name}
+
+```
+
+### Try it out
+The example will demonstrate blue-green deployment of one MTA comprised of one application and one service. The application, called "hello-router", is used to provide its live parameters. The service requires the live parameters of the module.
+
+```
+cf deploy ./blue-green-deploy-with-live-parameters --strategy blue-green --skip-testing-phase
+```
+In the testing phase the parameters of the resource will be resolved this way:
+```
+"router-provided-default-live-ap-name" : "hello-router"
+"router-provided-default-live-host" : "<org>-<space>-hello-router"
+"router-provided-default-live-uri" : "<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com"
+"router-provided-default-live-url" : "https://<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com"
+```
