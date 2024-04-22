@@ -1,7 +1,5 @@
 ## Execute blue-green deployment using live parameters
-During the testing phase of blue-green deploy, ${default-host},
-${default-url} and ${default-uri} receive "idle" suffix. However, while this is useful for resolving those urls during the testing phase and connecting the deployed applications with each other, this could be an issue if the idle version of that parameter cannot be updated after the testing phase (for example - service creation parameters). Since the idle URLs are deleted at the end of blue-green deployments and
-services are not updated with productive URLs like applications are. Here is an example:
+During the testing phase of the blue-green deployment, parameters ${default-host}, ${default-url} and ${default-uri} receive the "idle" suffix. In other words, these parameters are deemed to be in a standby or inactive state. However, while this is useful for resolving those URLs during the testing phase and connecting the deployed applications with each other, this could be an issue if the "idle" version of that parameter cannot be updated after the testing phase, as is the case with service creation parameters. The "idle" URLs are supposed to be deleted at the end of blue-green deployments. This might lead to functional issues if services dependent on these URLs are not updated with productive URLs unlike the applications. Here's an example:
 
 ```yaml
 ...
@@ -30,7 +28,9 @@ resources:
 ```
 
 ### Try it out
-The example will demonstrate blue-green deployment of one MTA comprised of one application and one service. The application, called "hello-router", is used to provide its live parameters. The service requires the live parameters of the module.
+The example demonstrates blue-green deployment of one MTA, comprised of one application and one service. The application, called "hello-router", is used to provide the live parameters of the MTA. The service requires the live parameters of the application.
+
+
 
 ```
 cf deploy ./blue-green-deploy-with-live-parameters --strategy blue-green --skip-testing-phase

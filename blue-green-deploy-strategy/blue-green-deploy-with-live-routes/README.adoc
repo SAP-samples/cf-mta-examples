@@ -1,15 +1,5 @@
-## Execute blue-green deployment using live routes parameter
-During the testing phase of blue-green deploy,
-the routes are swapped with idle route just for testing.
-However, while this is useful for resolving those routes during
-the testing phase and connecting the deployed applications with each other,
-this could be an issue if the idle route cannot be updated
-after the testing phase (for example - service creation parameters).
-Since the idle routes are deleted
-because after the testing is done, they are changed back to the normal
-routes. If you want to provide the specified
-in the descriptor routes and the idle one, you use the provided parameter:
-use-live-routes. Here is an example:
+## Execute blue-green deployment using the live routes parameter
+During the testing phase of the blue-green deployment, the routes are swapped with idle routes. This is useful for resolving those routes during the testing phase and connecting the deployed applications with each other. However, this could be an issue if the idle route cannot be updated after the testing phase, as is the case with service creation parameters. The idle routes are supposed to be deleted and changed back to normal routes after the testing is done. If you want to provide the routes, specified in the descriptor, as well as the idle one, you should use the provided parameter: use-live-routes. Here is an example:
 
 ``` yaml
 ...
@@ -22,7 +12,6 @@ modules:
         properties:
           provided-idle-route: ${routes/0/route}
         parameters:
-          # this is the default so this parameter can be omitted
           use-live-routes: false
       - name: backend-live-route
         properties:
@@ -50,7 +39,9 @@ resources:
       config:
         backend-live-route: ~{backend-live-route/provided-live-route}
 ```
-The route from the first provided section (backend-idle-route/provided-idle-route) will work as default - meaning the route will be resolved to the idle version during testing and then to the live one after continuing.
+The route from the first provided section (backend-idle-route/provided-idle-route) will work as a default route, meaning it will be resolved to the idle version during testing and then to the live version after continuing.
+
+
 The route from the second provided section (backend-live-route/provided-live-route) will always be resolved to the live version due to the 'use-live-routes' parameter
 
 ### Try it out
