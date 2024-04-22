@@ -42,11 +42,11 @@ resources:
 The route from the first provided section (backend-idle-route/provided-idle-route) will work as a default route, meaning it will be resolved to the idle version during testing and then to the live version after continuing.
 
 
-The route from the second provided section (backend-live-route/provided-live-route) will always be resolved to the live version due to the 'use-live-routes' parameter
+The route from the second provided section (backend-live-route/provided-live-route) will always be resolved to the live version due to the 'use-live-routes' parameter.
 
 ### Try it out
 
-The example will demonstrate blue-green deployment of one MTA comprised of two applications and one service. The first application, called "hello-backend", is used to provide its route. The second application, called "hello-router", requires the idle route. The service requires the live route.
+The example demonstrates blue-green deployment of one MTA, comprised of two applications and one service. The first application, called "hello-backend", is used to provide the route of the MTA. The second application, called "hello-router", requires the idle route. The service requires the live route.
 ```
 cf deploy ./blue-green-deploy-with-live-routes --strategy blue-green --skip-testing-phase
 ```
