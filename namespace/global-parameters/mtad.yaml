@@ -1,0 +1,32 @@
+_schema-version: "3.1"
+ID: hello
+version: 1.0.0
+
+parameters:
+  apply-namespace:
+    app-names: true
+    service-names: true
+    app-routes: true
+
+modules:
+  - name: hello-backend
+    type: application
+    path: appBits.zip
+    parameters:
+      apply-namespace: false
+
+  - name: hello-router
+    type: application
+    path: appBits.zip
+    requires:
+      - name: my-cf-service
+    parameters:
+      routes:
+        - route:  route-without-namespace.${default-domain}
+          apply-namespace: false
+resources:
+  - name: my-cf-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: "lite"
+      service: application-logs
