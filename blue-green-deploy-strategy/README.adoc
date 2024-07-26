@@ -155,8 +155,8 @@ The approach will use the deployment descriptor `hello-green/mtad.yaml` and alre
 #### Build and deploy
 The approach will use the development descriptor `hello-green/mta.yaml` to build binaries from the source code folders `hello-green/router/` and `hello-green/backend/`. Then the built MTAR will be deployed.
 ```bash
-  $ mbt build -p cf -s hello-blue
-  $ cf deploy hello-blue/mta_archives/hello_0.1.0.mtar --strategy blue-green
+  $ mbt build -p cf -s hello-green
+  $ cf deploy hello-green/mta_archives/hello_0.1.0.mtar --strategy blue-green
 ```
 
 ### Examine the result
