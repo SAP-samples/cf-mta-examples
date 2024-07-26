@@ -1,0 +1,28 @@
+_schema-version: 3
+ID: dynamic.service.guid.producer
+version: 1.0.0
+
+modules:
+ - name: app-guid-provider
+   type: staticfile
+   path: appBits.zip
+   parameters:
+     memory: 128M
+     no-start: true
+   provides:
+      - name: ups-guid
+        public: true
+        parameters:
+           visibility:     
+           - org: ${org}      
+             space: ${space}  
+        properties:
+            ups-instanceid: ~{test-ups/my-ups-service-guid} 
+   requires: 
+     - name: test-ups
+
+resources: 
+  - name: test-ups 
+    type: org.cloudfoundry.user-provided-service
+    properties: 
+      my-ups-service-guid: ${service-guid}
