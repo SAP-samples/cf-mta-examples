@@ -166,3 +166,31 @@ Similarly, when you run the command:
 $ cf deploy ./hello.mtar --namespace foo --apply-namespace-app-names false --apply-namespace-service-names false --apply-namespace-app-routes false
 ```
 none of the applications/services/routes will have the prefix `foo`.
+
+## Deploying an application, namespace applied as suffix
+### Configure using CLI flag
+Checkout the repository and navigate to 'cf-mta-examples/namespace/module-with-apply-as-suffix-flag'.
+
+The steps are the same as previous examples, the difference is that you add the _apply-namespace-as-suffix_ parameter:
+``` bash
+$ cf deploy ./hello.mtar --namespace foo --apply-namespace-as-suffix true
+```
+This will result in creating an application that has the namespace applied as a suffix and not a prefix.
+
+### Configure using _as-suffix_ in the descriptor
+Checkout the repository and navigate to 'cf-mta-examples/namespace/module-with-apply-as-suffix-global-parameter'. In this case where the namespace must be applied is configured using the global parameters in the deployment descriptor:
+```yaml
+...
+ parameters:
+  apply-namespace:
+    as-suffix: true
+...
+
+```
+
+The steps are the same as previous examples. Just run without the flag:
+``` bash
+$ cf deploy ./hello.mtar --namespace foo
+```
+
+This will result in creating an application that has the namespace applied as a suffix and not a prefix.

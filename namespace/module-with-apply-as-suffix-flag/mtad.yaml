@@ -1,0 +1,16 @@
+_schema-version: "3.1"
+ID: hello
+version: 1.0.0
+
+parameters:
+  apply-namespace:
+    app-names: true
+    service-names: true
+    app-routes: true
+
+modules:
+  - name: hello-backend
+    type: application
+    path: appBits.zip
+    parameters:
+      apply-namespace: false
