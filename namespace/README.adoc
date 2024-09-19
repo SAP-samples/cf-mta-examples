@@ -112,3 +112,57 @@ The steps are the same as previous examples, the difference is that 'apply-names
 ...
 
 ```
+## Deploying with global namespace modifier parameter
+
+To deploy an application with set global parameters, follow these steps:
+
+### 1. Check out the repository and navigate to the 'cf-mta-examples/namespace/global-parameters' directory.
+### 2. The deployment process is similar to previous examples, but there are new parameters for modifying namespace behavior globally and locally.
+
+The global namespace parameters are defined as follows:
+```
+parameters:
+  apply-namespace:
+    app-names: true
+    service-names: true
+    app-routes: true
+```
+
+If you deploy with only these parameters, all applications, services, and routes are expected to have the namespace applied as a prefix, if one was provided.
+
+If you add a namespace modifying parameter locally, for example:
+```
+modules:
+  - name: hello-backend
+    type: application
+    path: appBits.zip
+    parameters:
+      apply-namespace: false
+```
+it means that the application named "hello-backend" will not have the namespace prefix. Locally applied namespace parameters have higher priority than global parameters.
+
+The local `apply-namespace` parameter is set for one application/service/route, whereas global parameters are set on all applications/services/routes.
+
+When you run the command:
+```bash
+$ cf deploy ./hello.mtar --namespace foo
+```
+the expected results are:
+- hello-backend // local value is higher priority that global and global is ignored
+- foo-hello-router // global value is applied
+- route-without-namespace.${default-domain}
+- foo-my-cf-service
+
+Operation parameters/command-line options have the highest priority. If you use them, all applications/services/routes will follow the behavior specified in these command-line options and ignore all additional parameters, even if present.
+
+When you run the command:
+```bash
+$ cf deploy ./hello.mtar --namespace foo --apply-namespace-app-names true --apply-namespace-service-names true --apply-namespace-app-routes true
+```
+all applications/services/routes will have the prefix `foo`. In this way, other parameters in the descriptor are ignored.
+
+Similarly, when you run the command:
+```bash
+$ cf deploy ./hello.mtar --namespace foo --apply-namespace-app-names false --apply-namespace-service-names false --apply-namespace-app-routes false
+```
+none of the applications/services/routes will have the prefix `foo`.
