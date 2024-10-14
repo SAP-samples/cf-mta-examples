@@ -1,0 +1,34 @@
+_schema-version: "3.1.0"
+ID: hello
+version: 0.1.0
+
+modules:
+  - name: hello-router
+    type: java
+    path: router/
+    requires:
+      - name: backend
+        properties:
+          backend: ~{url}/backend
+          name: backend
+          url: ~{url}
+    parameters:
+      memory: 512M
+      disk-quota: 256M
+      instances: 3
+    properties:
+      MEMORY_CALCULATOR_V1: true
+
+  - name: hello-backend
+    type: java
+    path: backend/
+    provides:
+      - name: backend
+        properties:
+          url: "${default-url}"
+    parameters:
+      memory: 512M
+      disk-quota: 256M
+      instances: 3
+    properties:
+      MEMORY_CALCULATOR_V1: true
