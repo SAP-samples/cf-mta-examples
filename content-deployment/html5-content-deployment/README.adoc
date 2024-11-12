@@ -153,10 +153,10 @@ Pay attention that the name of the result zip file should be unique cross HTML5 
       build-result: dist
 ```
 
-`supported-platforms: []` indicates that this module will not appear in the resulting deployment descriptor. It's content will be deployed via a module where we collect content from all HTML5 modules.
+`supported-platforms: []` indicates that this module will not appear in the resulting deployment descriptor. Its content will be deployed via a module where we collect content from all HTML5 modules.
 `build-result: dist` instructs the MBT where to look for build result of this module.
 
-* The *mta.yaml file* should contain a module that is defined as a content one. Also you will need to configure it's build parameters to copy content  from all HTML5 modules (`zip` archive created during their build) into its internal folder (e.g. `resources` as in the example below). The content of this folder will be packaged as build result into the resulting MTA archive and this is the content (`zip` of `zips`) that will be deployed to the HTML5 repository.
+* The *mta.yaml file* should contain a module that is defined as a content one. Also you will need to configure its build parameters to copy content  from all HTML5 modules (`zip` archive created during their build) into its internal folder (e.g. `resources` as in the example below). The content of this folder will be packaged as build result into the resulting MTA archive and this is the content (`zip` of `zips`) that will be deployed to the HTML5 repository.
 
 ```yaml
   - name: mta_ui1_ui_deployer
