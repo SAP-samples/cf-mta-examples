@@ -1,0 +1,49 @@
+ID: a.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+modules:
+- name: destination-content-deployer
+  type: com.sap.application.content
+  build-parameters:
+    no-source: true
+  parameters:
+    content: #whole content structure moved up to the module's parameters (was in the destinations')
+      subaccount:
+        destinations:
+        - Name: backend
+          URL: ~{backend-api/url}  #from here, properties from different requires dependencies can be references - via ~{fully-qualified/references}
+          forwardAuthToken: true
+          ServiceInstanceName: "backend"
+  requires:
+  - name: destination-service
+    parameters:
+      content-target: true
+      # content: # Inlinte content can not be defined as this any more!
+      #   subaccount:
+      #     destinations:
+      #     - Name: backend
+      #       URL: https://abc.d  #because such values would have to be hard-coded
+      #       forwardAuthToken: true
+      #       ServiceInstanceName: "backend"
+  - name: backend-api  
+
+- name: backend
+  type: application 
+  path: "appBits.zip"
+  parameters: 
+    buildpack: staticfile_buildpack
+    memory: 1G 
+    disk-quota: 1G
+  provides:
+  - name: backend-api
+    properties:
+      url: ${default-url}
+
+resources:
+- name: destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: destination
+    service-name: destination-service
+    service-plan: lite
+
