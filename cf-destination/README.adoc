@@ -4,14 +4,14 @@
 
 This example shows how to model a simple CF application in an MTA, and a SCP sub-account destination pointing to it's url.
 
-# Try out
+## Try out
 
 ## Deploy an MTA containing an cf app.
 
-The example demostrate 2 different approaches that lead to the same result.
+The example demonstrate 2 different approaches that lead to the same result.
 
 ### Deploy from directory
-That approach uses deployment descritpr `mtad.yaml` and ready application binaries `appBits.zip`:
+That approach uses deployment descriptor `mtad.yaml` and ready application binaries `appBits.zip`:
 ``` bash
 cf deploy ./ -f ;
 ```
@@ -21,7 +21,7 @@ Then the MTAR is deployed.
 
 ``` bash
 mbt build -p cf -t . ;
-cf deploy a.cf.app_0.0.0.mtar -f ;
+cf deploy a.cf.app.mtar -f ;
 ```
 
 NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
@@ -30,12 +30,19 @@ NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on th
 
 ### List the deployed mta
 ```bash
-$ cf mta a.cf.app ;
-Showing health and status ...
+Showing health and status for multi-target app a.cf.app in org <org> / space <space> as <user>...
 OK
 Version: 0.0.0
+Namespace:
+
 Apps:
-name        requested state   instances   memory   disk   urls   
-my-cf-app   started           1/1         1G       1G     orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com, my-custom-host.at.some.domain 
+name      requested state   instances   memory   disk   urls
+backend   STARTED           1/1         20.8M    5.2M   <org>-<space>-backend.<domain>
+
+Services:
+name                  service       plan          bound apps   last operation
+destination-service   destination   lite                       create succeeded
+xsuaa-service         xsuaa         application   anatz        create succeeded
 ```
 
+### Verify the destination is available in your subaccount
