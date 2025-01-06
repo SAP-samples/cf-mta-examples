@@ -7,32 +7,29 @@ modules:
   build-parameters:
     no-source: true
   parameters:
-    content: #whole content structure moved up to the module's parameters (was in the destinations')
-      subaccount:
+    content:
+      subaccount: # subacount level destination
+        existing_destinations_policy: update # the destination will be updated
         destinations:
-        - Name: backend
-          URL: ~{backend-api/url}  #from here, properties from different requires dependencies can be references - via ~{fully-qualified/references}
+        - Name: uaa-destination
+          URL: ~{backend-api/url}  # from here, properties from different requires dependencies can be references - via ~{fully-qualified/references}
           forwardAuthToken: true
-          ServiceInstanceName: "backend"
+          ServiceInstanceName: "xsuaa-service" # the name of the service instance to which the destination will be created (uaa in this example)
   requires:
   - name: destination-service
     parameters:
       content-target: true
-      # content: # Inlinte content can not be defined as this any more!
-      #   subaccount:
-      #     destinations:
-      #     - Name: backend
-      #       URL: https://abc.d  #because such values would have to be hard-coded
-      #       forwardAuthToken: true
-      #       ServiceInstanceName: "backend"
-  - name: backend-api  
+  - name: xsuaa-service
+  - name: backend-api
 
 - name: backend
-  type: application 
+  type: application
   path: "appBits.zip"
-  parameters: 
+  requires:
+    - name: xsuaa-service
+  parameters:
     buildpack: staticfile_buildpack
-    memory: 1G 
+    memory: 1G
     disk-quota: 1G
   provides:
   - name: backend-api
@@ -47,3 +44,8 @@ resources:
     service-name: destination-service
     service-plan: lite
 
+- name: xsuaa-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: xsuaa
+    service-plan: application
