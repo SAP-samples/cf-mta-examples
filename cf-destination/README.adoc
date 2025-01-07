@@ -1,22 +1,22 @@
 :toc:
 
-# Managing CF Apps with an MTA
+# Managing CF Apps and SAP BTP Destination with an MTA
 
-This example shows how to model a simple CF application in an MTA, and a SCP sub-account destination pointing to it's url.
+This example shows how to model a simple CF application in an MTA, and a SAP BTP sub-account destination pointing to its url.
 
-## Try out
+# Try out
 
-## Deploy an MTA containing an cf app.
+## Deploy an MTA containing a CF app
 
-The example demonstrate 2 different approaches that lead to the same result.
+The example demonstrates 2 different approaches that lead to the same result.
 
 ### Deploy from directory
-That approach uses deployment descriptor `mtad.yaml` and ready application binaries `appBits.zip`:
+That approach uses deployment descriptor *mta.yaml* and ready application binaries *appBits.zip*:
 ``` bash
 cf deploy ./ -f ;
 ```
 ### Build and Deploy
-The approach is using development descriptor `mta.yaml`and application binaries `appBits.zip` to build MTAR.
+The approach is using development descriptor *mta.yaml* and application binaries *appBits.zip* to build MTAR.
 Then the MTAR is deployed.
 
 ``` bash
@@ -28,7 +28,7 @@ NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on th
 
 ## Examine the result
 
-### List the deployed mta
+### List the deployed MTA application
 ```bash
 Showing health and status for multi-target app a.cf.app in org <org> / space <space> as <user>...
 OK
@@ -40,9 +40,9 @@ name      requested state   instances   memory   disk   urls
 backend   STARTED           1/1         20.8M    5.2M   <org>-<space>-backend.<domain>
 
 Services:
-name                  service       plan          bound apps   last operation
-destination-service   destination   lite                       create succeeded
-xsuaa-service         xsuaa         application   anatz        create succeeded
+name                  service       plan          bound apps     last operation
+destination-service   destination   lite                         create succeeded
+xsuaa-service         xsuaa         application   backend        create succeeded
 ```
 
-### Verify the destination is available in your subaccount
+Verify the destination is available in your subaccount.
