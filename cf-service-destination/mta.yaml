@@ -1,0 +1,53 @@
+_schema-version: "3.1"
+ID: destination.reference.sample
+version: "1.0.0"
+
+modules:
+  - name: my-destination-content
+    type: com.sap.application.content
+    build-parameters:
+      no-source: true
+    requires:
+      - name: xsuaa-service
+      - name: workflow_service
+        parameters:
+          service-key:
+            name: &workflow-key workflow_sk-${timestamp}
+            config:
+              credential-type: x509
+              x509:
+                key-length: 4096
+                validity: 1
+                validity-type: YEARS
+      - name: destination-service-example
+        parameters:
+          content-target: true
+    parameters:
+      content:
+        instance:
+          existing_destinations_policy: update
+          destinations:
+            - Name: destination-to-uaa
+              Description: My Destination to xsuaa
+              ServiceInstanceName: xsuaa-service
+            - Name: destination-to-workflow
+              Description: My Destination to workflow
+              ServiceInstanceName: workflow_service
+              ServiceKeyName: *workflow-key
+
+resources:
+  - name: destination-service-example
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: lite
+      service: destination
+  - name: xsuaa-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+  - name: workflow_service
+    parameters:
+      service-plan: standard
+      service: workflow
+    type: org.cloudfoundry.managed-service
