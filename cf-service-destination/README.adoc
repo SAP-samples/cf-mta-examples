@@ -1,0 +1,47 @@
+:toc:
+
+# Managing CF Apps and SAP BTP Service Instance Destination with an MTA
+
+This example demonstrates how to model a simple Multi-Target Application (MTA) while configuring a SAP BTP service instance destination that connects to both an XSUAA service instance and a Workflow service instance. The setup includes a content deployment module that defines the required destinations inline. During deployment, the service instances are created first, followed by their respective service keys. The service key for the Workflow service instance is then used to configure the “destination-to-workflow” destination. The service key for the XSUAA service instance is used to configure "destination-to-workflow" destination. Since the timestamp parameter is utilized, this service key is regenerated with each deployment which enables the service keys rotation.
+
+# Try out
+
+## Deploy an MTA containing a CF app
+
+The example demonstrates 2 different approaches that lead to the same result.
+
+### Deploy from directory
+That approach uses deployment descriptor *mta.yaml*
+``` bash
+cf deploy ./ -f ;
+```
+### Build and Deploy
+The approach is using development descriptor *mta.yaml*.
+Then the MTAR is deployed.
+
+``` bash
+mbt build -p cf -t . ;
+cf deploy destination.reference.sample.mtar -f ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
+
+## Examine the result
+
+### List the deployed MTA application
+```bash
+Showing health and status for multi-target app a.cf.app in org <org> / space <space> as <user>...
+OK
+Version: 1.0.0
+Namespace:
+
+Apps:
+name   requested state   instances   memory   disk   urls
+
+Services:
+name                          service       plan          bound apps   last operation
+destination-service-example   destination   lite                       create succeeded
+xsuaa-service                 xsuaa         application                create succeeded
+workflow_service              workflow      standard                   create succeeded```
+
+Verify the destination service instance is created. Then navigate the destination service instance and verify the destinations are created.
