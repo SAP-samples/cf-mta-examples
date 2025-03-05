@@ -42,6 +42,7 @@ Services:
 name                          service       plan          bound apps   last operation
 destination-service-example   destination   lite                       create succeeded
 xsuaa-service                 xsuaa         application                create succeeded
-workflow_service              workflow      standard                   create succeeded```
+workflow_service              workflow      standard                   create succeeded
+```
 
 Verify the destination service instance is created. Then navigate the destination service instance and verify the destinations are created.
