@@ -1,0 +1,39 @@
+_schema-version: "3.1"
+ID: destination.name.reference.sample
+version: "1.0.0"
+
+modules:
+  - name: my-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: xsuaa-service
+      - name: my_destination_service
+        parameters:
+          content-target: true
+          service-key:
+            name: destination-service-key-${timestamp}
+            config:
+              xsuaa:
+                credential-type: x509
+          delete-service-key-after-deployment: true
+    parameters:
+      content:
+        instance:
+          existing_destinations_policy: update
+          destinations:
+            - Name: xsuaa-destination
+              Description: testing-key-rotation
+              ServiceInstanceName: xsuaa-service
+
+resources:
+  - name: my_destination_service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: lite
+      service: destination
+
+  - name: xsuaa-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
