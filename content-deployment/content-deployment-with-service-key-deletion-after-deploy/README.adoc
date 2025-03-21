@@ -1,0 +1,41 @@
+:toc:
+
+# Delete Service Keys After Content Deployment
+
+## Overview
+
+This is an extension of the existing content deployment modeling.
+
+During deployment a number of service keys are used either for retrieving credentials, a content endpoint from the content service instance or any number or required configurations from other service instances (depending on the content service implementation). After the content deploy the generated service key still exist which could lead to creating hundreds of service keys without deleting them. That's why we created a new `delete-service-key-after-deployment` parameter which when specified after the content deploy has finished, we delete the service keys generated during the deploy. This feature does not work for existing-service-keys
+
+```yaml
+...
+        parameters:
+          content-target: true
+          service-key:
+            name: destination-service-key-${timestamp}
+            config:
+              xsuaa:
+                credential-type: x509
+          delete-service-key-after-deployment: true
+```
+
+## Try it out
+
+You can test the feature by executing in this folder:
+```
+cf deploy
+```
+
+This will create two services and create service keys for each of them but the content deploy has finished, it will delete the generated service key for `my_destination_service`
+
+## Clean up resources
+It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
+``` bash
+$ cf undeploy <mta-id> -f --delete-services --delete-service-keys
+```
+
+## Official related documentation in SAP Help Portal
+
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d3e23196166b443db17b3545c912dfc0.html[Content Deployment]
+- link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/177d34d45e3d4fd99f4eeeffc5814cf1.html#loio177d34d45e3d4fd99f4eeeffc5814cf1__section_mtaModuleTypes[MTA Module Types] 
