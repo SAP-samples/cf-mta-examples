@@ -1,0 +1,16 @@
+_schema-version: '3.1'
+ID: fail-on-service-update-example
+version: 1.0.0
+
+resources:
+  - name: example-service-instance
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: "lite"
+      service: application-logs
+      config:
+        key: value
+      fail-on-service-update:
+        parameters: true
+        plan: true
+        tags: true
