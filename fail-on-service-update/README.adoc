@@ -1,0 +1,122 @@
+= Fail-on-Service-Update Example
+:toc:
+
+== Overview
+
+This example demonstrates the use of the `fail-on-service-update` parameter in MTA resources, which allows fine-grained control over the deployment behavior when updating service instances in Cloud Foundry.
+
+By default, managed service instance updates are fail-safe in certain scenarios—specifically when updating parameters (when the service broker is involved) or when a plan update triggers an asynchronous operation (service broker is involved). This behavior exists for legacy compatibility with service brokers that did not support plan updates in the Cloud Controller v2 API.
+
+The `fail-on-service-update` parameter controls how the deployment process reacts to errors when updating service instances. It can be set for parameters, plan, and tags individually.
+
+.Example
+[source,yaml]
+----
+resources:
+  - name: service-instance
+    type: org.cloudfoundry.managed-service
+    parameters:
+      fail-on-service-update:
+        parameters: true
+        plan: true
+        tags: true
+----
+
+== 1. Optional Resources
+
+To better handle cases where fail-safe behavior is not desired such as for updates to the plan, parameters, or tags fine-grained parameter called `fail-on-service-update` was introduced.
+
+This parameter allows for more precise control than the general `optional` parameter. However, note that the `optional` parameter takes precedence: if `optional: true` is specified, it overrides the behavior of the `fail-on-service-update` setting.
+
+For more information, see: https://help.sap.com/docs/btp/sap-business-technology-platform/resources#optional-resources[Optional Resources].
+
+.Example
+[source,yaml]
+----
+resources:
+  - name: service-instance
+    type: org.cloudfoundry.managed-service
+    optional: true # has precedence over fail-on-service-update
+    parameters:
+      fail-on-service-update: # specify if you want the service update to fail on error
+        parameters: true
+        plan: true
+        tags: true
+----
+
+== 2. Service Instance Parameters
+
+The update of the service parameters is, by default, fail-safe for async operations (when the service broker is involved). You can control this behavior using the `fail-on-service-update` parameter.
+
+For *managed service instances* (managed by service broker):
+
+- When set to `null` (not set):
+  * If the update triggers an asynchronous operation (Cloud Controller sends the parameters to the service broker), the deployment will not fail even if the update operation fails. This is the default, fail-safe behavior.
+- When set to `true`:
+  * If the service parameters update fails (even asynchronously), the deployment will also fail. This makes the deployment strict.
+- When set to `false`:
+  * The update is permissive — the deployment proceeds even if the parameters update fails.
+
+
+For *user-provided service instances*:
+
+- When set to `null` (not set):
+  * If the update fails, the deployment will also fail. This is the default behavior (same as when set to `true`).
+- When set to `true`:
+  * If the parameters update fails, the deployment will also fail. This makes the deployment strict.
+- When set to `false`:
+  * The update is permissive — the deployment proceeds even if the parameters update fails.
+
+== 3. Service Plan (for managed service instances only)
+
+The update of the service plan is, by default, fail-safe for async operations (those which trigger calls to the service brokers). You can control this behavior using the `fail-on-service-update` parameter.
+
+- When set to `null` (not set):
+  * If the update triggers an asynchronous operation (which is usually the case), the deployment will not fail even if the update operation fails. This is the default, fail-safe behavior.
+- When set to `true`:
+  * If the service plan update fails (even asynchronously), the deployment will also fail. This makes the deployment strict.
+- When set to `false`:
+  * The update is permissive — the deployment proceeds even if the plan update fails.
+
+== 4. Service Tags (for managed and user-provided service instances)
+
+The update of the service tags is, by default, not fail-safe (because the tags update does not results in a call to the service broker). You can control this behavior using the `fail-on-service-update` parameter.
+
+- When set to `null` (not set):
+  * For service tags: If the update fails, the deployment will also fail. This is the default behavior (same as when set to true).
+- When set to `true`:
+ * If the service tags update fails, the deployment will also fail.
+- When set to `false`:
+ * The update is permissive — the deployment proceeds even if the tags update fails.
+
+### Deploy with a deployment descriptor (mtad.yaml)
+That approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
+
+``` bash
+cf deploy ./ -f ;
+```
+
+_OR_
+
+First assemble an MTA archive using the `mtad.yaml` and then deploy the archive:
+
+``` bash
+mbt assemble -t ./ ;
+cf deploy fail-on-service-update-example_1.0.0.mtar ;
+```
+
+NOTE: See link:mtad.yaml[mtad.yaml] for the modelling
+
+### Build and Deploy
+The approach is using development descriptor `link:mta.yaml[mta.yaml]` and application binaries `link:appBits.zip[appBits.zip]` to build MTAR.
+Then the MTAR is deployed.
+
+``` bash
+mbt build -p cf -t . ;
+cf deploy fail-on-service-update-example_1.0.0.mtar -f ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
+
+---
+NOTE: The MTA that was deployed has a service with plan "lite"
