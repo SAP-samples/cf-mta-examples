@@ -1,0 +1,12 @@
+_schema-version: '3.1'
+ID: skip-app-deploy-ext
+extends: skip-app-deploy-example
+version: 0.0.1
+
+modules:
+  - name: app-to-deploy
+    parameters:
+      skip-deploy: true
+  - name: app-to-skip
+    parameters:
+      skip-deploy: false

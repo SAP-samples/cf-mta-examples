@@ -27,6 +27,7 @@ Clone the repository, following the link:https://help.github.com/en/github/creat
 * link:/cf-app-docker[Docker images as cf apps]
 * link:/app-routes[Managing cf app routes]
 * link:/sharing-values-between-apps[Sharing configuration values between apps]
+* link:/skip-app-deploy[Skip app deployment using `skip-deploy` parameter]
 
 ## SAP Content Deployment
 * link:/content-deployment/[SAP Content Deployment]
