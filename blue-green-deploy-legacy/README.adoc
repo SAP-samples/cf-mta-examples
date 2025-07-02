@@ -11,31 +11,31 @@ This technique can eliminate downtime due to app deployment. In addition, blue-g
 
 The example will demonstrate how to accomplish blue-green deployment using an MTA.
 
-MTA blue-green deployment is separeted in two phases:
+MTA blue-green deployment is separated in two phases:
 
 The first phase, known as validation, involves setting up the new color environment, in this case **Green**, for testing. **Green** is not accessible via the production routes but rather via temporary `-idle` routes. The purpose of the validation phase is to ensure the new version of the environment is fully operational.
 
 During the second phase all new applications are assigned to production routes and the new MTA color, in this case **Green**, becomes productive.
 
 ## Requirements
-* Awarenes of blue-green deployment in Cloud Foundry: link:https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html[Using Blue-Green Deployment to Reduce Downtime and Risk]
+* Awareness of blue-green deployment in Cloud Foundry: link:https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html[Using Blue-Green Deployment to Reduce Downtime and Risk]
 * Installed MultiApps CF CLI Plugin v2.3.0 and above
 * Installed Maven
 * Installed Cloud MTA Build Tool
-## Official documemtation
+## Official documentation
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/764308c52e68488dac848bae93e9137b.html[Legacy Blue-Green Deployment]
 
 # Try it out
 
-The example will demonstrate blue-green deployment of one MTA comprised of two applications. The first application, called `hello-backend`, serves as back end and the second one, called `hello-router`, serves as front end. 
+The example will demonstrate blue-green deployment of one MTA comprised of two applications. The first application, called `hello-backend`, serves as back end and the second one, called `hello-router`, serves as front end.
 
 The idea is to have sample MTA which seems very similar to standard business applications that are comprised of front end, back end and backing services. In the example `hello-backend` will play the combined role of back end and backing services, where the customer data is stored.
 
-In terms of the example, we are using Java applications which communicate using REST interface. Both applications are simple web projects containing only one servlet. 
+In terms of the example, we are using Java applications which communicate using REST interface. Both applications are simple web projects containing only one servlet.
 
 .Applications REST endpoints and logic
 |===
-|Application Color |hello-router |hello-backend 
+|Application Color |hello-router |hello-backend
 
 |blue
 |GET /router -> calls <hello-backend>/backend
@@ -108,12 +108,12 @@ INFO executing the "mvn -B package" command...
 INFO the build results of the "hello-backend" module will be packed and saved in the "/mta_examples/blue-green-deploy/hello-blue/.hello-blue_mta_build_tmp/hello-backend" folder
 INFO generating the metadata...
 INFO generating the MTA archive...
-INFO the MTA archive generated at: /mta_examples/blue-green-deploy/hello-blue/mta_archives/hello_0.1.0.mtar
+INFO the MTA archive generated at: /mta_examples/blue-green-deploy/hello-blue/mta_archives/hello_2.0.1.mtar
 
 The built MTAR archive is then deployed:
 
 ```bash
-$ cf bg-deploy hello-blue/mta_archives/hello_0.1.0.mtar
+$ cf bg-deploy hello-blue/mta_archives/hello_2.0.1.mtar
 ```
 
 ### Examine the result
@@ -169,7 +169,7 @@ $ mbt build -p cf -s hello-blue
 The builded MTAR is then deployed:
 
 ```bash
-$ cf bg-deploy hello-blue/mta_archives/hello_0.1.0.mtar
+$ cf bg-deploy hello-blue/mta_archives/hello_2.0.1.mtar
 ```
 
 ### Examine the result

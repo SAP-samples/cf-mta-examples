@@ -15,10 +15,10 @@ resources:
 modules:
   - name: my-java-app-module
     type: application
-    path: gs-rest-service/complete/target/gs-rest-service-0.1.0.jar
+    path: hello.war
     parameters:
-      buildpack: sap_java_buildpack # Not all buildpacks can enable dynatrace integration
-      app-name: spring-app
+      buildpack: sap_java_buildpack_jakarta # Not all buildpacks can enable dynatrace integration
+      app-name: my-app
     requires:
       - name: my-dynatrace-ups  # Binding to the dynatrace service
     properties: # Environemnt variables

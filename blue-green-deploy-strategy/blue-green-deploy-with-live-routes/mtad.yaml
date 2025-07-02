@@ -19,6 +19,7 @@ modules:
         parameters:
           use-live-routes: true
     parameters:
+      buildpack: sap_java_buildpack_jakarta
       routes:
         - route: ${default-live-uri}
 
@@ -28,6 +29,7 @@ modules:
     requires:
       - name: backend-idle-route
     parameters:
+      buildpack: sap_java_buildpack_jakarta
       backend-required-route: ~{backend-idle-route/provided-idle-route}
 
 resources:

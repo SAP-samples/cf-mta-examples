@@ -1,32 +1,30 @@
-_schema-version: "2.0.0"
+_schema-version: 3.1.0
 ID: hello
-version: 0.1.0
-
+version: 2.0.1
 modules:
-  - name: hello-router
-    type: java.tomcat
-    path: router.war
-    requires:
-      - name: backend
-        properties:
-          backend: ~{url}/backend
-          name: backend
-          url: ~{url}
-    parameters:
-      memory: 512M
-      disk-quota: 256M
+- name: hello-router
+  type: java.tomcat
+  properties:
+    MEMORY_CALCULATOR_V1: true
+  requires:
+  - name: backend
     properties:
-      MEMORY_CALCULATOR_V1: true
-
-  - name: hello-backend
-    type: java.tomcat
-    path: backend.war
-    provides:
-      - name: backend
-        properties:
-          url: "${default-url}"
-    parameters:
-      memory: 512M
-      disk-quota: 256M
+      backend: ~{url}/content
+      name: backend
+      url: ~{url}
+  parameters:
+    buildpack: sap_java_buildpack_jakarta
+    disk-quota: 256M
+    memory: 1GB
+- name: hello-backend
+  type: java.tomcat
+  properties:
+    MEMORY_CALCULATOR_V1: true
+  provides:
+  - name: backend
     properties:
-      MEMORY_CALCULATOR_V1: true
+      url: ${default-url}
+  parameters:
+    buildpack: sap_java_buildpack_jakarta
+    disk-quota: 256M
+    memory: 1GB
