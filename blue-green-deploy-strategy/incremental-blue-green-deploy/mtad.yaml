@@ -13,6 +13,7 @@ modules:
           name: backend
           url: ~{url}
     parameters:
+      buildpack: sap_java_buildpack_jakarta
       memory: 512M
       disk-quota: 256M
       instances: 3
@@ -27,6 +28,7 @@ modules:
         properties:
           url: "${default-url}"
     parameters:
+      buildpack: sap_java_buildpack_jakarta
       memory: 512M
       disk-quota: 256M
       instances: 3

@@ -7,10 +7,11 @@ modules:
     type: java.tomcat
     path: backend.war
     parameters:
-      memory: 256M
+      buildpack: sap_java_buildpack_jakarta
+      memory: 512M
       disk-quota: 256M
       routes:
-        - route:  ${app-name}.${default-domain}
+        - route:  ${app-name}.${space}.${default-domain}
       apply-namespace: true
     properties:
       message: "Hello World!"

@@ -6,6 +6,8 @@ modules:
   - name: hello-router
     type: java.tomcat
     path: router.war
+    parameters:
+      buildpack: sap_java_buildpack_jakarta
     requires:
       - name: example-resource
     provides:

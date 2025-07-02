@@ -12,14 +12,15 @@ modules:
         properties:
           url: "https://${routes/0/route}"
     parameters:
-      memory: 256M
+      buildpack: sap_java_buildpack_jakarta
+      memory: 512M
       disk-quota: 256M
       routes:
-        - route: ${app-name}.${default-domain}/content
+        - route: ${app-name}.${space}.${default-domain}/content
     properties:
       message: "Hello, from ${app-name}!"
       MEMORY_CALCULATOR_V1: true
-      
+
   - name: hello-router
     type: java.tomcat
     path: backend.war
@@ -30,9 +31,10 @@ modules:
           name: backend
           url: ~{url}
     parameters:
-      memory: 256M
+      buildpack: sap_java_buildpack_jakarta
+      memory: 512M
       disk-quota: 256M
       routes:
-        - route:  ${app-name}.${default-domain}
+        - route:  ${app-name}.${space}.${default-domain}
     properties:
       MEMORY_CALCULATOR_V1: true
