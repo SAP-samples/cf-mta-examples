@@ -5,24 +5,24 @@
 User-provided service instances enable developers to use services that are not available in the marketplace with their apps running on Cloud Foundry.
 
 The example will demonstrate how to manage User-Provided Service Instances with MTA.
-Real use case for SAP Business Technology Platform Cloud Foundry environment where user-provided service are needed is Dynatrace service. With dynatrace you can monitor your application and get insights of it.
+A real use case for SAP Business Technology Platform Cloud Foundry environment where user-provided services are needed is Dynatrace service. With Dynatrace you can monitor your application and get insights from it.
 
-To create user-provided services, you need resource with type `org.cloudfoundry.user-provided-service`.
+To create user-provided services, you need a resource with type `org.cloudfoundry.user-provided-service`.
 The resource has only one required parameter `config` that represents credentials of the service.
 
 
-## Oficial documemtation in Help SAP Portal
+## Official documentation in Help SAP Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html#loio9e34487b1a8643fb9a93ae6c4894f015__section_mtaResourceTypes[Resources] -> Special Resource Types
 
-# Try out
+# Try it out
 
 ## Execute initial creation of user-provided service
 
-The step represents the initial creation of service instance.
+This step represents the initial creation of the service instance.
 
 ### Deploy with a deployment descriptor (mtad.yaml)
 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` 
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]`
 
 ```bash
   $ cf deploy ./ -f
@@ -45,9 +45,9 @@ my-simple-service    user-provided
 
 ## Execute update of user-provided service
 
-The step represents the the update of service instance when it have changed parameters.
+This step represents the update of the service instance when it has changed parameters.
 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and extension descriptor `link:service-credentials.mtaext[service-credentials.mtaext]`:
+This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and extension descriptor `link:service-credentials.mtaext[service-credentials.mtaext]`:
 
 ```bash
   $  cf deploy ./ -e service-credentials.mtaext -f
@@ -59,9 +59,9 @@ That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]` and extensio
   ./service-credentials.mtaext
   OK
   ...
-  Service "my-simple-service" exists but doesnt have any bound applications
+  Service "my-simple-service" exists but doesn't have any bound applications
   Processing service "my-simple-service"...
   Updating service "my-simple-service"...
 ```
 
-NOTE: The service credential `foo` defined in deployment descriptor with value `baz` is overwritten with value `bar` coming from extension descriptor
+NOTE: The service credential `foo` defined in the deployment descriptor with value `baz` is overwritten with value `bar` coming from the extension descriptor.

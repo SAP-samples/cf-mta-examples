@@ -9,34 +9,34 @@ As you prepare a new version of your software, deployment and the final stage of
 
 This technique can eliminate downtime due to app deployment. In addition, blue-green deployment reduces risk: if something unexpected happens with your new version on Green, you can immediately roll back to the last version by switching back to Blue.
 
-The example will demonstrate how to acomplish blue-green deployment using MTA.
+The example will demonstrate how to accomplish blue-green deployment using MTA.
 
-MTA blue-green deployment is separeted in three phases. 
-First phase is used to setup the next color environment, in order to be tested. The new environment version, in this case GREEN, is not accessible on the productive routes but on temporary `-idle` routes. 
+MTA blue-green deployment is separated in three phases.
+First phase is used to set up the next color environment, in order to be tested. The new environment version, in this case GREEN, is not accessible on the productive routes but on temporary `-idle` routes.
 
-After this phase, the process enters second phase, so called testing phase. During that phase the user can verify that the new version of environment is operational by executing simple smoke tests or extensive testing. The user can decide to skip this phase with specifying the option '--skip-testing-phase'. The option is useful for CI/CD or other automated approaches.
+After this phase, the process enters the second phase, so called testing phase. During that phase the user can verify that the new version of environment is operational by executing simple smoke tests or extensive testing. The user can decide to skip this phase by specifying the option '--skip-testing-phase'. The option is useful for CI/CD or other automated approaches.
 
-During third phase all new applications are assigned to productive routes and the new MTA color become productive.
+During the third phase all new applications are assigned to productive routes and the new MTA color becomes productive.
 
 ## Requirements
-* Awarenes of blue green deploy in Cloud Foundry: link:https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html[Using Blue-Green Deployment to Reduce Downtime and Risk]
+* Awareness of blue green deploy in Cloud Foundry: link:https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html[Using Blue-Green Deployment to Reduce Downtime and Risk]
 * Installed MultiApps CF CLI Plugin v2.3.0 and above
 * Installed Maven
 * Installed Cloud MTA Build Tool
-## Official documemtation
+## Official documentation
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/7c83810c31d842938cbc39c135a2d99f.html[Blue-Green Deployment Strategy]
 
 # Try out
 
-The example will demonstrate blue-green deployment of one MTA comprised of two applications. The first applcation, called "hello-backend", serves as backend and the second one, called "hello-router", serves as front end. 
+The example will demonstrate blue-green deployment of one MTA composed of two applications. The first application, called "hello-backend", serves as backend and the second one, called "hello-router", serves as front end.
 
-The idea is to have sample MTA which seems very similar to standard business applications that are comprised of frontend, backend and backing services. In the example "hello-backend" will play the combined role between backend and backing services, where the customer data is stored.
+The idea is to have sample MTA which seems very similar to standard business applications that are composed of frontend, backend and backing services. In the example "hello-backend" will play the combined role between backend and backing services, where the customer data is stored.
 
-In terms of the example, we are using Java applications which communicate using the REST interface. Both applications are simple web projects containing only one servlet. 
+In terms of the example, we are using Java applications which communicate using the REST interface. Both applications are simple web projects containing only one servlet.
 
 .Applications REST endpoints and logic
 |===
-|Application Color |hello-router |hello-backend 
+|Application Color |hello-router |hello-backend
 
 |blue
 |GET /router -> calls <hello-backend>/backend
@@ -57,7 +57,7 @@ image::diagrams/initial-bg-deploy-blue.png[]
 ### Deploy
 
 You can try 3 different approaches, that will lead to the same result and the same output during the deployment.
-The differences are how the deploymnet is trigger.
+The differences are how the deployment is triggered.
 
 #### Using existing .mtar
 ```bash
@@ -81,7 +81,7 @@ The differences are how the deploymnet is trigger.
 ```
 
 #### Using deploy from directory with .mtad
-The approach will use deployment descriptor `hello-blue/mtad.yaml` and already built application bineries `hello-blue/router.war` and `hello-blue/backend.war`
+The approach will use deployment descriptor `hello-blue/mtad.yaml` and already built application binaries `hello-blue/router.war` and `hello-blue/backend.war`
 ```bash
   $ cf deploy hello-blue/ -f --strategy blue-green
 ```

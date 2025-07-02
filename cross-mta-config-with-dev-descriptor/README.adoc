@@ -1,8 +1,8 @@
 WARNING: THE SCENARIO WITH MTA.YAML AND (cloud) MBT IS NOT CURRENTLY FUNCTIONAL! For modelling with mtad.yaml please refer to link:../cross-mta-configurations[Cross MTA configurations example]
 
 Cross MTA configurations is a feature, allowing for consumption of external string values in the mta(d).yaml during deploy time.
-The values are usually provided by other MTAs during their deployments and most-often contain alocated routes mapped to apps in those mtas. Thus a 'service discovery' is achieved at deploy-time.
+The values are usually provided by other MTAs during their deployments and most-often contain allocated routes mapped to apps in those mtas. Thus a 'service discovery' is achieved at deploy-time.
 
-Since the SAP Cloud Deployment service persists those configurations until the providing MTA is undeployed, they can be used to also hold arbitrary configuration data - e.g. org/space speciffic settings which don't fit an extension descriptor.
+Since the SAP Cloud Deployment service persists those configurations until the providing MTA is undeployed, they can be used to also hold arbitrary configuration data - e.g. org/space specific settings which don't fit an extension descriptor.
 
 help.sap.com: https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b8e1953a618e47e1bd3c3a60c213226e.html

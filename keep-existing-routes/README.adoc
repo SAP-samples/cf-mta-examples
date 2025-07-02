@@ -1,24 +1,24 @@
-# Keeping exisiting routes on update
+# Keeping existing routes on update
 :toc:
 
 ## Overview
-This example shows how to preserve manual mappings of app routes during MTA deployment. This feature tends to be useful, for instance, when tenant onboarding for multitenant apps generates a separate route for each tenant and that route is not maintained in an *.mtaext extension descriptor given to the MTA deployer. 
+This example shows how to preserve manual mappings of app routes during MTA deployment. This feature tends to be useful, for instance, when tenant onboarding for multitenant apps generates a separate route for each tenant and that route is not maintained in an *.mtaext extension descriptor given to the MTA deployer.
 
 It can be activated in 3 ways:
 
-* global parameter `keep-existing-routes: true` 
+* global parameter `keep-existing-routes: true`
 * module level parameter `keep-existing-routes: true`
 * module level parameter `keep-existing:...`
 
-```bash 
+```bash
   ...
   parameters:
-    keep-existing: 
+    keep-existing:
       routes:true
 ```
 NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] in the current directory.
 
-### Deploy 
+### Deploy
 
 You can deploy it directly from an `mtad.yaml` file:
 
@@ -44,7 +44,7 @@ $ cf deploy a.cf.app_0.0.0.mtar -f ;
 $ cf map-route cf-app-unmapping-routes apps.internal --hostname "custom-host"
 $ cf map-route cf-app-keeping-complex-param apps.internal --hostname "custom-host"
 $ cf map-route cf-app-keeping-simple-param apps.internal --hostname "custom-host"
-  
+
 ```
 ### Examine the new routing
 
@@ -52,12 +52,12 @@ $ cf map-route cf-app-keeping-simple-param apps.internal --hostname "custom-host
 $ cf apps
 Getting apps in org ...
 name                           requested state   instances   memory   disk   urls
-cf-app-keeping-complex-param   started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-complex-param.<default-domain>, 
+cf-app-keeping-complex-param   started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-complex-param.<default-domain>,
 cf-app-keeping-simple-param    started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-simple-param.<default-domain>
 cf-app-unmapping-routes        started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-unmapping-routes.<default-domain>
 ```
 
-### Re-deply to simulate update
+### Re-deploy to simulate update
 
 ```bash
 $ cf deploy -f ;
@@ -74,7 +74,7 @@ $ cf deploy a.cf.app_0.0.0.mtar -f ;
 $ cf apps
 Getting apps in org ...
 name                           requested state   instances   memory   disk   urls
-cf-app-keeping-complex-param   started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-complex-param.<default-domain>, 
+cf-app-keeping-complex-param   started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-complex-param.<default-domain>,
 cf-app-keeping-simple-param    started           1/1         1G       1G     custom-host.apps.internal, <org>-<space>-cf-app-keeping-simple-param.<default-domain>
 cf-app-unmapping-routes        started           1/1         1G       1G     <org>-<space>-cf-app-unmapping-routes.<default-domain>
 ```

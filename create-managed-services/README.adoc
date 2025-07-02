@@ -13,7 +13,7 @@ Orchestration of the following CF features is covered:
 
 ### Service instances
 Service instances are modeled as MTA resources of type `org.cloudfoundry.managed-service`.
-The service instance can be configured on it's creation or update via the `config` parameter.
+The service instance can be configured on its creation or update via the `config` parameter.
 
 ....
 ...
@@ -23,7 +23,7 @@ The service instance can be configured on it's creation or update via the `confi
     service: logging
     service-plan: free
     service-name: my-logging-service
-    config: 
+    config:
       map: of
       creation: parameters
 ....
@@ -31,11 +31,11 @@ The service instance can be configured on it's creation or update via the `confi
 
 [cols=3*, options=header]
 |===
-|parameter 
+|parameter
 |configuration
-|optional 
+|optional
 
-| service 
+| service
 | service offering (label)
 | mandatory
 
@@ -57,7 +57,7 @@ The service instance can be configured on it's creation or update via the `confi
 ### Service Bindings
 Service instances are modeled as in the MTA modules describing the bound apps.
 A binding is created or updated when a resource, describing a service instance, is required by an app module.
-The service instance can be configured on it's creation or update via the `config` parameter.
+The service instance can be configured on its creation or update via the `config` parameter.
 
 ....
 ...
@@ -67,15 +67,15 @@ modules:
   requires:
     - name: my-cf-service-instance-resource
       parameters:
-        config: 
+        config:
           binding-config: "binding-config-value"
 ....
 
 [cols=3*, options=header]
 |===
-|parameter 
+|parameter
 |configuration
-|optional 
+|optional
 
 | config
 | creation/update parameters of the service binding
@@ -84,7 +84,7 @@ modules:
 |===
 
 
-# Related examples 
+# Related examples
 - service instance and binding parameters(configurations) management with MTAs
 - update of service instances and bindings [updating parameters, changing plans and labels; recreation]
 
@@ -98,7 +98,7 @@ modules:
 
 # Try it out
 ## Deploy the MTA
-The example demostrates 2 different approaches that lead to the same result.
+The example demonstrates 2 different approaches that lead to the same result.
 
 NOTE: you can adjust the service label and plan values to match the available in your environment
 
@@ -138,26 +138,27 @@ NOTE: See link:mta.yaml[mta.yaml] for the concrete modelling
 ``` bash
 $ cf services
 Getting services in org deploy-service / space ****** as ******...
-name                                        service            plan          bound apps                 ...                 
-my-logging-service-instance-name            application-logs   lite          my-mta-managed-app-module    
+name                                        service            plan          bound apps                 ...
+my-logging-service-instance-name            application-logs   lite          my-mta-managed-app-module
 ```
 
-### List app status and attributes 
+### List app status and attributes
 
 ``` bash
 $ cf service my-logging-service-instance-name ;
 Showing info of service my-logging-service-instance-name in org deploy-service / space ****** as ******...
 name:             my-logging-service-instance-name
 service:          application-logs
-tags:             
+tags:
 plan:             lite
 ...
 bound apps:
 name                        binding name   status             message
-my-mta-managed-app-module                  create succeeded   
+my-mta-managed-app-module                  create succeeded
 ```
 
 ## Clean up resources
 It is recommended to stop or undeploy your MTAs when they are no longer needed. In order to do so, run the following command:
 ``` bash
 $ cf undeploy <mta-id> -f --delete-services
+```

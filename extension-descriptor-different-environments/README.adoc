@@ -5,7 +5,7 @@
 Configuration of the MTA is done with the standard approach using MTA extension descriptors. Extension descriptors are complementary files to the main deployment descriptor that provide additional data. They have file extension `.mtaext` and are external for MTA archive `.mtar`. Extension descriptors can be used to provide deployment specific information, for example credentials to external services.
 
 For the test purpose of the example, we will use an MTA containing a simple application, simple service and binding between them.
-The MTA will be deployed in DEV and PROD environments using different extension descriptors resulting in different set-ups.
+The MTA will be deployed in DEV and PROD environments using different extension descriptors resulting in different setups.
 
 ## [Optional] Requirements
 - Quota for application
@@ -57,7 +57,7 @@ This step of the example shows how the MTA is deployed in DEV environment where 
 
 ### Deploy with a deployment descriptor (`mtad.yaml`)
 
-That approach uses deployment descritpr `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptor for DEV env `link:dev.mtaext[dev.mtaext]`:
+That approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]`, ready application binaries `link:appBits.zip[appBits.zip]` and extension descriptor for DEV env `link:dev.mtaext[dev.mtaext]`:
 
 ``` bash
 $ cf deploy -f -e dev.mtaext

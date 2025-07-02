@@ -31,7 +31,7 @@ Step by step explanation:
 
 1. A user starts a deploy for a previously deployed MTA. The mtad.yaml descriptor contains resources with `service-keys` definitions
 2. Deploy Service detects the existing services and service keys part of the MTA that already exist in the target space and org via their names and metadata
-3. Deploy Service resolves all parameters in the descriptor (including the system parameter `${timestamp}`) and gathers the service key definintions for the current deployment. These are then compared to the existing ones detected in the previous step - any defined keys not present are marked for *creation*, any defined keys that are present but in a failed state (determined by last operation state from CF != "succeeded")  or have different credentials are marked for *recreation*, any keys that are present but are not defined are marked for *deletion*
+3. Deploy Service resolves all parameters in the descriptor (including the system parameter `${timestamp}`) and gathers the service key definitions for the current deployment. These are then compared to the existing ones detected in the previous step - any defined keys not present are marked for *creation*, any defined keys that are present but in a failed state (determined by last operation state from CF != "succeeded")  or have different credentials are marked for *recreation*, any keys that are present but are not defined are marked for *deletion*
 4. Deploy Service updates the metadata of any present service keys if necessary (e.g. the key was created previously for a different MTA or without metadata)
 5. Deploy Service deletes the service keys marked for recreation in step 3
 6. Deploy Service creates new service keys - the ones marked for creation and the ones deleted in the previous step
@@ -63,7 +63,7 @@ resources:
       service-name: my-service
       service-key-name: rotating-key-${timestamp}
 ```
-link:https://help.sap.com/docs/btp/sap-business-technology-platform/service-keys#consumption-of-service-keys[More details about this parameter here.] 
+link:https://help.sap.com/docs/btp/sap-business-technology-platform/service-keys#consumption-of-service-keys[More details about this parameter here.]
 
 
 ## Try it out
@@ -103,6 +103,6 @@ cf env my-app
 ...
 ```
 
-## Official related documemtation in Help SAP Portal
+## Official related documentation in Help SAP Portal
 
 - link:https://help.sap.com/docs/btp/sap-business-technology-platform/service-keys[MTA Service Keys Official Documentation]

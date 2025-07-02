@@ -8,12 +8,12 @@ Orchestration of the following CF features is covered:
 
 - updating service instances: https://docs.cloudfoundry.org/devguide/services/managing-services.html#update_service
 
-## Modelling
+## Modeling
 
 ### Service instances
-Service instances are modelled as MTA resources of type `org.cloudfoundry.managed-service`.
-Parameters in the config parameter can be specified to configure the service instance on it's creation or update
-The parameters in the skip-service-updates parameter specify which confiuration to not update
+Service instances are modeled as MTA resources of type `org.cloudfoundry.managed-service`.
+Parameters in the config parameter can be specified to configure the service instance on its creation or update
+The parameters in the skip-service-updates parameter specify which configuration to not update
 
 ....
 resources:
@@ -23,7 +23,7 @@ resources:
     service: application-logs
     service-plan: "lite"
     service-name: "my-logging-service-instance-name"
-    config: 
+    config:
       map: of
       creation: parameters
     skip-service-updates:
@@ -35,9 +35,9 @@ resources:
 
 [cols=3*, options=header]
 |===
-|parameter 
+|parameter
 |configuration
-|optional 
+|optional
 
 | skip-service-updates
 | the configs which to skip on update
@@ -50,13 +50,13 @@ Additional information about the other parameters can be found here link:https:/
 ## Requirements
 - access to a CF space with quota for creation of service instances
 
-## Oficial documemtation in Help SAP Portal
+## Official documentation in Help SAP Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/a36df26b36484129b482ae20c3eb8004.html[Service creation parameters]
 
 # Try out
 ## Deploy the MTA
-The example demostrates 2 different approaches that lead to the same result.
+The example demonstrates 2 different approaches that lead to the same result.
 
 NOTE: you can adjust the service label and plan values to match the available in your environment
 
@@ -102,7 +102,7 @@ resources:
     service: application-logs
     service-plan: "standard"
     service-name: "my-logging-service-instance-name"
-    config: 
+    config:
       map: of
       creation: parameters
     skip-service-updates:
@@ -131,7 +131,7 @@ resources:
     service: application-logs
     service-plan: "standard"
     service-name: "my-logging-service-instance-name"
-    config: 
+    config:
       map: of
       creation: parameters
     skip-service-updates:
@@ -157,21 +157,21 @@ Service plan for service "my-logging-service-instance-name" will not be updated,
 ``` bash
 $ cf services
 Getting services in org deploy-service / space ****** as ******...
-name                                        service            plan          bound apps                 ...                 
-my-logging-service-instance-name            application-logs   lite          my-mta-managed-app-module    
+name                                        service            plan          bound apps                 ...
+my-logging-service-instance-name            application-logs   lite          my-mta-managed-app-module
 ```
 
-### List app status and attributes 
+### List app status and attributes
 
 ``` bash
 $ cf service my-logging-service-instance-name ;
 Showing info of service my-logging-service-instance-name in org deploy-service / space ****** as ******...
 name:             my-logging-service-instance-name
 service:          application-logs
-tags:             
+tags:
 plan:             lite
 ...
 bound apps:
 name                        binding name   status             message
-my-mta-managed-app-module                  create succeeded   
+my-mta-managed-app-module                  create succeeded
 ```
