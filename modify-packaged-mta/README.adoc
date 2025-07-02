@@ -1,19 +1,19 @@
-# Modifying assembled MTA archives 
+# Modifying assembled MTA archives
 
 :toc:
 :toc-title: Instructions
 
-This example shows how to manually modify, package and deploy an already assembled MTA
+This example shows how to manually modify, package, and deploy an already assembled MTA.
 
-NOTE: Such operations are generally prone to errors and failure due to change in input. 
+NOTE: Such operations are generally prone to errors and failure due to changes in input.
 
-WARNING: If the MTA archive is signed, after modifications signatures may no longer be valid. Depending on the CA and cn, the archive deployment may be rejected 
+WARNING: If the MTA archive is signed, after modifications signatures may no longer be valid. Depending on the CA and CN, the archive deployment may be rejected.
 
-Please consider using other mechanisms for configuring deployments, as:
+Please consider using other mechanisms for configuring deployments, such as:
 
-* modifying MTA parameters/properties via extension descriptors (-e *.mtaext) (TODO link) 
-* refactor in source code (before initial assembly)
-* deploy multiple MTAs in a single space, use namespaces ( not yet available )
+* modifying MTA parameters/properties via extension descriptors (-e *.mtaext) (TODO link)
+* refactoring in source code (before initial assembly)
+* deploying multiple MTAs in a single space, use namespaces (not yet available)
 
 ## Try it
 Execute the commands below in the current directory
@@ -28,9 +28,9 @@ Archive:  original.mtar
   inflating: appBits.zip
 ```
 
-### 2. Modify the arcive
+### 2. Modify the archive
 
-In example, change the MTA ID as it is not modifyable in an *.mtaext
+In this example, change the MTA ID as it is not modifiable in an *.mtaext
 ``` bash
 $ cat META-INF/mtad.yaml
   _schema-version: 3.3.0
@@ -38,7 +38,7 @@ $ cat META-INF/mtad.yaml
   version: 0.0.0
   ...
 
-$ sed -i -e 's/ID:\(.*\)/ID:\1-with-suffix /g' META-INF/mtad.yaml                                                 
+$ sed -i -e 's/ID:\(.*\)/ID:\1-with-suffix /g' META-INF/mtad.yaml
 
 $ cat META-INF/mtad.yaml
   _schema-version: 3.3.0
@@ -55,10 +55,11 @@ zip modified.mtar META-INF/* appBits.zip
   adding: appBits.zip (stored 0%)
 ```
 
-### 4. Deploy 
+### 4. Deploy
 
 ``` bash
-$ cf deploy modified.mtar                                     Deploying multi-target app archive modified.mtar in org ***** / space ****** as ******...
+$ cf deploy modified.mtar
+Deploying multi-target app archive modified.mtar in org ***** / space ****** as ******...
 Uploading 1 files...
   .../modified.mtar
 OK
@@ -72,5 +73,5 @@ $ cf mtas
 Getting multi-target apps in org ****** / space ****** as ******...
 OK
 mta id                 version
-a.cf.app-with-suffix   0.0.0 
+a.cf.app-with-suffix   0.0.0
 ```

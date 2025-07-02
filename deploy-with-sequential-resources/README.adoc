@@ -10,9 +10,9 @@ This example shows how to make use of the resource parameter `processed-after` i
 ## Modeling
 
 ### Service instances having processed-after parameter
-Whenever order of service processing is necessary, the `processed-after` parameter comes handy. By using the parameter, we create a sequence of services (an order) in which the services should be processed. 
+Whenever order of service processing is necessary, the `processed-after` parameter comes handy. By using the parameter, we create a sequence of services (an order) in which the services should be processed.
 
-For example let's say service `A` requires service `B` and service `C` to be processed first. On the other hand both service `B` and service `C` require service `D` to be pocessed first. Service `D` does not require any other service. So the order for processing should be:
+For example let's say service `A` requires service `B` and service `C` to be processed first. On the other hand both service `B` and service `C` require service `D` to be processed first. Service `D` does not require any other service. So the order for processing should be:
 `D -> B, C -> A`.
 
 We can achieve this with the following `mtad.yaml`:
@@ -43,17 +43,17 @@ resources:
 
 NOTE: If the parameter `processed-after` is not specified, the resources are processed in parallel.
 
-NOTE: The `processed-after` parameter is supported from schema version 3 onwards. If it's used in a descriptor with schema version 2 or lower, the following message should appear: 
+NOTE: The `processed-after` parameter is supported from schema version 3 onwards. If it's used in a descriptor with schema version 2 or lower, the following message should appear:
 ``` bash
 Entities from class "Resource" with schema version "2" do not support this operation. At least "3" is required.
 ```
 
-NOTE: In case two dependencies depend on each other for processing an error will be shown: 
+NOTE: In case two dependencies depend on each other for processing an error will be shown:
 ``` bash
 Resources "<resource1>" and "<resource2>" both depend on each other for processing
 ```
 
-NOTE: It is NOT allowed a service to depend on itself. If attempt for doing so is made the follwoing error should be displayed:
+NOTE: It is NOT allowed a service to depend on itself. If attempt for doing so is made the following error should be displayed:
 ``` bash
 Resource "{0}" is required by itself for processing
 ```
@@ -61,14 +61,14 @@ Resource "{0}" is required by itself for processing
 ## Requirements
 - Access to a Cloud Foundry space with quota for creation of service instances.
 
-## Official documentation is SAP Help Portal
+## Official documentation in SAP Help Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html[Resources]
 
 ## Try it out
 ### Deploy the MTA
 The example can be run with 2 approaches for building an MTA. Both lead to the same result.
 
-#### Deploying from a directory 
+#### Deploying from a directory
 This approach uses deployment descriptor `link:mtad.yaml[mtad.yaml]` and ready application binaries `link:appBits.zip[appBits.zip]`:
 
 ``` bash
@@ -102,7 +102,7 @@ Creating service "serviceA" from MTA resource "serviceA"...
 Creating application "multiple-anatz" from MTA module "multiple-anatz"...
 Uploading application "multiple-anatz"...
 Started async upload of application "multiple-anatz"
-Scaling application "multiple-anatz" to "1" instances... 
+Scaling application "multiple-anatz" to "1" instances...
 Staging application "multiple-anatz"...
 Application "multiple-anatz" staged
 Starting application "multiple-anatz"...
@@ -148,22 +148,22 @@ NOTE: See link:mta.yaml[mta.yaml] for the specific modeling.
 At any step you can check the created deployment with the following command:
 
 ``` bash
-$ cf mta multiple-anatz 
+$ cf mta multiple-anatz
 Showing health and status for multi-target app multiple-anatz in org deploy-service / space ******** as ********...
 OK
 Version: 3.0.0
-Namespace: 
+Namespace:
 
 Apps:
-name             requested state   instances   memory   disk   urls   
-multiple-anatz   started           1/1         1G       1G     deploy-service-*******-multiple-anatz.cfapps.sap.hana.ondemand.com   
+name             requested state   instances   memory   disk   urls
+multiple-anatz   started           1/1         1G       1G     deploy-service-*******-multiple-anatz.cfapps.sap.hana.ondemand.com
 
 Services:
-name       service    plan       bound apps   last operation   
-serviceA   auditlog   standard                create succeeded   
-serviceB   auditlog   standard                create succeeded   
-serviceC   auditlog   standard                create succeeded   
-serviceD   auditlog   standard                create succeeded   
+name       service    plan       bound apps   last operation
+serviceA   auditlog   standard                create succeeded
+serviceB   auditlog   standard                create succeeded
+serviceC   auditlog   standard                create succeeded
+serviceD   auditlog   standard                create succeeded
 ```
 
 ## Clean up resources

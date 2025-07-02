@@ -88,17 +88,17 @@ Deploy the example mta from this repo. The mta has an application `my-app` that 
 ```text
     parameters:
 	  ...
-      null-parameter: 
-    parameters-metadata:  
-      null-parameter:  
+      null-parameter:
+    parameters-metadata:
+      null-parameter:
         optional: true / false # If the parameter is not defined in an extension descriptor, the optional value does matter.
-        overwritable: true   
+        overwritable: true
     properties:
-      null-property: 
-    properties-metadata:  
-      null-property:  
+      null-property:
+    properties-metadata:
+      null-property:
         optional: true / false # If the property is not defined in an extension descriptor, the optional value does matter.
-        overwritable: true  
+        overwritable: true
 ```
 
 ``` bash

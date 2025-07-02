@@ -1,7 +1,7 @@
 # Cross MTA configurations
 
 Cross MTA configurations is a feature, allowing for consumption of external string values in the `mta(d).yaml` during deployment time.
-The values are usually provided by other MTAs during their deployments and most often contain alocated routes mapped to apps in those MTAs. Thus a 'service discovery' is achieved at deployment time.
+The values are usually provided by other MTAs during their deployments and most often contain allocated routes mapped to apps in those MTAs. Thus a 'service discovery' is achieved at deployment time.
 
 Since the SAP Cloud Deployment service persists those configurations until the providing MTA is undeployed, they can be used to also hold arbitrary configuration data like org/space specific settings which don't fit an extension descriptor.
 
@@ -22,7 +22,7 @@ NOTE: See provider/mtad.yaml for details on the provided configuration values/na
 ## Deploy consumer MTA
 To consume the config values, run the following command from the current directory:
 
-```bash 
+```bash
 $ cd consumer ;
 $ cf deploy -f ;
 ```
@@ -65,12 +65,12 @@ NOTE: those env variable values can as configuraiton
 $ cd consumer;
 $ cf deploy -f -e ci.mtaext ;
 ```
-NOTE: See how the provided configuration was selected with provider/ci.mtaext. 
+NOTE: See how the provided configuration was selected with provider/ci.mtaext.
 
 Result:
 ```bash
 name                        service            plan       bound apps   last operation     broker            upgrade available
-myCIService                 application-logs   lite       staticapp    create succeeded   sleeve-broker     
+myCIService                 application-logs   lite       staticapp    create succeeded   sleeve-broker
 ...
     "tags": [
      "myCIService.customized_tag"

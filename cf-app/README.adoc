@@ -8,7 +8,7 @@ This example shows how to model a simple Cloud Foundry application (CF app) in a
 
 ## Deploy an MTA containing a CF app
 
-The example demostrates 2 different approaches that lead to the same result.
+The example demonstrates 2 different approaches that lead to the same result.
 
 ### Deploy from directory
 This approach uses deployment descriptor `mtad.yaml` and ready application binaries `appBits.zip`:
@@ -39,11 +39,11 @@ Showing health and status ...
 OK
 Version: 0.0.0
 Apps:
-name        requested state   instances   memory   disk   urls   
-my-cf-app   started           1/1         1G       1G     orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com, my-custom-host.at.some.domain 
+name        requested state   instances   memory   disk   urls
+my-cf-app   started           1/1         1G       1G     orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com, my-custom-host.at.some.domain
 ```
 
-### List app status and attributes 
+### List app status and attributes
 ``` bash
 $ cf app my-cf-app ;
 Showing health and status for app my-cf-app in org ********** / space ******** as **********...
@@ -62,7 +62,7 @@ memory usage:   1024M
 #0   running   2019-08-21T21:46:14Z   1.1%   12.2M of 1G   5.3M of 1G
 ```
 
-### List app env variables and find the defined properties in the User Provided section 
+### List app env variables and find the defined properties in the User Provided section
 ``` bash
 $ cf env my-cf-app | grep "MY_CF_APP_ENV_VARIABLE" ;
   MY_CF_APP_ENV_VARIABLE: HELLO MTA

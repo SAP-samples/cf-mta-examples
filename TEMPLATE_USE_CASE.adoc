@@ -10,7 +10,7 @@
 - what should exist in local dev
 - any other prerequisites?
 
-## [Optional] Oficial documemtation in Help SAP Portal
+## [Optional] Official documentation in Help SAP Portal
 - link:https://help.sap.com/[Official Name of the page]
 
 # Try out

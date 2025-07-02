@@ -4,10 +4,10 @@
 
 Cloud Foundry aggregates logging information for your apps, like inbound requests and output to the standard output and error streams. To persist that information in a more flexible or, generally speaking custom manner, you can redirect these logs to a log management service.
 
-In the absence of compatible log managment services in the marketplace, user-provided service instances can enable the streaming of app logs to a log service of your choice using the optional parameter `syslog-drain-url`.
+In the absence of compatible log management services in the marketplace, user-provided service instances can enable the streaming of app logs to a log service of your choice using the optional parameter `syslog-drain-url`.
 It specifies the URL to which logs for bound applications will be streamed.
 
-This example will demonstrate how to create a user-provided-service, which streams the logs of its bound applications to a log managment service.
+This example will demonstrate how to create a user-provided service, which streams the logs of its bound applications to a log management service.
 
 
 Documented feature in the CF docs:
@@ -16,7 +16,7 @@ link:https://docs.cloudfoundry.org/devguide/services/user-provided.html#syslog[S
 
 link:https://docs.cloudfoundry.org/devguide/streaming-logs-index.html[More info about streaming app logs in CF]
 
-## Modelling
+## Modeling
 
 `syslog-drain-url` can be defined under `parameters` in a resource of type `org.cloudfoundry.user-provided-service`, as shown in `link:mtad.yaml[mtad.yaml]`:
 ```text
@@ -38,7 +38,7 @@ NOTE: the value of the `syslog-drain-url` parameter can be changed for each depl
 ## Related examples
 - link:../user-provided-service/README.adoc[Manage User-Provided Service Instances]
 
-## Official documentation in Help SAP Portal
+## Official documentation in SAP Help Portal
 - link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e34487b1a8643fb9a93ae6c4894f015.html#loio9e34487b1a8643fb9a93ae6c4894f015__section_resourceSpecificParameters[Resource-Specific Parameters]
 
 ## Try out
