@@ -1,0 +1,145 @@
+:toc:
+
+# Managing CF App Features with MTA
+
+This example shows how to use the `app-features` parameter in an MTA to enable or disable different Cloud Foundry features for your applications. The `app-features` parameter allows fine-grained control over CF app capabilities during deployment.
+
+## Overview
+
+The `app-features` parameter accepts an array of feature flags that can be used to:
+- Enable or disable specific Cloud Foundry application features
+- Control runtime behavior of applications
+- Customize deployment characteristics per environment
+
+## Supported App Features
+
+The following features can be controlled via the `app-features` parameter:
+
+- `ssh`: Enable/disable SSH access to the application container
+- `file-based-vcap-services`: Use file-based service bindings instead of environment variables
+
+More features may be added in the future as Cloud Foundry evolves, please refer to the following link:https://v3-apidocs.cloudfoundry.org/index.html#supported-app-features[link] for the latest updates.
+
+## Try it out
+
+### Deploy an MTA with App Features
+
+The example demonstrates how to configure different app features using the `app-features` parameter.
+
+### Deploy from directory
+This approach uses deployment descriptor `mtad.yaml` and ready application binaries `appBits.zip`:
+``` bash
+$ cf deploy ./ -f ;
+```
+
+### Build and deploy
+This approach uses development descriptor `mta.yaml` and application binaries `appBits.zip` to build an MTAR archive:
+
+``` bash
+$ mbt build -p cf -t . ;
+```
+
+The built MTAR is then deployed:
+
+``` bash
+$ cf deploy cf.app.features_0.0.0.mtar -f ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the `app-features` parameter configuration.
+
+### Examine the result
+
+#### List the deployed MTA
+```bash
+$ cf mta cf.app.features ;
+Showing health and status for multi-target app cf.app.features in org **** / space **** as ****...
+OK
+Version: 0.0.0
+Namespace: 
+
+Apps:
+name                     requested state   instances   memory   disk   urls
+my-featured-app-module   STARTED           1/1         19.6M    5.3M   orgname-spacename-my-featured-app-module.example.com
+
+Services:
+name            service   plan          bound apps               last operation
+xsuaa-service   xsuaa     application   my-featured-app-module   create succeeded
+```
+
+#### Verify app features
+Check that the app was deployed with the specified features:
+
+``` bash
+$ cf curl v3/apps/$(cf app my-featured-app-module --guid)/features
+{
+  "resources": [
+    {
+      "name": "ssh",
+      "description": "Enable SSHing into the app.",
+      "enabled": true
+    },
+    {
+      "name": "revisions",
+      "description": "Enable versioning of an application",
+      "enabled": true
+    },
+    {
+      "name": "service-binding-k8s",
+      "description": "Enable k8s service bindings for the app",
+      "enabled": false
+    },
+    {
+      "name": "file-based-vcap-services",
+      "description": "Enable file-based VCAP service bindings for the app",
+      "enabled": true
+    }
+  ],
+  "pagination": {
+    "total_results": 4,
+    "total_pages": 1,
+    "first": {
+      "href": "/v3/apps/e41aef45-76e1-4c2a-b375-f17b7ae47566/features"
+    },
+    "last": {
+      "href": "/v3/apps/e41aef45-76e1-4c2a-b375-f17b7ae47566/features"
+    },
+    "next": null,
+    "previous": null
+  }
+}
+```
+
+#### Test SSH access (if enabled)
+If SSH feature is enabled in the app-features:
+``` bash
+$ cf ssh my-featured-app ;
+```
+
+#### Test file based VCAP services (if enabled)
+If File based VCAP services is enabled, then service bindings will be set in file with specified path in `VCAP_SERVICES_FILE_PATH` environment variable:
+``` bash
+$ cf env my-featured-app-module
+Getting env variables for app my-featured-app-module in org **** / space **** as ****...
+System-Provided:
+VCAP_SERVICES_FILE_PATH: "/etc/cf-service-bindings/vcap_services"
+...
+```
+
+### Use Cases
+
+Enable SSH for debugging:
+```yaml
+app-features:
+  ssh: true
+```
+
+Enable file based VCAP services to mitigate env limit of 130kB:
+```yaml
+app-features:
+  file-based-vcap-services: true
+```
+
+### Related Examples
+
+* link:../cf-app[Simple CF app example, managing app attributes & deploy parameters]
+* link:../blue-green-deploy-strategy[Deploy with Blue-green strategy]
