@@ -1,0 +1,26 @@
+ID: cf.app.features
+_schema-version: 3.3.0
+version: 0.0.0
+
+modules:
+  # CF app demonstrating the app-features parameter
+  - name: my-featured-app-module
+    type: application
+    path: "appBits.zip"
+    parameters:
+      memory: 1G
+      disk-quota: 1G
+      instances: 1
+      # App Features Configuration
+      app-features:
+        ssh: true # Enable SSH access to the application container
+        file-based-vcap-services: true # Use file-based service bindings instead of environment variables
+    requires:
+      - name: xsuaa-service
+
+resources:
+  - name: xsuaa-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
