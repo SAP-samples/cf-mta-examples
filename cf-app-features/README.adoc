@@ -2,7 +2,12 @@
 
 # Managing CF App Features with MTA
 
-This example shows how to use the `app-features` parameter in an MTA to enable or disable different Cloud Foundry features for your applications. The `app-features` parameter allows fine-grained control over CF app capabilities during deployment.
+This example shows how to use the `app-features` parameter in an MTA to enable or disable different Cloud Foundry features for your applications. The `app-features` parameter allows fine-grained control over CF app capabilities during deployment. This feature also helps solve the 130KB environment variable limit issue described in link:https://github.com/cloudfoundry/garden-runc-release/issues/160[garden-runc-release#160] by providing an alternative way to configure app features without using environment variables.
+
+## Official Documentation
+
+For more information about the `app-features` parameter and other module-specific parameters, see:
+link:https://help.sap.com/docs/btp/sap-business-technology-platform/modules?locale=en-US#module-specific-parameters[SAP BTP Documentation - Module-Specific Parameters]
 
 ## Overview
 
