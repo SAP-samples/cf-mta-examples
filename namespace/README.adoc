@@ -8,7 +8,7 @@ This example shows how to deploy a single MTA multiple times in a space using na
 * Installed MultiApps CF CLI Plugin v2.5.0 or above
 
 ## Official documentation
-* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b28fd77836d44bde8c404618bf0f1228.html[(Experimental) Namespaces]
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b28fd77836d44bde8c404618bf0f1228.html[Namespaces]
 
 ## Deploying two applications in namespace
 Checkout the repository and navigate to 'cf-mta-examples/namespace/two-modules'
