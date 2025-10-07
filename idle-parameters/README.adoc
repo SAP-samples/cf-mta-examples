@@ -1,4 +1,4 @@
-# Using idle parameters [EXPERIMENTAL]
+# Using idle parameters
 :toc:
 
 ## Overview
