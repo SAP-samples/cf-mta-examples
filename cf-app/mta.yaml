@@ -16,17 +16,17 @@ modules:
             \"elements\": \"${default-url}\"
             }
           ]"
-    parameters: #ALL paramters are optional and can be deleted- defaults will be taken/detected if non specified. 
+    parameters: #ALL paramters are optional and can be deleted- defaults will be taken/detected if non specified.
       buildpack: staticfile_buildpack
-      app-name: my-cf-app 
-      memory: 1G 
-      disk-quota: 1G 
-      no-route: false 
-      no-start: false 
-      instances: 1 
-      routes: # if not defined, a default route would be auto assigned unless no-route is specified
-        - route: ${default-host}.${default-domain}
-        - route: my-custom-host.at.some.domain
+      app-name: my-cf-app
+      memory: 1G
+      disk-quota: 1G
+      no-route: false
+      no-start: false
+      instances: 1
+      # routes: # if not defined, a default route would be auto assigned unless no-route is specified
+      #   - route: ${default-host}.${default-domain}
+      #   - route: my-custom-host.at.some.domain
       upload-timeout: 180 #seconds
       health-check-type: http #http/port/process
       health-check-http-endpoint: "/index" # the http route pinged
@@ -38,7 +38,7 @@ modules:
       ##out of scope for this example:
       #hosts: #registering multitude of hosts
       #domain: #rarely are custom domain registered in such manner
-      #domains: 
+      #domains:
       #
       #command: java -jar ... #start my app in a custom way with this command
       #
@@ -50,8 +50,8 @@ modules:
       #tasks: # Execute this task after staging my app
       #   - name: my task
       #     command: echo "Custom command executed in an app container!"
-      #keep-existing: #Usually used when *.mtaext files are not maintained and the platform is relied on to persist the config state. E.g. multitenant apps which receive additional routes on onboarding of accounts 
-      #  env: false 
+      #keep-existing: #Usually used when *.mtaext files are not maintained and the platform is relied on to persist the config state. E.g. multitenant apps which receive additional routes on onboarding of accounts
+      #  env: false
       #  routes: false
       #  service-bindings: false
       #
