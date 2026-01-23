@@ -28,7 +28,7 @@ The built MTAR is then deployed:
 $ cf deploy a.cf.app_0.0.0.mtar -f ;
 ```
 
-NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used.
+NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for details on the attributes and environment and deployer parameters used. To learn more about what parameters are supported for CF apps, see the link:https://help.sap.com/docs/btp/sap-business-technology-platform/modules?ai=true&locale=en-US#module-specific-parameters[official documentation]
 
 ## Examine the result
 
@@ -40,7 +40,7 @@ OK
 Version: 0.0.0
 Apps:
 name        requested state   instances   memory   disk   urls
-my-cf-app   started           1/1         1G       1G     orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com, my-custom-host.at.some.domain
+my-cf-app   started           1/1         1G       1G     orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com
 ```
 
 ### List app status and attributes
@@ -50,7 +50,7 @@ Showing health and status for app my-cf-app in org ********** / space ******** a
 
 name:              my-cf-app
 requested state:   started
-routes:            orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com, my-custom-host.at.some.domain
+routes:            orgname-spacename-my-mta-managed-app-module.cfapps.sap.hana.ondemand.com
 last uploaded:     Thu 22 Aug 00:46:00 EEST 2019
 stack:             cflinuxfs4
 buildpacks:        staticfile
