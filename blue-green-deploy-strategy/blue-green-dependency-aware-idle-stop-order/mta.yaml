@@ -1,0 +1,20 @@
+_schema-version: 3.3.0
+ID: hello-world
+version: 1.0.0
+parameters:
+  bg-dependency-aware-stop-order: true
+
+modules:
+- name: provider-app
+  type: staticfile
+  path: content/hello_world.zip
+  parameters:
+    memory: 64M
+
+- name: consumer-app
+  type: staticfile
+  path: content/hello_world.zip
+  deployed-after:
+      - provider-app
+  parameters:
+    memory: 64M

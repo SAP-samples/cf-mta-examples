@@ -1,0 +1,109 @@
+= Dependency-Aware Stop Order in Blue-Green Deployments
+:toc:
+:toclevels: 2
+
+== Overview
+
+This example demonstrates how to use the `bg-dependency-aware-stop-order` parameter together with the `deployed-after` attribute to prevent transient failures during blue-green deployments of MTAs.
+
+In complex application setups, some modules depend on others being continuously available. During the final phase of a blue-green deployment, idle applications are restarted and stopped. If this happens in an incorrect order, dependent modules may temporarily lose access to their dependencies, leading to request failures.
+
+== Scenario
+
+The MTA consists of the following modules:
+
+* `provider-app` – a module that must remain available
+* `consumer-app` – an application module that depends on `provider-app`
+
+The `consumer-app` module communicates with `provider-app` during runtime. If `provider-app` is stopped while `consumer-app` is still running, requests from `consumer-app` to `provider-app` will fail.
+
+== Problem
+
+During a standard blue-green deployment:
+
+. Idle versions of all modules are started.
+. The deployment enters the final (resume) phase.
+. Idle applications are stopped and restarted.
+
+Without dependency-aware ordering, `provider-app-idle` may be stopped while `consumer-app-idle` is still running, causing transient failures due to the temporary unavailability of `provider-app`.
+
+== Solution
+
+Enable dependency-aware stop order using one of the following options:
+
+* Set the global parameter `bg-dependency-aware-stop-order` in the deployment descriptor
+* Use the deployment flag `--dependency-aware-stop-order`
+
+NOTE: When both are specified, the command-line flag `--dependency-aware-stop-order` takes precedence over the descriptor parameter.
+
+This ensures that during the final phase of the blue-green deployment:
+
+* Dependent modules are stopped first
+* Dependencies remain available
+* Dependencies are restarted before dependent modules are updated and started
+
+
+== Example Deployment
+
+Deploy the application using the blue-green strategy:
+
+[source,bash]
+----
+ cf deploy hello.mtar --strategy blue-green --skip-testing-phase                            
+Deploying multi-target app archive hello.mtar in org ... / space ... as ...
+...
+Operation ID: 42063835-fde4-11f0-b2f9-eeee0a981ee1
+Deploying in org "..." and space "..."
+Detected MTA schema version: "3"
+No deployed MTA detected - this is initial deployment of MTA with ID "hello-world"
+Detected new MTA version: "1.0.0"
+Creating application "provider-app-idle" from MTA module "provider-app"...
+Uploading application "provider-app-idle"...
+Started async upload of application "provider-app-idle"
+Staging application "provider-app-idle"...
+Application "provider-app-idle" staged
+Starting application "provider-app-idle"...
+Application "provider-app-idle" started and available at "..."
+Creating application "consumer-app-idle" from MTA module "consumer-app"...
+Uploading application "consumer-app-idle"...
+Started async upload of application "consumer-app-idle"
+Staging application "consumer-app-idle"...
+Application "consumer-app-idle" staged
+Starting application "consumer-app-idle"...
+Application "consumer-app-idle" started and available at "..."
+----
+
+Resume phase: 
+
+[source,bash]
+----
+Detected new MTA version: "1.0.0"
+Application "consumer-app-idle" stopped
+Updating application "provider-app-idle"...
+Renaming application "provider-app-idle" to "provider-app"...
+Stopping application "provider-app"...
+Starting application "provider-app"...
+Application "provider-app" started and available at "..."
+Updating application "consumer-app-idle"...
+Renaming application "consumer-app-idle" to "consumer-app"...
+Starting application "consumer-app"...
+Application "consumer-app" started and available at "..."
+Skipping deletion of services, because the command line option "--delete-services" is not specified.
+Process finished.
+Use "cf dmol -i 42063835-fde4-11f0-b2f9-eeee0a981ee1" to download the logs of the process.
+----
+
+We can see that with dependency-aware stop order enabled in the resume phase:
+
+* `consumer-app` is stopped before `provider-app`
+* `provider-app` is restarted before `consumer-app` is started again
+
+
+== Notes
+
+* This parameter affects only the final phase of a blue-green deployment.
+* It does not affect the testing phase, during which both live and idle applications run in parallel.
+* The feature is disabled by default and must be explicitly enabled.
+
+For more information, see:
+https://help.sap.com/docs/btp/sap-business-technology-platform/parameters-and-properties#parameters
