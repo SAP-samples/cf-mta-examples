@@ -31,8 +31,9 @@ Without dependency-aware ordering, `provider-app-idle` may be stopped while `con
 
 Enable dependency-aware stop order using one of the following options:
 
-* Set the global parameter `bg-dependency-aware-stop-order` in the deployment descriptor
-* Use the deployment flag `--dependency-aware-stop-order`
+Set the global boolean parameter bg-dependency-aware-stop-order (default: false) in the deployment descriptor, or enable it at deploy time using the command-line option:
+
+`cf deploy hello.mtar --strategy blue-green --dependency-aware-stop-order`
 
 NOTE: When both are specified, the command-line flag `--dependency-aware-stop-order` takes precedence over the descriptor parameter.
 
