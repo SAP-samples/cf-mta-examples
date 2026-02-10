@@ -14,7 +14,7 @@ modules:
       url: ~{url}
   parameters:
     buildpack: sap_java_buildpack_jakarta
-    disk-quota: 256M
+    disk-quota: 512M
     memory: 1GB
 - name: hello-backend
   type: java.tomcat
@@ -26,5 +26,5 @@ modules:
       url: ${default-url}
   parameters:
     buildpack: sap_java_buildpack_jakarta
-    disk-quota: 256M
+    disk-quota: 512M
     memory: 1GB

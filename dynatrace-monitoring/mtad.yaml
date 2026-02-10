@@ -14,7 +14,7 @@ resources:
 
 modules:
   - name: my-java-app-module
-    type: application
+    type: java.tomcat
     path: hello.war
     parameters:
       buildpack: sap_java_buildpack_jakarta # Not all buildpacks can enable dynatrace integration

@@ -9,11 +9,10 @@ modules:
     parameters:
       buildpack: sap_java_buildpack_jakarta
       memory: 512M
-      disk-quota: 256M
+      disk-quota: 512M
       routes:
         - route: hello-backend.${space}.${default-domain}
         - route: route-without-namespace.${space}.${default-domain}
           apply-namespace: false
     properties:
       message: "Hello World!"
-      MEMORY_CALCULATOR_V1: true
