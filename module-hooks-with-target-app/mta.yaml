@@ -1,0 +1,29 @@
+ID: hook-test
+_schema-version: "3.3.0"
+version: 0.1.7
+
+modules:
+  - name: my-module
+    type: application
+    path: appBits.zip
+
+    hooks:
+      - name: default-behavior-hook
+        type: task
+        phases:
+          - blue-green.application.after-stop.live
+        parameters:
+          command: "echo DEFAULT_NO_REDIRECT"
+
+      - name: target-app-test
+        type: task
+        phases:
+          - blue-green.application.after-stop.live
+        parameters:
+          command: "echo REDIRECTED_TO_IDLE"
+          phases-config:
+            - phase: blue-green.application.after-stop.live
+              target-app: idle
+#            - phase: blue-green.application.after-stop.live
+#              target-app: live
+

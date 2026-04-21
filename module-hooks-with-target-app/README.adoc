@@ -1,0 +1,105 @@
+:toc:
+
+# Module hooks with target-app
+
+Define and execute hooks at specific phases of a blue-green deployment, targeting a specific application variant (idle or live).
+
+By default, a hook task runs on the application that owns the hook. The `phases-config` parameter lets you override this and redirect the hook execution to the `idle` or `live` app variant instead.
+
+## Official Documentation
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b9245ba90aa14681a416065df8e8c593.html[Module Hooks]
+
+## Activation
+
+- Use `_schema-version` with major version `3`, for instance `3.3.0`
+- Add a `hooks` section to the module
+- Use `phases-config` inside a hook to specify which app variant (`idle` or `live`) should execute the task
+
+```yaml
+ID: hook-test
+_schema-version: "3.3.0"
+version: 0.1.7
+
+modules:
+  - name: my-module
+    type: application
+    path: appBits.zip
+
+    hooks:
+      - name: default-behavior-hook
+        type: task
+        phases:
+          - blue-green.application.after-stop.live
+        parameters:
+          command: "echo DEFAULT_NO_REDIRECT"
+
+      - name: target-app-test
+        type: task
+        phases:
+          - blue-green.application.after-stop.live
+        parameters:
+          command: "echo REDIRECTED_TO_IDLE"
+          phases-config:
+            - phase: blue-green.application.after-stop.live
+              target-app: idle
+```
+
+### Behaviour
+
+| Hook | `phases-config` `target-app` | Executes on |
+|---|---|---|
+| `default-behavior-hook` | _(not set)_ | `my-module-live` (owner, default) |
+| `target-app-test` | `idle` | `my-module` (the idle/new variant) |
+
+Without `phases-config`, the task always runs on the app variant that owns the hook. Setting `target-app: idle` redirects it to the newly deployed app; `target-app: live` keeps it on the old app.
+
+NOTE: Only one `target-app` entry per phase is allowed. Defining the same phase twice results in a deployment error.
+
+## Try it out
+
+### `cf deploy --strategy blue-green` (recommended)
+
+```bash
+cf deploy --strategy blue-green --skip-testing-phase
+```
+
+Expected output (see link:output/bg-deploy-blue-green-strategy.txt[bg-deploy-blue-green-strategy.txt]):
+
+```
+...
+Stopping application "my-module-live"...
+Executing hook "default-behavior-hook"
+Executing task "default-behavior-hook" on application "my-module-live"...   # <-- runs on live (default)
+Executing hook "target-app-test"
+Executing task "target-app-test" on application "my-module"...              # <-- redirected to idle
+Deleting application "my-module-live"...
+Process finished.
+```
+
+### `cf bg-deploy` (legacy)
+
+```bash
+cf bg-deploy --no-confirm
+```
+
+Expected output (see link:output/bg-deploy-legacy.txt[bg-deploy-legacy.txt]):
+
+```
+...
+Stopping application "my-module-green"...
+Executing hook "default-behavior-hook"
+Executing task "default-behavior-hook" on application "my-module-green"...  # <-- runs on live (green)
+Executing hook "target-app-test"
+Executing task "target-app-test" on application "my-module-blue"...         # <-- redirected to idle (blue)
+Deleting application "my-module-green"...
+Process finished.
+```
+
+### Error case — duplicate phase
+
+Defining the same phase twice in `phases-config` causes the deployment to fail (see link:output/bg-deploy-blue-green-strategy-duplicate-phase-failure.txt[bg-deploy-blue-green-strategy-duplicate-phase-failure.txt]):
+
+```
+Error merging descriptors: Duplicate phase "blue-green.application.after-stop.live" in "phases-config" of hook "target-app-test". Only one target-app per phase is supported.
+Process failed.
+```
