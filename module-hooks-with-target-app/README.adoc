@@ -6,6 +6,22 @@ Define and execute hooks at specific phases of a blue-green deployment, targetin
 
 By default, a hook task runs on the application that owns the hook. The `phases-config` parameter lets you override this and redirect the hook execution to the `idle` or `live` app variant instead.
 
+## Supported Blue-Green Phases
+
+The following phases support hooks of type `task`. The **Default target-app** column shows which application variant the hook executes on when no `phases-config` `target-app` is specified:
+
+| Phase | Supported type | Default target-app |
+|---|---|---|
+| `blue-green.application.before-stop.idle` | task | idle |
+| `blue-green.application.before-stop.live` | task | live |
+| `blue-green.application.after-stop.idle` | task | idle |
+| `blue-green.application.after-stop.live` | task | live |
+| `blue-green.application.before-unmap-routes.live` | task | live |
+| `blue-green.application.before-start.idle` | task | idle |
+| `blue-green.application.before-start.live` | task | idle |
+
+NOTE: The phase suffix (`.idle` or `.live`) indicates **when** the hook fires relative to the deployment lifecycle — it does not necessarily dictate where the hook runs. For example, `before-start.live` fires before starting the live app but defaults to executing the task on the **idle** variant. Use `phases-config` with `target-app` to override the default and explicitly control which variant runs the hook.
+
 ## Official Documentation
 * SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b9245ba90aa14681a416065df8e8c593.html[Module Hooks]
 
@@ -31,14 +47,14 @@ modules:
         phases:
           - blue-green.application.after-stop.live
         parameters:
-          command: "echo DEFAULT_NO_REDIRECT"
+          command: "echo Executing hook on live application"
 
       - name: target-app-test
         type: task
         phases:
           - blue-green.application.after-stop.live
         parameters:
-          command: "echo REDIRECTED_TO_IDLE"
+          command: "echo Executing hook on idle application"
           phases-config:
             - phase: blue-green.application.after-stop.live
               target-app: idle

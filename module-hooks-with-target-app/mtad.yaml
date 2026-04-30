@@ -13,17 +13,15 @@ modules:
         phases:
           - blue-green.application.after-stop.live
         parameters:
-          command: "echo DEFAULT_NO_REDIRECT"
+          command: "echo Executing hook on live application"
 
       - name: target-app-test
         type: task
         phases:
           - blue-green.application.after-stop.live
         parameters:
-          command: "echo REDIRECTED_TO_IDLE"
+          command: "echo Executing hook on idle application"
           phases-config:
             - phase: blue-green.application.after-stop.live
               target-app: idle
-#            - phase: blue-green.application.after-stop.live
-#              target-app: live
 
