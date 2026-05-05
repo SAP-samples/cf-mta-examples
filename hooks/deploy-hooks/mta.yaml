@@ -1,0 +1,27 @@
+ID: a.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+
+modules:
+  - name: cf-app-with-hooks
+    type: application
+    path: "appBits.zip"
+    hooks:
+      - name: deploy-before-stop
+        type: task
+        phases:
+          - deploy.application.before-stop
+        parameters:
+          command: "echo 'Will be executed before the application stops during normal deployment'"
+      - name: deploy-after-stop
+        type: task
+        phases:
+          - deploy.application.after-stop
+        parameters:
+          command: "echo 'Will be executed after the application stops during normal deployment'"
+      - name: deploy-before-start
+        type: task
+        phases:
+          - deploy.application.before-start
+        parameters:
+          command: "echo 'Will be executed before the application starts during normal deployment'"

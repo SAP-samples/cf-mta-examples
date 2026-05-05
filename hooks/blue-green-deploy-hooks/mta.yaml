@@ -4,15 +4,9 @@ version: 0.0.0
 
 modules:
   - name: cf-app-with-hooks
-    type: application 
+    type: application
     path: "appBits.zip"
     hooks:
-      - name: deploy-before-stop
-        type: task
-        phases:
-          - deploy.application.before-stop
-        parameters:
-          command: "echo 'Will be executed before the application stops during normal deployment'"
       - name: blue-green-before-stop-idle
         type: task
         phases:
@@ -25,12 +19,6 @@ modules:
           - blue-green.application.before-stop.live
         parameters:
           command: "echo 'Will be executed before the live application stops during blue-green deployment'"
-      - name: deploy-after-stop
-        type: task
-        phases:
-          - deploy.application.after-stop
-        parameters:
-          command: "echo 'Will be executed after the application stops during normal deployment'"
       - name: blue-green-after-stop-idle
         type: task
         phases:
@@ -48,13 +36,7 @@ modules:
         phases:
           - blue-green.application.before-unmap-routes.live
         parameters:
-          command: "echo 'Will be executed before the unmapping of the live application routes druing blue-green deployment (resume phase)'"
-      - name: deploy-before-start
-        type: task
-        phases:
-          - deploy.application.before-start
-        parameters:
-          command: "echo 'Will be executed before the application starts during normal deployment'"
+          command: "echo 'Will be executed before the unmapping of the live application routes during blue-green deployment (resume phase)'"
       - name: blue-green-before-start-idle
         type: task
         phases:

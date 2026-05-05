@@ -1,0 +1,81 @@
+:toc:
+
+# Blue-Green Deploy Hooks
+
+Define and execute hooks at specific phases of a blue-green deployment.
+
+## Official Documentation
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b9245ba90aa14681a416065df8e8c593.html[Module Hooks]
+
+## Supported Phases
+
+| Phase | Type | Description |
+|---|---|---|
+| `blue-green.application.before-stop.idle` | task | Before the idle application is stopped |
+| `blue-green.application.before-stop.live` | task | Before the live application is stopped |
+| `blue-green.application.after-stop.idle` | task | After the idle application is stopped |
+| `blue-green.application.after-stop.live` | task | After the live application is stopped |
+| `blue-green.application.before-unmap-routes.live` | task | Before unmapping routes from the live application |
+| `blue-green.application.before-start.idle` | task | Before the idle application is started |
+| `blue-green.application.before-start.live` | task | Before the live application is started |
+
+## Activation
+
+- Use `_schema-version` with major version `3`, for instance `3.3.0`
+- Add a `hooks` section to the module with blue-green phases
+
+```yaml
+ID: a.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+
+modules:
+  - name: cf-app-with-hooks
+    type: application
+    path: "appBits.zip"
+    hooks:
+      - name: blue-green-before-stop-idle
+        type: task
+        phases:
+          - blue-green.application.before-stop.idle
+        parameters:
+          command: "echo 'Will be executed before the idle application stops during blue-green deployment'"
+      - name: blue-green-after-stop-live
+        type: task
+        phases:
+          - blue-green.application.after-stop.live
+        parameters:
+          command: "echo 'Will be executed after the live application stops during blue-green deployment (resume phase)'"
+```
+
+## Try it out
+
+### `cf deploy --strategy blue-green`
+
+```bash
+cf deploy --strategy blue-green --skip-testing-phase
+```
+
+Expected output (see link:output/blue-green.application.before-stop.idle.txt[blue-green.application.before-stop.idle.txt]):
+
+```
+...
+Executing hook "blue-green-before-stop-idle"
+Executing task "blue-green-before-stop-idle" on application "cf-app-with-hooks"...
+Stopping application "cf-app-with-hooks"...
+...
+```
+
+### `cf bg-deploy` (legacy)
+
+```bash
+cf bg-deploy --no-confirm
+```
+
+See link:output/all-hooks-execution.txt[all-hooks-execution.txt] for complete output with all hooks executing.
+
+## Advanced: Redirect hook execution with `target-app`
+
+By default, a hook task runs on the application variant implied by the phase. You can override this using the `phases-config` `target-app` parameter to redirect execution to a different variant (`idle` or `live`).
+
+See link:with-target-app/README.adoc[with-target-app] for a dedicated example.

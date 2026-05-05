@@ -1,0 +1,70 @@
+:toc:
+
+# Deploy Hooks
+
+Define and execute hooks at specific phases of a standard (non-blue-green) module deployment.
+
+## Official Documentation
+* SAP Help Portal: link:https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/b9245ba90aa14681a416065df8e8c593.html[Module Hooks]
+
+## Supported Phases
+
+| Phase | Type | Description |
+|---|---|---|
+| `deploy.application.before-stop` | task | Executes before the application is stopped |
+| `deploy.application.after-stop` | task | Executes after the application is stopped |
+| `deploy.application.before-start` | task | Executes before the application is started |
+
+## Activation
+
+- Use `_schema-version` with major version `3`, for instance `3.3.0`
+- Add a `hooks` section to the module
+
+```yaml
+ID: a.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+
+modules:
+  - name: cf-app-with-hooks
+    type: application
+    path: "appBits.zip"
+    hooks:
+      - name: deploy-before-stop
+        type: task
+        phases:
+          - deploy.application.before-stop
+        parameters:
+          command: "echo 'Will be executed before the application stops during normal deployment'"
+      - name: deploy-after-stop
+        type: task
+        phases:
+          - deploy.application.after-stop
+        parameters:
+          command: "echo 'Will be executed after the application stops during normal deployment'"
+      - name: deploy-before-start
+        type: task
+        phases:
+          - deploy.application.before-start
+        parameters:
+          command: "echo 'Will be executed before the application starts during normal deployment'"
+```
+
+## Try it out
+
+Run `cf deploy` in this directory:
+
+```bash
+cf deploy
+```
+
+Expected output (see link:output/deploy.application.before-stop.txt[deploy.application.before-stop.txt]):
+
+```
+...
+Executing hook "deploy-before-stop"
+Executing task "deploy-before-stop" on application "cf-app-with-hooks"...
+Stopping application "cf-app-with-hooks"...
+Starting application "cf-app-with-hooks"...
+...
+```
