@@ -64,6 +64,12 @@ Optimize deploy time by executing deploy operations in parallel
 ### Idle host and domain during blue-green deployment
 * link:/idle-parameters[Idle route(s), idle host(s) and idle domain(s)]
 
+## Module Hooks
+* link:/hooks[Module Hooks]
+** link:/hooks/deploy-hooks[Deploy Hooks]
+** link:/hooks/blue-green-hooks[Blue-Green Deploy Hooks]
+** link:/hooks/blue-green-hooks/with-target-app[Blue-Green Hooks with target-app]
+
 ## Solution development efficiency
 * link:/partial-build-deploy[Build/Assemble & Deploy only a parts of an MTA]
 

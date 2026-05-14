@@ -1,0 +1,51 @@
+ID: a.cf.app
+_schema-version: 3.3.0
+version: 0.0.0
+
+modules:
+  - name: cf-app-with-hooks
+    type: application
+    path: "appBits.zip"
+    hooks:
+      - name: blue-green-before-stop-idle
+        type: task
+        phases:
+          - blue-green.application.before-stop.idle
+        parameters:
+          command: "echo 'Will be executed before the idle application stops during blue-green deployment'"
+      - name: blue-green-before-stop-live
+        type: task
+        phases:
+          - blue-green.application.before-stop.live
+        parameters:
+          command: "echo 'Will be executed before the live application stops during blue-green deployment'"
+      - name: blue-green-after-stop-idle
+        type: task
+        phases:
+          - blue-green.application.after-stop.idle
+        parameters:
+          command: "echo 'Will be executed after the idle application stops during blue-green deployment (resume phase)'"
+      - name: blue-green-after-stop-live
+        type: task
+        phases:
+          - blue-green.application.after-stop.live
+        parameters:
+          command: "echo 'Will be executed after the live application stops during blue-green deployment (resume phase)'"
+      - name: blue-green-before-unmap-routes-live
+        type: task
+        phases:
+          - blue-green.application.before-unmap-routes.live
+        parameters:
+          command: "echo 'Will be executed before the unmapping of the live application routes during blue-green deployment (resume phase)'"
+      - name: blue-green-before-start-idle
+        type: task
+        phases:
+          - blue-green.application.before-start.idle
+        parameters:
+          command: "echo 'Will be executed before the idle application starts during blue-green deployment'"
+      - name: blue-green-before-start-live
+        type: task
+        phases:
+          - blue-green.application.before-start.live
+        parameters:
+          command: "echo 'Will be executed before the live application start during blue-green deployment (resume phase)'"
