@@ -30,5 +30,6 @@ modules:
       health-check-type: http #http/port/process
       health-check-http-endpoint: "/index" # the http route pinged
       health-check-timeout: 180 #seconds
+      health-check-interval: 30 #seconds, liveness health check polling interval
       app-features:
         ssh: true
