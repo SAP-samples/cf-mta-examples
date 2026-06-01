@@ -278,6 +278,7 @@ name            requested state   instances   memory   disk   urls
 hello-backend   started           1/1         512M     256M   <org>-<space>-hello-backend.cfapps.sap.hana.ondemand.com
 hello-router    started           1/1         512M     256M   <org>-<space>-hello-router.cfapps.sap.hana.ondemand.com
 ```
+
 Verify that the BLUE environent is the productive one and serves on the productive routes:
 ```bash
   $ curl https://<org>-<space>-hello-router.cfapps.sap.hana.ondemand.com/router
