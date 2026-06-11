@@ -26,6 +26,7 @@ Clone the repository, following the link:https://help.github.com/en/github/creat
 * link:/cf-app[Simple CF app example, managing app attributes & deploy parameters]
 * link:/cf-app-features[Managing CF app features with app-features parameter]
 * link:/cf-app-docker[Docker images as cf apps]
+* link:/cf-app-cnb[Cloud Native Buildpacks as cf app staging lifecycle]
 * link:/app-routes[Managing cf app routes]
 * link:/sharing-values-between-apps[Sharing configuration values between apps]
 * link:/skip-app-deploy[Skip app deployment using `skip-deploy` parameter]
