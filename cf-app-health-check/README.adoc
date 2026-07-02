@@ -1,0 +1,133 @@
+:toc:
+
+# Configuring CF App Health Checks with MTA
+
+This example shows how to configure Cloud Foundry application health checks through the MTA `health-check-*` parameters. Health checks determine when Cloud Foundry considers an app instance healthy after start and while it is running; misconfiguring them is a common cause of "app crashed" or "app never became healthy" failures on deploy.
+
+## Official Documentation
+
+For general information about module parameters, see:
+link:https://help.sap.com/docs/btp/sap-business-technology-platform/modules?locale=en-US#module-specific-parameters[SAP BTP Documentation - Module-Specific Parameters]
+
+For the underlying Cloud Foundry concept, see:
+link:https://docs.cloudfoundry.org/devguide/deploy-apps/healthchecks.html[Cloud Foundry Docs - Using Application Health Checks]
+
+## Overview
+
+Four MTA parameters cover the full health-check surface of a CF application:
+
+[cols="1,3", options="header"]
+|===
+| Parameter                     | Purpose
+| `health-check-type`           | How CF probes the app: `http`, `port`, or `process`
+| `health-check-http-endpoint`  | HTTP path CF requests when `health-check-type: http`
+| `health-check-timeout`        | Seconds CF waits for the app to become healthy after start
+| `health-check-interval`       | Seconds between successive health checks while the app runs
+|===
+
+### Picking a `health-check-type`
+
+[cols="1,3", options="header"]
+|===
+| Type      | When to use it
+| `http`    | The app serves HTTP and can respond with `2xx` on a known path. Pair with `health-check-http-endpoint`.
+| `port`    | The app listens on the port CF assigns (`$PORT`) but does not serve HTTP, or you don't want to expose a health endpoint.
+| `process` | The app is not network-facing (worker, one-off task). CF only checks that the process is alive.
+|===
+
+### About `health-check-interval`
+
+`health-check-interval` is a newer MTA parameter, added in link:https://github.com/cloudfoundry/multiapps-controller/pull/1853[cloudfoundry/multiapps-controller#1853]. It maps to CF's v3 process `health_check.data.interval` field and controls how often the liveness check runs after the app is up. If you deploy this example against an older SAP Cloud Deployment service that predates that change, the parameter will be ignored (or reported as unknown). Omit the line in that case; the other three parameters have been supported for much longer.
+
+## Try it out
+
+### Deploy from directory
+This approach uses deployment descriptor `mtad.yaml` and ready application binaries `appBits.zip`:
+``` bash
+$ cf deploy ./ -f ;
+```
+
+### Build and deploy
+This approach uses development descriptor `mta.yaml` and application binaries `appBits.zip` to build an MTAR archive:
+
+``` bash
+$ mbt build -p cf -t . ;
+```
+
+The built MTAR is then deployed:
+
+``` bash
+$ cf deploy cf.app.health.check_0.0.0.mtar -f ;
+```
+
+NOTE: See link:mta.yaml[mta.yaml] or link:mtad.yaml[mtad.yaml] for the full parameter set.
+
+### Examine the result
+
+#### List the deployed MTA
+```bash
+$ cf mta cf.app.health.check ;
+Showing health and status for multi-target app cf.app.health.check in org **** / space **** as ****...
+OK
+Version: 0.0.0
+Namespace:
+
+Apps:
+name                            requested state   instances   memory   disk   urls
+my-health-checked-app-module    STARTED           1/1         19.6M    5.3M   orgname-spacename-my-health-checked-app-module.example.com
+```
+
+#### Verify the health check landed on the CF process
+Inspect the `health_check` block on the app's web process. All four values from the MTA descriptor should be reflected here:
+
+``` bash
+$ cf curl "/v3/apps/$(cf app my-health-checked-app-module --guid)/processes" ;
+{
+  "resources": [
+    {
+      "type": "web",
+      "instances": 1,
+      "health_check": {
+        "type": "http",
+        "data": {
+          "timeout": 180,
+          "invocation_timeout": null,
+          "interval": 15,
+          "endpoint": "/index"
+        }
+      },
+      ...
+    }
+  ]
+}
+```
+
+If `interval` is `null` in the output despite being set in the descriptor, the deploy service is older than link:https://github.com/cloudfoundry/multiapps-controller/pull/1853[multiapps-controller#1853].
+
+### Use Cases
+
+Fast-recovering web app (frequent checks, short grace period):
+```yaml
+health-check-type: http
+health-check-http-endpoint: "/health"
+health-check-timeout: 30
+health-check-interval: 5
+```
+
+Slow-starting app that only needs to open a port:
+```yaml
+health-check-type: port
+health-check-timeout: 300
+health-check-interval: 30
+```
+
+Background worker with no listening port:
+```yaml
+health-check-type: process
+health-check-timeout: 60
+```
+
+### Related Examples
+
+* link:../cf-app[Simple CF app example, managing app attributes & deploy parameters]
+* link:../cf-app-features[Managing CF app features with app-features parameter]

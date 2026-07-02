@@ -1,0 +1,16 @@
+_schema-version: 3.3.0
+ID: cf.app.health.check
+version: 0.0.0
+
+modules:
+  - name: my-health-checked-app-module
+    type: application
+    path: "appBits.zip"
+    parameters:
+      memory: 1G
+      disk-quota: 1G
+      instances: 1
+      health-check-type: http                # http / port / process
+      health-check-http-endpoint: "/index"   # only relevant when health-check-type is http
+      health-check-timeout: 180              # seconds to wait for the first successful check after start
+      health-check-interval: 15              # seconds between checks
