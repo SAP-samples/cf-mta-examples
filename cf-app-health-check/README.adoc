@@ -31,13 +31,13 @@ Four MTA parameters cover the full health-check surface of a CF application:
 |===
 | Type      | When to use it
 | `http`    | The app serves HTTP and can respond with `2xx` on a known path. Pair with `health-check-http-endpoint`.
-| `port`    | The app listens on the port CF assigns (`$PORT`) but does not serve HTTP, or you don't want to expose a health endpoint.
+| `port`    | The app listens on the port CF assigns (`$PORT`) but does not serve HTTP, or you don't want to expose a health endpoint. Applied by default when `health-check-type` is not set.
 | `process` | The app is not network-facing (worker, one-off task). CF only checks that the process is alive.
 |===
 
 ### About `health-check-interval`
 
-`health-check-interval` is a newer MTA parameter, added in link:https://github.com/cloudfoundry/multiapps-controller/pull/1853[cloudfoundry/multiapps-controller#1853]. It maps to CF's v3 process `health_check.data.interval` field and controls how often the liveness check runs after the app is up. If you deploy this example against an older SAP Cloud Deployment service that predates that change, the parameter will be ignored (or reported as unknown). Omit the line in that case; the other three parameters have been supported for much longer.
+`health-check-interval` maps to CF's v3 process `health_check.data.interval` field and controls how often the liveness check runs after the app is up.
 
 ## Try it out
 
@@ -102,7 +102,7 @@ $ cf curl "/v3/apps/$(cf app my-health-checked-app-module --guid)/processes" ;
 }
 ```
 
-If `interval` is `null` in the output despite being set in the descriptor, the deploy service is older than link:https://github.com/cloudfoundry/multiapps-controller/pull/1853[multiapps-controller#1853].
+If `interval` is `null` in the output despite being set in the descriptor, the deploy service version does not yet support the parameter.
 
 ### Use Cases
 
