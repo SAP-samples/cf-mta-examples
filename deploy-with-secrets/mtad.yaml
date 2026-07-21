@@ -1,0 +1,25 @@
+_schema-version: "3.1"
+ID: example-services
+version: 1.2.0
+
+modules:
+  - name: myApp
+    type: staticfile
+    path: appBits.zip
+    parameters:
+      app-name: example-app
+      memory: 299M
+      disk-quota: 107M
+    requires:
+      - name: my-resource
+        parameters:
+          config:
+            importantParameter: ${configSecret}
+
+resources:
+  - name: my-resource
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: workflow
+      service-plan: standard
+      service-name: my-resource-name
