@@ -1,0 +1,205 @@
+# Secrets During Deployment Feature
+
+## Overview
+
+This feature enables secure handling of secret values during deployment without exposing them in MTA descriptors or source control repositories. The SAP Cloud Deployment Service processes these secrets securely using encryption.
+
+## Security Considerations
+
+- Secrets are never stored in plain text in deployment descriptors.
+- Encryption keys are managed through Cloud Foundry User Provided Services (UPS).
+- Secrets are protected in transit, at rest, and in logs.
+- Two operational modes are supported: persistent UPS and disposable UPS.
+
+## How Secret Values Are Handled
+
+1. Declare secrets as environment variables.
+2. Encrypt secrets using a User Provided Service (UPS).
+3. Transmit secrets securely to the deployment service.
+4. Decrypt secrets in memory only during deployment.
+
+## Activation
+
+To enable secure parameter handling:
+
+1. Add the --require-secure-parameters flag to the deploy command.
+2. Choose persistent or disposable UPS behavior.
+
+Basic command:
+```bash
+cf deploy ./ -f -e extension.mtaext,extension-after.mtaext --require-secure-parameters
+```
+
+Disposable UPS command:
+```bash
+cf deploy ./ -f -e extension.mtaext,extension-after.mtaext \
+  --require-secure-parameters \
+  --disposable-user-provided-service
+```
+
+## User Provided Service (UPS) Details
+
+Naming conventions:
+- Persistent UPS: __mta-secure-<mtaId> (or __mta-secure-<mtaId>-<namespace>)
+- Disposable UPS: __mta-secure-<mtaId>-<random suffix> (or with namespace)
+
+UPS credentials format:
+```json
+{
+  "encryptionKey": "<32-character-key>"
+}
+```
+
+Example UPS creation:
+```bash
+cf cups __mta-secure-myApp -p '{"encryptionKey": "abdfgtresghytiothewqprtimgnhdrwp"}'
+```
+
+Key requirements:
+- Exactly 32 characters.
+- Alphanumeric characters, hyphens, and underscores only are allowed.
+
+## Declaring Secret Values
+
+Declare secrets as environment variables with these prefixes:
+
+Plain string secret:
+```bash
+__MTA___<NAME>=plainStringSecret
+```
+
+JSON secret:
+```bash
+__MTA_JSON___<NAME>='{"secretKey":"secretValue"}'
+```
+
+Certificate secret:
+```bash
+__MTA_CERT___<NAME>=<base64-encoded-certificate>
+```
+
+Environment variable syntax may vary depending on your shell or client environment.
+
+## Key Management
+
+Best practices:
+- Rotate keys between deployments, not during an active deployment.
+- For automated key rotation, use disposable UPS.
+- Ensure all processes using the old key are complete before deleting it.
+- For persistent UPS, it is advised to create it or update it before each new process.
+
+## Protection Levels
+
+- In transit: Secrets are sent over HTTPS in an in-memory extension descriptor.
+- At rest: Secrets are stored encrypted only during the deployment operation.
+- In logs: Secrets are excluded from logs.
+
+Recommendation: Avoid using the --keep-files option to ensure proper cleanup.
+
+## Where The Components Are
+
+- Multiapps CF CLI Plugin: local machine, CI/CD pipelines and etc.
+- User Provided Service: your Cloud Foundry organization/account.
+- SAP Cloud Deployment Service: SAP-owned account.
+
+## Usage Examples
+
+### Persistent UPS
+
+1. Set an environment variable:
+```bash
+__MTA___configSecret="confidentialInformation"
+```
+
+2. Create the UPS (or let the CLI create it automatically):
+```bash
+cf cups __mta-secure-myApp -p '{"encryptionKey": "abdfgtresghytiothewqprtimgnhdrwp"}'
+```
+
+3. Deploy with secure parameters:
+```bash
+cf deploy ./ -f -e extension.mtaext,extension-after.mtaext --require-secure-parameters
+```
+
+4. Example descriptor with a secret reference:
+```yaml
+_schema-version: "3.1"
+ID: example-services
+version: 1.2.0
+
+modules:
+  - name: myApp
+    type: staticfile
+    path: appBits.zip
+    parameters:
+      app-name: example-app-persistent
+      memory: 299M
+      disk-quota: 107M
+    requires:
+      - name: my-resource
+        parameters:
+          config:
+            importantParameter: ${configSecret}
+
+resources:
+  - name: my-resource
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: workflow
+      service-plan: standard
+      service-name: my-resource-name
+```
+
+5. After deployment, delete the UPS:
+```bash
+cf delete-service __mta-secure-myApp
+```
+
+### Disposable UPS
+
+1. Set an environment variable:
+```bash
+__MTA___configSecret="confidentialInformation"
+```
+
+2. Deploy with a disposable UPS:
+```bash
+cf deploy ./ -f -e extension.mtaext,extension-after.mtaext \
+  --require-secure-parameters \
+  --disposable-user-provided-service
+```
+
+3. Example descriptor with a secret reference:
+```yaml
+_schema-version: "3.1"
+ID: example-services
+version: 1.2.0
+
+modules:
+  - name: myApp
+    type: staticfile
+    path: appBits.zip
+    parameters:
+      app-name: example-app-disposable
+      memory: 299M
+      disk-quota: 107M
+    requires:
+      - name: my-resource
+        parameters:
+          config:
+            importantParameter: ${configSecret}
+
+resources:
+  - name: my-resource
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: workflow
+      service-plan: standard
+      service-name: my-resource-name
+```
+
+4. The UPS is deleted automatically after deployment.
+
+## Official Documentation
+
+### (REMINDER) Include link here when the public documentation is done!
