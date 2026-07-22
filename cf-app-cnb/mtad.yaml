@@ -1,0 +1,19 @@
+_schema-version: "3.3.0"
+ID: a.cnb.cf.app
+version: 0.0.0
+
+modules:
+  # A CF app whose source is staged on the platform via the Cloud Native
+  # Buildpacks (CNB) lifecycle.
+  - name: my-cnb-managed-app
+    type: application
+    path: .
+    parameters:
+      lifecycle: cnb
+      buildpacks:
+        - docker://docker.io/paketobuildpacks/nodejs
+      memory: 256M
+      disk-quota: 512M
+      instances: 1
+      routes:
+        - route: ${default-host}.${default-domain}
