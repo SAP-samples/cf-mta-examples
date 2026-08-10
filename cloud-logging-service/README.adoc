@@ -1,0 +1,79 @@
+:toc:
+# Exporting MTA operation logs to SAP Cloud Logging
+
+When an MTA is deployed, undeployed, or otherwise processed, the SAP Cloud Deployment service produces operation logs that describe the progress and outcome of the operation. By modelling a resource of type `org.cloudfoundry.cloud-logging-service`, you instruct the SAP Cloud Deployment service to also forward these operation logs to an link:https://help.sap.com/docs/cloud-logging[SAP Cloud Logging] service instance, so that you can store, visualize, and analyze them together with the rest of your observability data.
+
+The SAP Cloud Deployment service reads the mutual TLS ingestion credentials from a service key of the SAP Cloud Logging instance and uses them to forward the logs to its ingestion endpoint.
+
+NOTE: This is an experimental feature.
+
+The resource supports the following parameters:
+
+- `service-name` - Name of the SAP Cloud Logging service instance. Optional, defaults to the resource name.
+- `service-key-name` - Name of the service key that holds the ingestion credentials. Optional, defaults to the resource name.
+- `log-level` - Verbosity of the exported operation logs. One of `INFO`, `WARN`, `DEBUG`, `ERROR`, `TRACE`. Optional, defaults to `INFO`. The values are hierarchical, e.g. `TRACE` exports logs of all levels while `ERROR` exports only error-level logs. A more verbose level increases the volume of data ingested into SAP Cloud Logging, which affects its consumption and eventual costs.
+- `destination` - A map with `org-name` and `space-name`, specifying the org and space in which the SAP Cloud Logging instance resides. Optional, defaults to the org and space of the current deployment.
+
+## Requirements
+- An existing SAP Cloud Logging service instance, represented as a service instance in the Cloud Foundry environment.
+- The instance is reachable from the same Cloud Foundry API endpoint that you use to deploy the MTA.
+- The instance has a service key that provides mutual TLS ingestion credentials.
+- The user who starts the deployment has access to the SAP Cloud Logging service instance. If the instance resides in a different space, the user needs the *Space Developer* role in that space as well.
+
+## Official documentation in Help SAP Portal
+- link:https://help.sap.com/docs/cloud-logging[SAP Cloud Logging]
+
+## Try it out
+
+### Deploy with a deployment descriptor (mtad.yaml)
+
+Update the values in `link:mtad.yaml[mtad.yaml]` with the name of your SAP Cloud Logging service instance and its service key.
+
+```yaml
+    service-name: my-cloud-logging-instance
+    service-key-name: my-service-key
+    log-level: INFO
+```
+
+Trigger the deployment.
+
+```bash
+  $ cf deploy ./ -f
+  ...
+  Processing service "my-cloud-logging-instance"...
+  ...
+  Process finished.
+```
+
+NOTE: You can mark the resource as optional by setting `optional: true`. In that case, a missing or invalid SAP Cloud Logging configuration does not cause the deployment to fail; some operation logs might not appear in SAP Cloud Logging, but they remain available through the multitarget application commands `cf mta-ops` and `cf download-mta-op-logs`.
+
+#### Verify the result
+Open your SAP Cloud Logging instance and observe that the operation logs of the deployment appear there.
+
+Alternatively, download the operation logs with the MultiApps CF CLI plugin.
+
+```bash
+  $ cf download-mta-op-logs --mta cloud.logging.export.example --last 1
+```
+
+### Specify the SAP Cloud Logging instance in an extension descriptor
+
+It may make sense to keep the concrete instance, service key, and target org/space in a separate file, outside the application source code repository. This can be achieved with an extension descriptor.
+
+#### Define the values in an extension descriptor
+- Set the values in `link:cloud-logging-credentials.mtaext[cloud-logging-credentials.mtaext]`. Use the `destination` section only if the SAP Cloud Logging instance resides in a different org or space than the one you deploy to.
+
+#### Trigger deployment with the extension descriptor
+
+```bash
+  $ cf deploy ./ -e cloud-logging-credentials.mtaext -f
+  ...
+  Uploading 1 files...
+  ./cloud-logging-credentials.mtaext
+  OK
+  ...
+  Process finished.
+```
+
+#### Verify the result
+Open your SAP Cloud Logging instance and observe that the operation logs of the deployment appear there.
