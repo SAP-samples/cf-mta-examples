@@ -58,7 +58,7 @@ Alternatively, download the operation logs with the MultiApps CF CLI plugin.
 
 ### Specify the SAP Cloud Logging instance in an extension descriptor
 
-It may make sense to keep the concrete instance, service key, and target org/space in a separate file, outside the application source code repository. This can be achieved with an extension descriptor.
+It may make sense to keep the concrete instance, service key, and target org/space in a separate file, outside the application source code repository. This can be achieved with an extension descriptor. It is particularly useful when the same MTA archive is deployed in different environments that use different SAP Cloud Logging service instances, for example one SAP Cloud Logging instance for a development environment and another one for a productive environment.
 
 #### Define the values in an extension descriptor
 - Set the values in `link:cloud-logging-credentials.mtaext[cloud-logging-credentials.mtaext]`. Use the `destination` section only if the SAP Cloud Logging instance resides in a different org or space than the one you deploy to.
