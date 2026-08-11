@@ -1,0 +1,22 @@
+_schema-version: 3.3.0
+ID: cloud.logging.export.example
+version: 1.0.0
+
+# This example shows how to export the operation logs of an MTA deployment to an
+# SAP Cloud Logging service instance, by modelling a resource of type
+# org.cloudfoundry.cloud-logging-service.
+#
+# When this resource is present, the SAP Cloud Deployment service reads the
+# mutual TLS ingestion credentials of the referenced service key and forwards the
+# operation logs of the deployment to the SAP Cloud Logging instance.
+
+resources:
+  - name: my-cloud-logging # The SAP Cloud Logging export resource
+    type: org.cloudfoundry.cloud-logging-service
+    parameters:
+      service-name: my-cloud-logging-instance # Name of the existing SAP Cloud Logging service instance. Optional - defaults to the resource name.
+      service-key-name: my-service-key # Name of the service key that holds the mutual TLS ingestion credentials. Optional - defaults to the resource name.
+      log-level: INFO # Verbosity of the exported operation logs: INFO, WARN, DEBUG, ERROR, or TRACE. Optional - defaults to INFO.
+      # destination: # Optional. Set only if the SAP Cloud Logging instance is in a different org/space than the deployment.
+      #   org-name: my-org
+      #   space-name: my-space
