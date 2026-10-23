@@ -1,0 +1,38 @@
+_schema-version: "3.3.0"
+ID: a.cnb.cf.app
+version: 0.0.0
+
+modules:
+  # A CF app whose source is staged on the platform via the Cloud Native
+  # Buildpacks (CNB) lifecycle.  The Paketo Node.js buildpack runs `npm
+  # install` during staging and registers `node server.js` (taken from the
+  # `start` script in package.json) as the `web` process type, so no explicit
+  # `command:` is required here.
+  - name: my-cnb-managed-app
+    type: application
+    path: .
+    build-parameters:
+      # Files to exclude from the MTA archive.  `node_modules/` would otherwise
+      # be uploaded if the user ran `npm install` locally; the buildpack
+      # produces it on the platform during staging.  The other entries are
+      # build artefacts of `mbt` itself, plus the previous run's MTAR.
+      ignore:
+        - node_modules/
+        - .gitignore
+        - .cf-app-cnb_mta_build_tmp/
+        - Makefile_*.mta
+        - "*.mtar"
+    parameters:
+      # Switch this app from the default "buildpack v2" lifecycle to "buildpack
+      # v3" (Cloud Native Buildpacks).  See the Cloud Foundry documentation:
+      # https://v3-apidocs.cloudfoundry.org/#the-cnb-lifecycle
+      lifecycle: cnb
+      # CNB buildpack image, given as a fully qualified Docker URL.  The Paketo
+      # Node.js image is pulled by the platform during staging.
+      buildpacks:
+        - docker://docker.io/paketobuildpacks/nodejs
+      memory: 256M
+      disk-quota: 512M
+      instances: 1
+      routes:
+        - route: ${default-host}.${default-domain}
