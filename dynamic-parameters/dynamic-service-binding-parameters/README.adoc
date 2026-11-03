@@ -1,0 +1,61 @@
+# Dynamic Service Binding Parameters
+:toc:
+
+## Overview
+
+Dynamic Parameters can resolve values from a service key's credentials and inject
+them into another resource's binding configuration at deploy time, using the
+`{ds/...}` reference syntax:
+
+```
+{ds/<source-resource>/service-keys.<key-name>.credentials.<field>}
+```
+
+In this example the `app` module binds to `target-service`, and its binding
+`config` pulls the `clientid` and `xsappname` fields from the `source-key`
+service key of `source-service`. The deploy service reads the referenced key's
+credentials and substitutes the resolved values before creating the binding.
+
+## Requirements
+- The credential source resource (`source-service`) must be listed under the
+  module's `requires`, so that the `{ds/...}` reference can be resolved.
+- The referenced service key (`source-key`) must be declared on the source
+  resource under `service-keys`.
+- The referenced credential fields must exist in the service key's credentials.
+- Major schema version of the MTA project must be 3 or higher.
+
+## Official documentation in Help SAP Portal
+- link:https://help.sap.com/docs/btp/sap-business-technology-platform/parameters-and-properties#dynamic-parameters[Dynamic Parameters]
+
+# Try out
+
+## How to execute
+
+```bash
+$ cf deploy ./
+```
+
+## Verify the result
+Check that the resolved credential values were injected into the `target-service`
+binding config:
+
+```text
+cf env app
+...
+VCAP_SERVICES: {
+  "xsuaa": [
+    {
+      "name": "ds-target-service",
+      "binding_name": null,
+      "credentials": { ... },
+      "label": "xsuaa",
+      ...
+    }
+  ]
+}
+...
+```
+
+The `consumer-client-id` and `consumer-xsappname` values configured on the
+`target-service` binding reflect the `clientid` and `xsappname` resolved from the
+`source-key` credentials of `source-service`.
