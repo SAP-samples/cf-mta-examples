@@ -18,14 +18,16 @@ credentials and substitutes the resolved values before creating the binding.
 
 ## Requirements
 - The credential source resource (`source-service`) must be listed under the
-  module's `requires`, so that the `{ds/...}` reference can be resolved.
+  consuming module's `requires`, so that the `{ds/...}` reference can be
+  resolved.
 - The source can be a managed service created by this MTA (as shown here), or an
   existing service already provisioned in the space
-  (`org.cloudfoundry.existing-service`). Either way, the referenced service and
-  its named service key must exist at deploy time.
-- The referenced service key (`source-key`) must be available on the source
-  resource — declared under `service-keys` for a managed service, or already
-  present for an existing service.
+  (`org.cloudfoundry.existing-service`). The resolver looks the service up by its
+  CF service name — the resource's `service-name` parameter if set, otherwise the
+  resource name — so both types work the same way.
+- The referenced service key (`source-key`) must exist on the CF service at the
+  time the reference is resolved: declared under `service-keys` for a managed
+  service, or already created for an existing service.
 - The referenced credential fields must exist in the service key's credentials.
 - Major schema version of the MTA project must be 3 or higher.
 
