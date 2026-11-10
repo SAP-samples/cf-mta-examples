@@ -17,9 +17,9 @@ service key of `source-service`. The deploy service reads the referenced key's
 credentials and substitutes the resolved values before creating the binding.
 
 ## Requirements
-- The credential source resource (`source-service`) must be listed under the
-  consuming module's `requires`, so that the `{ds/...}` reference can be
-  resolved.
+- The credential source (`source-service`) must be declared as a resource in the
+  MTA descriptor. The resolver locates it from the descriptor's `resources` list,
+  so it does not need to appear in the consuming module's `requires`.
 - The source can be a managed service created by this MTA (as shown here), or an
   existing service already provisioned in the space
   (`org.cloudfoundry.existing-service`). The resolver looks the service up by its
