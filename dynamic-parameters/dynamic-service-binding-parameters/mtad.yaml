@@ -12,9 +12,6 @@ modules:
       health-check-type: process
       no-route: true
     requires:
-      # The credential source resource MUST be in requires so the
-      # {ds/...} reference below is resolvable.
-      - name: source-service
       # The app binds to target-service; its binding config pulls
       # fields from source-service's named service key credentials.
       - name: target-service
