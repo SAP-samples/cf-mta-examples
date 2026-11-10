@@ -202,4 +202,4 @@ resources:
 
 ## Official Documentation
 
-### (REMINDER) Include link here when the public documentation is done!
+### https://help.sap.com/docs/btp/sap-business-technology-platform/sensitive-data-handling-during-mta-deployment?locale=en-US
