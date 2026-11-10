@@ -45,6 +45,13 @@ Clone the repository, following the link:https://help.github.com/en/github/creat
 ## Share configuration values between MTAs via a configuration registry
 * link:/cross-mta-configurations[Cross MTA Configurations]
 
+## Dynamic Parameters
+Consume entities from the existing Cloud Foundry environment inside the MTA descriptor
+
+* link:/dynamic-parameters[Dynamic Parameters]
+** link:/dynamic-parameters/dynamic-parameters-for-cross-mta-configurations[Dynamic Parameters for Configuration Entries]
+** link:/dynamic-parameters/dynamic-service-binding-parameters[Dynamic Service Binding Parameters]
+
 ## Managing deployment configurations
 * link:/modify-packaged-mta[Modifying an assembled MTA archive]
 * link:/extension-descriptor-different-environments[Configure same MTA for different environments]
