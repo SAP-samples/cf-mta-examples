@@ -1,4 +1,8 @@
 */mta_archives/*.mtar
+*/*.mtar
+*/.*_mta_build_tmp/
+*/Makefile_*.mta
+*/mta-op-*/
 .DS_Store
 */target/*
 *.code-workspace
